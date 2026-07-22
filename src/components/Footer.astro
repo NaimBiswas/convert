@@ -1,0 +1,28 @@
+<footer class="footer">
+  <span class="footer-tag">
+    <span class="lock-icon">🔒</span>
+    No servers. No storage. No tracking. Your data never leaves your device.
+  </span>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <span class="sep">·</span>
+    <a href="#">GitHub</a>
+    <span class="sep">·</span>
+    <a href="#">Feedback</a>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 64px; padding: 24px 0; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--text-muted); flex-wrap: wrap; gap: 12px;
+    transition: border-color var(--transition), color var(--transition);
+  }
+  .footer a { color: var(--text-secondary); text-decoration: none; transition: color var(--transition); }
+  .footer a:hover { color: var(--text); }
+  .footer-links { display: flex; align-items: center; gap: 8px; }
+  .sep { color: var(--border); }
+  .footer-tag { display: flex; align-items: center; gap: 6px; }
+  .lock-icon { font-size: 13px; }
+</style>

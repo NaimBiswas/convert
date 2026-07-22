@@ -1,0 +1,128 @@
+<div class="section-label">Preview — 10 rows × 5 columns</div>
+
+<div class="table-wrap">
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>name <span class="sort-icon">▼</span></th>
+          <th>email <span class="type-badge string">string</span></th>
+          <th>age <span class="type-badge number">number</span></th>
+          <th>role</th>
+          <th>active <span class="type-badge boolean">boolean</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Sarah Chen</td><td>sarah.chen@acmecorp.com</td><td>34</td><td>Engineering Lead</td><td class="val-true">true</td></tr>
+        <tr><td>Marcus Johnson</td><td>marcus.j@startup.io</td><td>28</td><td>Backend Developer</td><td class="val-true">true</td></tr>
+        <tr><td>Priya Sharma</td><td>priya.sharma@dataflow.co</td><td>31</td><td>Data Analyst</td><td class="val-false">false</td></tr>
+        <tr><td>Alex Kim</td><td>alex.kim@webster.tech</td><td>26</td><td>Frontend Developer</td><td class="val-true">true</td></tr>
+        <tr><td>Yuki Tanaka</td><td>yuki.tanaka@bridge.jp</td><td>42</td><td>Product Manager</td><td class="val-true">true</td></tr>
+        <tr><td>Omar Hassan</td><td>omar.h@niletech.com</td><td>29</td><td>DevOps Engineer</td><td class="val-false">false</td></tr>
+        <tr><td>Elena Vasquez</td><td>elena.v@solara.io</td><td>37</td><td>UX Designer</td><td class="val-true">true</td></tr>
+        <tr><td>Liam O'Brien</td><td>liam.ob@greenfield.ie</td><td>33</td><td>Full Stack Developer</td><td class="val-true">true</td></tr>
+        <tr><td>Aisha Patel</td><td>aisha.p@quantum.ai</td><td>45</td><td>VP Engineering</td><td class="val-true">true</td></tr>
+        <tr><td>David Park</td><td>david.p@nexus.health</td><td>39</td><td>Data Scientist</td><td class="val-false">false</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-footer">
+    <span>10 rows · 5 columns · 7.2 KB</span>
+    <div class="pagination">
+      <button class="page-btn current">1</button>
+    </div>
+  </div>
+</div>
+
+<div class="output-area">
+  <button class="btn-download primary">⬇ Download XLSX</button>
+  <button class="btn-download">⬇ Download CSV</button>
+  <button class="btn-download">📋 Copy as JSON</button>
+</div>
+<div class="privacy-footnote">
+  <span>🔒</span>
+  <span>No data uploaded — everything stays on your machine. Deleted when you close the tab.</span>
+</div>
+
+<style>
+  .section-label {
+    display: flex; align-items: center; gap: 8px; margin: 36px 0 12px;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    transition: color var(--transition);
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+    transition: background var(--transition);
+  }
+  .table-wrap {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden; background: var(--surface);
+    transition: all var(--transition);
+  }
+  .table-scroll { overflow-x: auto; }
+  .table-wrap table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .table-wrap th {
+    text-align: left; padding: 10px 14px; font-weight: 500; font-size: 12px;
+    color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px;
+    background: var(--surface-hover); border-bottom: 1px solid var(--border);
+    white-space: nowrap; cursor: pointer; user-select: none;
+    transition: all var(--transition);
+  }
+  .table-wrap th:hover { color: var(--text); }
+  .sort-icon { opacity: 0.4; font-weight: 400; }
+  .table-wrap td {
+    padding: 9px 14px; border-bottom: 1px solid var(--border);
+    color: var(--text); white-space: nowrap;
+    transition: border-color var(--transition), color var(--transition);
+  }
+  .table-wrap tr:last-child td { border-bottom: none; }
+  .table-wrap tbody tr { transition: background var(--transition); }
+  .table-wrap tbody tr:hover td { background: var(--secondary-glow); }
+  .type-badge {
+    display: inline-block; padding: 1px 6px; border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+    background: color-mix(in srgb, var(--primary) 10%, transparent);
+    color: var(--primary);
+    vertical-align: middle;
+  }
+  .type-badge.string { background: color-mix(in srgb, var(--secondary) 10%, transparent); color: var(--secondary); }
+  .type-badge.number { background: color-mix(in srgb, var(--success) 10%, transparent); color: var(--success); }
+  .type-badge.boolean { background: color-mix(in srgb, var(--error) 10%, transparent); color: var(--error); }
+  .val-true { color: var(--success); }
+  .val-false { color: var(--error); }
+
+  .table-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: var(--surface); border-top: 1px solid var(--border);
+    font-size: 12px; color: var(--text-muted); flex-wrap: wrap; gap: 8px;
+    transition: all var(--transition);
+  }
+  .pagination { display: flex; align-items: center; gap: 4px; }
+  .page-btn {
+    width: 26px; height: 26px; border-radius: 5px; border: 1px solid transparent;
+    background: transparent; color: var(--text-muted); cursor: pointer;
+    font-size: 12px; font-family: 'Inter', sans-serif;
+    transition: all var(--transition);
+  }
+  .page-btn:hover { border-color: var(--border); color: var(--text); }
+  .page-btn.current { background: var(--primary-glow); color: var(--primary); font-weight: 500; }
+
+  .output-area {
+    margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .btn-download {
+    padding: 9px 18px; font-size: 13px; font-weight: 500; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text-secondary); cursor: pointer; font-family: 'Inter', sans-serif;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all var(--transition);
+  }
+  .btn-download:hover { border-color: var(--text-muted); color: var(--text); }
+  .btn-download.primary { border-color: var(--primary); color: var(--primary); }
+  .btn-download.primary:hover { background: var(--primary-glow); }
+  .privacy-footnote {
+    display: flex; align-items: center; gap: 6px; margin-top: 12px;
+    font-size: 12px; color: var(--text-muted);
+  }
+</style>

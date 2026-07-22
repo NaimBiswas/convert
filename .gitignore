@@ -1,0 +1,35 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+.env.local
+
+# IDE
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# package manager lockfiles (keep one, ignore others)
+# npm lockfile is tracked; ignore pnpm/yarn
+pnpm-lock.yaml
+yarn.lock
+project-plan.md

@@ -1,0 +1,71 @@
+---
+const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Markdown'];
+---
+
+<header class="header">
+  <div class="header-left">
+    <a href="/" class="logo">
+      <div class="logo-icon">C</div>
+      <span class="logo-text">Convert</span>
+    </a>
+  </div>
+  <div class="header-right">
+    <nav class="header-nav">
+      <a href="#">Documentation</a>
+      <a href="#">API</a>
+      <span class="badge">v1.0</span>
+    </nav>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+  </div>
+</header>
+
+<script>
+  import { toggleTheme } from '../lib/theme';
+  const btn = document.getElementById('themeToggle');
+  const isDark = document.documentElement.classList.contains('dark');
+  btn.textContent = isDark ? '☀️' : '🌙';
+  btn.addEventListener('click', () => {
+    toggleTheme();
+    btn.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+  });
+</script>
+
+<style>
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 0; border-bottom: 1px solid var(--border);
+    transition: border-color var(--transition);
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+  .logo-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px; color: #FFF;
+    transition: background var(--transition);
+  }
+  .logo-text { font-weight: 600; font-size: 18px; letter-spacing: -0.3px; transition: color var(--transition); }
+  .header-right { display: flex; align-items: center; gap: 16px; font-size: 14px; }
+  .header-nav { display: flex; align-items: center; gap: 16px; }
+  .header-nav a { color: var(--text-secondary); text-decoration: none; transition: color var(--transition); }
+  .header-nav a:hover { color: var(--text); }
+  .theme-btn {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-secondary); cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    transition: all var(--transition); font-size: 16px;
+  }
+  .theme-btn:hover { border-color: var(--primary); color: var(--primary); }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 100px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 12px; color: var(--text-secondary);
+    transition: background var(--transition), border-color var(--transition);
+  }
+  @media (max-width: 640px) {
+    .header-nav a { display: none; }
+  }
+</style>
