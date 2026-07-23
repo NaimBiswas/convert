@@ -59,7 +59,7 @@ const url = Astro.url;
   <body>
     <div class="app">
       <Header />
-      <slot />
+      <div class="main"><slot /></div>
       <Footer />
     </div>
     <script>
@@ -125,7 +125,8 @@ const url = Astro.url;
     transition: background var(--transition), color var(--transition);
   }
 
-  .app { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  .app { max-width: 1200px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; min-height: 100vh; }
+  .app > .main { flex: 1; }
 
   @media (max-width: 640px) {
     .app { padding: 0 16px; }
