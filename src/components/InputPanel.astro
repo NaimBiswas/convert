@@ -1,11 +1,12 @@
 <div class="input-header">
   <div class="input-tabs" id="inputTabs">
-    <button class="input-tab active" data-tab="paste">Paste</button>
-    <button class="input-tab" data-tab="upload">Upload</button>
+    <button class="input-tab active" data-tab="paste" id="tabPaste">Paste</button>
+    <button class="input-tab" data-tab="upload" id="tabUpload">Upload</button>
     <button class="input-tab" data-tab="url">URL</button>
   </div>
   <div class="input-actions">
     <button class="btn" id="loadExample">↻ Load Example</button>
+    <button class="btn" id="formatBtn" title="Pretty-print">▦ Format</button>
     <button class="btn" id="clearBtn">✕ Clear</button>
     <button class="btn" id="validateBtn" style="color:var(--success);border-color:var(--success);">✓ Validate</button>
   </div>
@@ -13,62 +14,472 @@
 
 <div class="privacy-notice">
   <span>🔒</span>
-  <span>Processed entirely in your browser — no upload, no storage, no servers</span>
+    <span>Processed entirely in your browser — no storage, no servers. URL fetch with proxy enabled routes through a 3rd party.</span>
 </div>
 
-<textarea class="code-editor" id="codeEditor" placeholder="Paste your data here...">name,email,age,role,active
-Sarah Chen,sarah.chen@acmecorp.com,34,Engineering Lead,true
-Marcus Johnson,marcus.j@startup.io,28,Backend Developer,true
-Priya Sharma,priya.sharma@dataflow.co,31,Data Analyst,false
-Alex Kim,alex.kim@webster.tech,26,Frontend Developer,true
-Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true
-Omar Hassan,omar.h@niletech.com,29,DevOps Engineer,false
-Elena Vasquez,elena.v@solara.io,37,UX Designer,true
-Liam O'Brien,liam.ob@greenfield.ie,33,Full Stack Developer,true
-Aisha Patel,aisha.p@quantum.ai,45,VP Engineering,true
-David Park,david.p@nexus.health,39,Data Scientist,false</textarea>
+<div id="uploadZone" class="upload-zone" style="display:none">
+  <div class="drop-inner">
+    <div class="upload-icon">📂</div>
+    <p class="upload-text">Drag & drop a file here, or <span class="upload-link" id="browseLink">browse</span></p>
+    <p class="upload-hint">Supports: JSON, CSV, XML, YAML, Excel (XLSX)</p>
+    <input type="file" id="fileInput" accept=".json,.csv,.xml,.yaml,.yml,.xlsx" hidden />
+  </div>
+</div>
+
+<div id="urlZone" class="url-zone" style="display:none">
+  <div class="url-row">
+    <input type="text" id="urlInput" class="url-input" placeholder="https://example.com/data.json" />
+    <button class="btn" id="fetchBtn">⬇ Fetch</button>
+  </div>
+  <label class="url-option">
+    <input type="checkbox" id="corsProxyCheck" />
+    <span>Use CORS proxy (for APIs that don't allow direct fetch)</span>
+  </label>
+</div>
+
+<div id="sheetBar" class="sheet-bar" style="display:none">
+  <span style="font-size:13px;color:var(--text-secondary)">Sheet:</span>
+  <select id="sheetSelect" class="sheet-select"></select>
+  <span id="sheetCount" style="font-size:12px;color:var(--text-muted)"></span>
+</div>
+
+<textarea class="code-editor" id="codeEditor" placeholder="Paste your data here..."></textarea>
+
+<div id="validationBadge" class="validation-badge" style="display:none"></div>
 
 <div class="convert-row">
-  <button class="btn-convert" id="convertBtn">⟳ Convert to Excel (XLSX)</button>
+  <button class="btn-convert" id="convertBtn">⟳ Convert</button>
   <button class="btn-ghost" id="swapBtn2">⇄ Swap</button>
   <button class="btn-ghost" id="resetBtn">↻ Reset</button>
+  <div class="tools-dropdown">
+    <button class="btn-ghost" id="toolsBtn">🔧 Tools ▾</button>
+    <div class="tools-menu" id="toolsMenu" style="display:none">
+      <button class="tool-menu-item" id="genDataBtn">🎲 Generate random data</button>
+      <button class="tool-menu-item" id="base64EncodeBtn">🔐 Base64 Encode</button>
+      <button class="tool-menu-item" id="base64DecodeBtn">🔓 Base64 Decode</button>
+      <button class="tool-menu-item" id="hexEncodeBtn">🔢 Hex Encode</button>
+      <button class="tool-menu-item" id="hexDecodeBtn">🔢 Hex Decode</button>
+    </div>
+  </div>
 </div>
 
 <script>
+  import { detectFormat, validate, formatText } from '../lib/detect';
+  import { parseJSON } from '../lib/converters/json';
+  import { parseCSV } from '../lib/converters/csv';
+  import { parseXML } from '../lib/converters/xml';
+  import { parseYAML } from '../lib/converters/yaml';
+  import { pushHistory, setState, getState, clearPersistedHistory } from '../lib/appState';
+  import { generateRandomData, encodeBase64, decodeBase64, encodeHex, decodeHex } from '../lib/tools';
+  import * as XLSX from 'xlsx';
+
   const editor = document.getElementById('codeEditor') as HTMLTextAreaElement;
   const tabs = document.querySelectorAll('#inputTabs .input-tab');
-  const loadExample = document.getElementById('loadExample');
-  const clearBtn = document.getElementById('clearBtn');
-  const validateBtn = document.getElementById('validateBtn');
+  const loadExample = document.getElementById('loadExample')!;
+  const clearBtn = document.getElementById('clearBtn')!;
+  const validateBtn = document.getElementById('validateBtn')!;
+  const formatBtn = document.getElementById('formatBtn') as HTMLButtonElement;
   const convertBtn = document.getElementById('convertBtn') as HTMLButtonElement;
+  const uploadZone = document.getElementById('uploadZone')!;
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  const browseLink = document.getElementById('browseLink')!;
+  const urlZone = document.getElementById('urlZone')!;
+  const urlInput = document.getElementById('urlInput') as HTMLInputElement;
+  const fetchBtn = document.getElementById('fetchBtn')!;
+  const corsProxyCheck = document.getElementById('corsProxyCheck') as HTMLInputElement;
+  const sheetBar = document.getElementById('sheetBar')!;
+  const sheetSelect = document.getElementById('sheetSelect') as HTMLSelectElement;
+  const sheetCount = document.getElementById('sheetCount')!;
+  const validationBadge = document.getElementById('validationBadge')!;
+  const swapBtn2 = document.getElementById('swapBtn2') as HTMLButtonElement;
+  const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
+  const toolsBtn = document.getElementById('toolsBtn')!;
+  const toolsMenu = document.getElementById('toolsMenu')!;
+  const genDataBtn = document.getElementById('genDataBtn')!;
+  const base64EncodeBtn = document.getElementById('base64EncodeBtn')!;
+  const base64DecodeBtn = document.getElementById('base64DecodeBtn')!;
+  const hexEncodeBtn = document.getElementById('hexEncodeBtn')!;
+  const hexDecodeBtn = document.getElementById('hexDecodeBtn')!;
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
+  const fromSelect = document.getElementById('from-format') as HTMLSelectElement;
+  const toSelect = document.getElementById('to-format') as HTMLSelectElement;
 
-  loadExample?.addEventListener('click', () => {
-    editor.value = `name,email,age,role,active
+  let loadedFile: { name: string; data: string | ArrayBuffer; sheets?: string[] } | null = null;
+
+  const SAMPLE_DATA: Record<string, string> = {
+    'JSON': `{
+  "employees": [
+    { "name": "Alice", "role": "Engineer", "active": true },
+    { "name": "Bob", "role": "Designer", "active": false },
+    { "name": "Charlie", "role": "Manager", "active": true }
+  ]
+}`,
+    'CSV': `name,email,age,role,active
 Sarah Chen,sarah.chen@acmecorp.com,34,Engineering Lead,true
 Marcus Johnson,marcus.j@startup.io,28,Backend Developer,true
 Priya Sharma,priya.sharma@dataflow.co,31,Data Analyst,false
 Alex Kim,alex.kim@webster.tech,26,Frontend Developer,true
-Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true
-Omar Hassan,omar.h@niletech.com,29,DevOps Engineer,false
-Elena Vasquez,elena.v@solara.io,37,UX Designer,true
-Liam O'Brien,liam.ob@greenfield.ie,33,Full Stack Developer,true
-Aisha Patel,aisha.p@quantum.ai,45,VP Engineering,true
-David Park,david.p@nexus.health,39,Data Scientist,false`;
+Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
+    'XML': `<?xml version="1.0" encoding="UTF-8"?>
+<employees>
+  <employee>
+    <name>Alice</name>
+    <role>Engineer</role>
+    <active>true</active>
+  </employee>
+  <employee>
+    <name>Bob</name>
+    <role>Designer</role>
+    <active>false</active>
+  </employee>
+  <employee>
+    <name>Charlie</name>
+    <role>Manager</role>
+    <active>true</active>
+  </employee>
+</employees>`,
+    'YAML': `employees:
+  - name: Alice
+    role: Engineer
+    active: true
+  - name: Bob
+    role: Designer
+    active: false
+  - name: Charlie
+    role: Manager
+    active: true`,
+    'Excel (XLSX)': 'Use the Upload tab to load an Excel (.xlsx) file.'
+  };
+
+  function setActiveTab(tabName: string) {
+    tabs.forEach(t => t.classList.remove('active'));
+    const btn = document.querySelector(`.input-tab[data-tab="${tabName}"]`) as HTMLElement;
+    if (btn) btn.classList.add('active');
+    uploadZone.style.display = tabName === 'upload' ? 'flex' : 'none';
+    urlZone.style.display = tabName === 'url' ? 'block' : 'none';
+    const hideEditor = (tabName === 'upload' || tabName === 'url') && !editor.value;
+    editor.style.display = hideEditor ? 'none' : '';
+    if (tabName === 'url') urlInput.focus();
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      setActiveTab(tab.getAttribute('data-tab')!);
+    });
   });
 
-  clearBtn?.addEventListener('click', () => { editor.value = ''; editor.focus(); });
+  browseLink.addEventListener('click', () => fileInput.click());
 
-  validateBtn?.addEventListener('click', () => {
-    try { JSON.parse(editor.value); alert('Valid JSON!'); }
-    catch { try { JSON.parse('[' + editor.value.split('\n').map(l => '{' + l.split(',').map((_, i) => `"col${i}":"${_}"`).join(',') + '}').join(',') + ']'); alert('Looks like valid CSV data.'); }
-    catch { alert('Could not auto-detect format. Make sure your data is valid.'); }}
+  uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.classList.add('drag-over');
+  });
+
+  uploadZone.addEventListener('dragleave', () => {
+    uploadZone.classList.remove('drag-over');
+  });
+
+  uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.classList.remove('drag-over');
+    const file = e.dataTransfer?.files[0];
+    if (file) handleFile(file);
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (file) handleFile(file);
+    fileInput.value = '';
+  });
+
+  const MAX_FILE_SIZE = 50 * 1024 * 1024;
+
+  function handleFile(file: File) {
+    if (file.size > MAX_FILE_SIZE) {
+      showValidation(false, `File too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max: 50 MB`);
+      return;
+    }
+    const ext = file.name.split('.').pop()?.toLowerCase();
+    if (ext === 'xlsx') {
+      readBinaryFile(file);
+    } else {
+      readTextFile(file);
+    }
+  }
+
+  function readTextFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      editor.value = text;
+      loadedFile = { name: file.name, data: text };
+      setActiveTab('paste');
+      updateConvertButton();
+    };
+    reader.readAsText(file);
+  }
+
+  function readBinaryFile(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = reader.result as ArrayBuffer;
+      try {
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetNames = workbook.SheetNames;
+        loadedFile = { name: file.name, data, sheets: sheetNames };
+
+        if (sheetNames.length > 1) {
+          sheetBar.style.display = 'flex';
+          sheetSelect.innerHTML = sheetNames.map(s => `<option value="${s}">${s}</option>`).join('');
+          sheetCount.textContent = `${sheetNames.length} sheets`;
+          loadSheet(workbook, sheetNames[0]);
+        } else {
+          sheetBar.style.display = 'none';
+          loadSheet(workbook, sheetNames[0]);
+        }
+
+        fromSelect.value = 'Excel (XLSX)';
+        updateConvertButton();
+      } catch {
+        alert('Could not read Excel file. Make sure it is a valid .xlsx file.');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function loadSheet(workbook: XLSX.WorkBook, name: string) {
+    const sheet = workbook.Sheets[name];
+    const csv = XLSX.utils.sheet_to_csv(sheet);
+    editor.value = csv;
+    setActiveTab('paste');
+  }
+
+  sheetSelect.addEventListener('change', () => {
+    if (!loadedFile?.data) return;
+    const workbook = XLSX.read(loadedFile.data as ArrayBuffer, { type: 'array' });
+    loadSheet(workbook, sheetSelect.value);
+  });
+
+  const INPUT_FORMATS = ['JSON', 'CSV', 'XML', 'YAML', 'Excel (XLSX)'];
+
+  function validateFormatMatch() {
+    const text = editor.value.trim();
+    const from = fromSelect?.value || 'JSON';
+    const to = toSelect?.value || 'Excel (XLSX)';
+
+    editor.classList.remove('format-mismatch');
+    convertBtn.textContent = `⟳ Convert to ${to}`;
+
+    if (!text || !INPUT_FORMATS.includes(from)) return;
+
+    let match = true;
+    let message = '';
+
+    if (from === 'Excel (XLSX)') {
+      match = false;
+      message = 'Excel requires file upload — use Upload tab';
+    } else {
+      const detected = detectFormat(text);
+      if (detected && detected !== from) {
+        match = false;
+        message = `Content looks like ${detected}, not ${from}`;
+      } else if (!detected) {
+        match = false;
+        message = `Could not detect ${from} data`;
+      }
+    }
+
+    if (!match) {
+      editor.classList.add('format-mismatch');
+      convertBtn.textContent = `⚠ ${message}`;
+    }
+  }
+
+  function updateConvertButton() {
+    validateFormatMatch();
+  }
+
+  fromSelect?.addEventListener('change', updateConvertButton);
+  toSelect?.addEventListener('change', updateConvertButton);
+  window.addEventListener('format-swap', updateConvertButton);
+  editor.addEventListener('input', validateFormatMatch);
+
+  loadExample.addEventListener('click', () => {
+    const format = fromSelect?.value || 'JSON';
+    editor.value = SAMPLE_DATA[format] || SAMPLE_DATA['JSON'];
+    loadedFile = null;
+    validationBadge.style.display = 'none';
+    updateConvertButton();
+  });
+
+  clearBtn.addEventListener('click', () => {
+    editor.value = '';
+    loadedFile = null;
+    validationBadge.style.display = 'none';
+    editor.focus();
+  });
+
+  validateBtn.addEventListener('click', () => {
+    const text = editor.value;
+    const detected = detectFormat(text);
+    const format = detected || fromSelect?.value || 'JSON' as any;
+    const result = validate(text, format);
+    showValidation(result.valid, result.message, format);
+  });
+
+  formatBtn.addEventListener('click', () => {
+    const text = editor.value;
+    if (!text.trim()) return;
+    const format = detectFormat(text) || (fromSelect?.value as any) || 'JSON';
+    try {
+      editor.value = formatText(text, format);
+      showValidation(true, `Formatted as ${format}`, format);
+    } catch {
+      showValidation(false, `Could not format as ${format}`, format);
+    }
+  });
+
+  function doConvert() {
+    const text = editor.value;
+    if (!text.trim()) { showValidation(false, 'Nothing to convert — paste or upload data first.'); return; }
+
+    const from = fromSelect?.value || 'JSON';
+    const to = toSelect?.value || 'Excel (XLSX)';
+    const detected = detectFormat(text);
+
+    const formatToParse = detected || from;
+
+    try {
+      let result;
+      switch (formatToParse) {
+        case 'JSON': result = parseJSON(text); break;
+        case 'CSV': result = parseCSV(text); break;
+        case 'XML': result = parseXML(text); break;
+        case 'YAML': result = parseYAML(text); break;
+        case 'Excel (XLSX)': showValidation(false, 'Cannot parse Excel from text. Use the Upload tab.'); return;
+        case 'HTML Table': case 'Markdown': showValidation(false, `${formatToParse} is output-only — select a different source format`); return;
+        default: showValidation(false, `Unsupported format: ${formatToParse}`); return;
+      }
+      if (result.rows.length === 0) { showValidation(false, 'Parsed successfully but no data rows found.'); return; }
+      pushHistory(result);
+      setState({ fromFormat: formatToParse as any, toFormat: to as any, rawInput: text });
+      showValidation(true, `Parsed ${result.meta.rowCount} rows × ${result.meta.colCount} columns`);
+    } catch (e) {
+      showValidation(false, `Parse error: ${(e as Error).message}`);
+    }
+  }
+
+  convertBtn.addEventListener('click', doConvert);
+
+  swapBtn2.addEventListener('click', () => {
+    const tmp = fromSelect.value;
+    fromSelect.value = toSelect.value;
+    toSelect.value = tmp;
+    updateConvertButton();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    editor.value = '';
+    loadedFile = null;
+    validationBadge.style.display = 'none';
+    setActiveTab('paste');
+    clearPersistedHistory();
+  });
+
+  function showValidation(valid: boolean, message: string) {
+    validationBadge.style.display = 'flex';
+    validationBadge.className = `validation-badge ${valid ? 'valid' : 'invalid'}`;
+    validationBadge.textContent = valid ? `✓ ${message}` : `✗ ${message}`;
+    setTimeout(() => {
+      validationBadge.style.opacity = '0';
+      setTimeout(() => {
+        validationBadge.style.display = 'none';
+        validationBadge.style.opacity = '1';
+      }, 300);
+    }, 3000);
+  }
+
+  let activeFetch: AbortController | null = null;
+
+  fetchBtn.addEventListener('click', async () => {
+    let url = urlInput.value.trim();
+    if (!url) { showValidation(false, 'Enter a URL first.'); return; }
+
+    if (activeFetch) activeFetch.abort();
+    const controller = new AbortController();
+    activeFetch = controller;
+
+    if (corsProxyCheck.checked) {
+      url = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+    }
+    try {
+      const res = await fetch(url, { signal: controller.signal });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const text = await res.text();
+      editor.value = text;
+      loadedFile = null;
+      setActiveTab('paste');
+      showValidation(true, `Fetched ${(text.length / 1024).toFixed(1)} KB from URL`);
+    } catch (e) {
+      if ((e as Error).name === 'AbortError') return;
+      showValidation(false, `Fetch failed: ${(e as Error).message}. Try enabling the CORS proxy.`);
+    } finally {
+      if (activeFetch === controller) activeFetch = null;
+    }
+  });
+
+  urlInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') fetchBtn.click();
+  });
+
+  toolsBtn.addEventListener('click', () => {
+    toolsMenu.style.display = toolsMenu.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!toolsBtn.contains(e.target as Node) && !toolsMenu.contains(e.target as Node)) {
+      toolsMenu.style.display = 'none';
+    }
+  });
+
+  genDataBtn.addEventListener('click', () => {
+    editor.value = generateRandomData();
+    loadedFile = null;
+    toolsMenu.style.display = 'none';
+    setActiveTab('paste');
+    showValidation(true, 'Generated random data (CSV)');
+  });
+
+  base64EncodeBtn.addEventListener('click', () => {
+    try { editor.value = encodeBase64(editor.value); toolsMenu.style.display = 'none'; showValidation(true, 'Base64 encoded'); }
+    catch { showValidation(false, 'Base64 encode failed'); }
+  });
+
+  base64DecodeBtn.addEventListener('click', () => {
+    try { editor.value = decodeBase64(editor.value.trim()); toolsMenu.style.display = 'none'; showValidation(true, 'Base64 decoded'); }
+    catch { showValidation(false, 'Invalid Base64 input'); }
+  });
+
+  hexEncodeBtn.addEventListener('click', () => {
+    try { editor.value = encodeHex(editor.value); toolsMenu.style.display = 'none'; showValidation(true, 'Hex encoded'); }
+    catch { showValidation(false, 'Hex encode failed'); }
+  });
+
+  hexDecodeBtn.addEventListener('click', () => {
+    try { editor.value = decodeHex(editor.value.trim()); toolsMenu.style.display = 'none'; showValidation(true, 'Hex decoded'); }
+    catch { showValidation(false, 'Invalid hex input'); }
+  });
+
+  // validateFormatMatch handles input validation
+
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag === 'TEXTAREA' || tag === 'INPUT') {
+        e.preventDefault();
+        doConvert();
+      }
+    }
   });
 </script>
 
@@ -103,6 +514,41 @@ David Park,david.p@nexus.health,39,Data Scientist,false`;
     border: 1px solid color-mix(in srgb, var(--success) 15%, transparent);
     font-size: 12px; font-weight: 450; color: var(--success);
   }
+  .upload-zone {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    padding: 40px 24px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 12px; cursor: pointer; transition: all var(--transition);
+    background: var(--surface);
+  }
+  .upload-zone.drag-over {
+    border-color: var(--primary); background: var(--primary-glow);
+  }
+  .drop-inner { text-align: center; }
+  .upload-icon { font-size: 36px; margin-bottom: 8px; }
+  .upload-text { font-size: 14px; color: var(--text-secondary); margin-bottom: 4px; }
+  .upload-link { color: var(--primary); cursor: pointer; font-weight: 500; text-decoration: underline; }
+  .upload-hint { font-size: 12px; color: var(--text-muted); }
+  .url-zone {
+    margin-bottom: 12px; padding: 16px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface);
+  }
+  .url-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .url-input {
+    flex: 1; padding: 8px 14px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--code-bg); color: var(--text);
+    font-size: 14px; font-family: 'Inter', sans-serif;
+  }
+  .url-input:focus { outline: none; border-color: var(--border-focus); }
+  .url-option { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); cursor: pointer; }
+  .sheet-bar {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    padding: 8px 14px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .sheet-select {
+    padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); font-size: 13px; font-family: 'Inter', sans-serif;
+  }
   .code-editor {
     background: var(--code-bg); border: 1px solid var(--border);
     border-radius: var(--radius); padding: 16px; min-height: 220px;
@@ -112,9 +558,35 @@ David Park,david.p@nexus.health,39,Data Scientist,false`;
   }
   .code-editor:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--primary-glow); }
   .code-editor::placeholder { color: var(--text-muted); }
+  .code-editor.format-mismatch { border-color: var(--error); box-shadow: 0 0 0 2px color-mix(in srgb, var(--error) 20%, transparent); }
+  .validation-badge {
+    display: flex; align-items: center; gap: 6px; margin-top: 8px; padding: 8px 14px;
+    border-radius: var(--radius-sm); font-size: 12px; font-weight: 500;
+    transition: opacity 300ms;
+  }
+  .validation-badge.valid {
+    background: color-mix(in srgb, var(--success) 10%, transparent);
+    color: var(--success); border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
+  }
+  .validation-badge.invalid {
+    background: color-mix(in srgb, var(--error) 10%, transparent);
+    color: var(--error); border: 1px solid color-mix(in srgb, var(--error) 20%, transparent);
+  }
   .convert-row {
     display: flex; align-items: center; gap: 8px; margin-top: 16px; flex-wrap: wrap;
   }
+  .tools-dropdown { position: relative; }
+  .tools-menu {
+    position: absolute; top: 100%; right: 0; z-index: 50; margin-top: 4px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15); min-width: 200px; overflow: hidden;
+  }
+  .tool-menu-item {
+    display: block; width: 100%; padding: 8px 14px; border: none; background: none;
+    text-align: left; font-size: 13px; font-family: 'Inter', sans-serif; cursor: pointer;
+    color: var(--text); transition: background var(--transition);
+  }
+  .tool-menu-item:hover { background: var(--surface-hover); }
   .btn-convert {
     padding: 10px 28px; font-size: 15px; font-weight: 600;
     border-radius: var(--radius); font-family: 'Inter', sans-serif; cursor: pointer;

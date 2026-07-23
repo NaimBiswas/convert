@@ -12,3 +12,8 @@ import PreviewTable from '../components/PreviewTable.astro';
   <InputPanel />
   <PreviewTable />
 </BaseLayout>
+
+<script>
+  import { loadPersistedState } from '../lib/appState';
+  loadPersistedState();
+</script>

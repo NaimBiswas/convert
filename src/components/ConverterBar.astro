@@ -6,7 +6,7 @@ const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Ma
   <div class="format-group">
     <select class="format-select" id="from-format">
       {formats.map(f => (
-        <option value={f} selected={f === 'CSV'}>{f}</option>
+        <option value={f} selected={f === 'JSON'}>{f}</option>
       ))}
     </select>
     <span class="format-select-arrow">▼</span>
@@ -37,6 +37,7 @@ const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Ma
     const tmp = from.value;
     from.value = to.value;
     to.value = tmp;
+    window.dispatchEvent(new CustomEvent('format-swap'));
   });
 </script>
 
