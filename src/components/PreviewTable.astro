@@ -218,12 +218,17 @@
     });
   }
 
+  function truncate(text: string, max: number): string {
+    return text.length > max ? text.slice(0, max) + '...' : text;
+  }
+
   function renderBody(headers: string[], rows: Record<string, unknown>[]) {
     tableBody.innerHTML = rows.map((row, ri) => {
       const cells = headers.map(h => {
         const val = row[h] ?? '';
-        const display = typeof val === 'object' ? escapeHtml(JSON.stringify(val)) : escapeHtml(String(val));
-        return `<td data-col="${h}" data-row="${ri}" class="editable">${display}</td>`;
+        const raw = typeof val === 'object' ? JSON.stringify(val) : String(val);
+        const display = truncate(escapeHtml(raw), 55);
+        return `<td data-col="${h}" data-row="${ri}" class="editable" title="${escapeHtml(raw)}">${display}</td>`;
       }).join('');
       return `<tr>${cells}<td class="action-col"><button class="del-row-btn" data-idx="${ri}">✕</button></td></tr>`;
     }).join('');
