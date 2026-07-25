@@ -1,4 +1,4 @@
-# Metadata Converter
+# Data Converter
 
 A free online tool for developers, analysts, QA engineers, and businesses to convert structured data between JSON, XML, CSV, Excel, YAML, and other formats — entirely in your browser. Nothing is uploaded.
 
