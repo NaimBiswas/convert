@@ -34,10 +34,6 @@ npm run preview
 
 Output goes to `dist/`.
 
-## Deploy
-
-See [CLOUDFLARE_DEPLOY.md](CLOUDFLARE_DEPLOY.md) for Cloudflare Pages setup. Also works on Vercel, Netlify, or any static host.
-
 ## Project Structure
 
 ```
