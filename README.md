@@ -1,6 +1,6 @@
-# Data Converter
+# Metadata Converter
 
-Convert between JSON, CSV, Excel (XLSX), XML, YAML, HTML Table, Markdown, and PDF — entirely in your browser. Nothing is uploaded.
+A free online tool for developers, analysts, QA engineers, and businesses to convert structured data between JSON, XML, CSV, Excel, YAML, and other formats — entirely in your browser. Nothing is uploaded.
 
 Built with [Astro](https://astro.build) + vanilla TypeScript.
 
@@ -51,7 +51,7 @@ src/
 │   ├── exportUtils.ts # HTML, Markdown, PDF export helpers
 │   ├── theme.ts    # Light/dark theme
 │   └── tools.ts    # Random data, Base64, Hex tools
-├── pages/          # index.astro (tool), docs.astro
+├── pages/          # index.astro (tool), docs.astro, about, contact, privacy, terms, cookies, faq, 404
 └── styles/         # Global CSS
 ```
 
