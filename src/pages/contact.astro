@@ -2,7 +2,18 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Contact Us" description="Get in touch with the Data Converter team. Report bugs, suggest features, or ask questions.">
+<BaseLayout title="Contact Us" description="Get in touch with the Data Converter team. Report bugs, suggest features, or ask questions." keywords="contact, support, bug report, data converter" breadcrumbs={[{name:'Home',url:'/'},{name:'Contact',url:'/contact'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact Us',
+  description: 'Get in touch with the Data Converter team.',
+  mainEntity: {
+    '@type': 'Person',
+    name: 'Naim Biswas',
+    email: 'nayeembiswas2@gmail.com',
+    contactType: 'technical support',
+  },
+}}>
   <main class="legal">
     <h1>Contact</h1>
 

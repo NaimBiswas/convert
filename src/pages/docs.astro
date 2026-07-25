@@ -2,7 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Documentation — How to Use the Data Converter" description="Learn how to convert between JSON, CSV, Excel, XML, YAML, Markdown, HTML, and PDF. Complete guide with shortcuts, tools, and privacy info.">
+<BaseLayout title="Documentation — How to Use the Data Converter" description="Learn how to convert between JSON, CSV, Excel, XML, YAML, Markdown, HTML, and PDF. Complete guide with shortcuts, tools, and privacy info." keywords="documentation, how to convert, format conversion, data converter" breadcrumbs={[{name:'Home',url:'/'},{name:'Docs',url:'/docs'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  name: 'How to Use the Data Converter',
+  description: 'Complete guide to converting between JSON, CSV, Excel, XML, YAML, Markdown, HTML, and PDF.',
+  applicationCategory: 'UtilityApplication',
+  author: { '@type': 'Person', name: 'Naim Biswas' },
+}}>
   <main class="docs">
     <h1>How to Use the Data Converter</h1>
 

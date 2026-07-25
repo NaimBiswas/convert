@@ -2,7 +2,14 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="About Us" description="Learn about Data Converter — a free, private, browser-based tool for converting between JSON, CSV, Excel, XML, YAML, and more.">
+<BaseLayout title="About Us" description="Learn about Data Converter — a free, private, browser-based tool for converting between JSON, CSV, Excel, XML, YAML, and more." keywords="about, data converter, online converter, browser-based" breadcrumbs={[{name:'Home',url:'/'},{name:'About',url:'/about'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Data Converter',
+  url: 'https://metadataconverter.com',
+  description: 'Convert structured data between JSON, CSV, Excel, XML, YAML, and more — entirely in your browser.',
+  author: { '@type': 'Person', name: 'Naim Biswas', url: 'https://github.com/NaimBiswas' },
+}}>
   <main class="legal">
     <h1>About Us</h1>
 

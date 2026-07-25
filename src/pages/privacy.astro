@@ -2,7 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Privacy Policy" description="Data Converter privacy policy — we do not collect, store, or share your data. Everything runs in your browser.">
+<BaseLayout title="Privacy Policy" description="Data Converter privacy policy — we do not collect, store, or share your data. Everything runs in your browser." keywords="privacy policy, data privacy, browser-based, no upload" breadcrumbs={[{name:'Home',url:'/'},{name:'Privacy',url:'/privacy'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Privacy Policy',
+  description: 'Data Converter does not collect, store, or share your data. All processing happens in your browser.',
+  about: { '@type': 'Thing', name: 'Privacy' },
+}}>
   <main class="legal">
     <h1>Privacy Policy</h1>
 

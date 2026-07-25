@@ -2,7 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Terms & Conditions" description="Data Converter terms and conditions — free to use, no warranty, your responsibility.">
+<BaseLayout title="Terms & Conditions" description="Data Converter terms and conditions — free to use, no warranty, your responsibility." keywords="terms and conditions, terms of service, data converter" breadcrumbs={[{name:'Home',url:'/'},{name:'Terms',url:'/terms'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Terms & Conditions',
+  description: 'Data Converter terms and conditions — free to use, no warranty, your responsibility.',
+  about: { '@type': 'Thing', name: 'Terms of Service' },
+}}>
   <main class="legal">
     <h1>Terms &amp; Conditions</h1>
 

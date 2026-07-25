@@ -2,7 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Frequently Asked Questions" description="Common questions about the Data Converter tool — privacy, formats, limits, and troubleshooting.">
+<BaseLayout title="Frequently Asked Questions" description="Common questions about the Data Converter tool — privacy, formats, limits, and troubleshooting." keywords="faq, data converter help, format support, troubleshooting" breadcrumbs={[{name:'Home',url:'/'},{name:'FAQ',url:'/faq'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  name: 'Frequently Asked Questions',
+  mainEntity: [
+    { '@type': 'Question', name: 'Is my data safe? Do you store anything?', acceptedAnswer: { '@type': 'Answer', text: 'Everything runs in your browser — nothing is uploaded to any server. Your data never leaves your device.' } },
+    { '@type': 'Question', name: 'What formats do you support?', acceptedAnswer: { '@type': 'Answer', text: 'Input: JSON, CSV, Excel (.xlsx), XML, YAML. Output: JSON, CSV, Excel (.xlsx), XML, YAML, HTML Table, Markdown, PDF.' } },
+    { '@type': 'Question', name: 'Is there a file size limit?', acceptedAnswer: { '@type': 'Answer', text: 'The limit depends on your device memory. Most files up to 50-100 MB work fine. Excel uploads are capped at 50 MB.' } },
+    { '@type': 'Question', name: 'Do I need an account?', acceptedAnswer: { '@type': 'Answer', text: 'No. There are no accounts, no sign-ups, no logins. Just open the site and start converting.' } },
+    { '@type': 'Question', name: 'Can I edit my data after converting?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. After conversion, you get a full table editor with search, sort, inline edit, find-and-replace, transpose, undo/redo, and more.' } },
+    { '@type': 'Question', name: 'The conversion looks wrong — what do I do?', acceptedAnswer: { '@type': 'Answer', text: 'Check that your input is well-formed. JSON needs proper syntax, CSV needs a header row. For nested data, the tool flattens keys with underscore separator.' } },
+  ],
+}}>
   <main class="faq">
     <h1>Frequently Asked Questions</h1>
 

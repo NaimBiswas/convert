@@ -2,7 +2,13 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Cookie Policy" description="Data Converter cookie policy — minimal, functional cookies only.">
+<BaseLayout title="Cookie Policy" description="Data Converter cookie policy — minimal, functional cookies only." keywords="cookie policy, cookies, Google Analytics, data converter" breadcrumbs={[{name:'Home',url:'/'},{name:'Cookies',url:'/cookies'}]} schema={{
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Cookie Policy',
+  description: 'Data Converter uses minimal cookies — functional theme preference and Google Analytics.',
+  about: { '@type': 'Thing', name: 'Cookies' },
+}}>
   <main class="legal">
     <h1>Cookie Policy</h1>
 
