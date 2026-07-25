@@ -1,28 +1,50 @@
 <footer class="footer">
-  <span class="footer-tag">
-    <span class="lock-icon">🔒</span>
-    No servers. No storage. No tracking. Your data never leaves your device.
-  </span>
-  <div class="footer-links">
-    <a href="/docs">Docs</a>
-    <span class="sep">·</span>
-    <a href="https://github.com/NaimBiswas/convert" target="_blank" rel="noopener">GitHub</a>
-    <span class="sep">·</span>
-    <a href="/">Home</a>
+  <div class="footer-top">
+    <span class="footer-tag">
+      <span class="lock-icon">🔒</span>
+      No servers. No storage. No tracking. Your data never leaves your device.
+    </span>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <span class="sep">·</span>
+      <a href="/docs">Docs</a>
+      <span class="sep">·</span>
+      <a href="/about">About</a>
+      <span class="sep">·</span>
+      <a href="/contact">Contact</a>
+      <span class="sep">·</span>
+      <a href="/privacy">Privacy</a>
+      <span class="sep">·</span>
+      <a href="/terms">Terms</a>
+      <span class="sep">·</span>
+      <a href="/cookies">Cookies</a>
+      <span class="sep">·</span>
+      <a href="https://github.com/NaimBiswas/convert" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; {new Date().getFullYear()} Data Converter. All rights reserved.
   </div>
 </footer>
 
 <style>
   .footer {
     margin-top: 64px; padding: 24px 0; border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 13px; color: var(--text-muted); flex-wrap: wrap; gap: 12px;
+    font-size: 13px; color: var(--text-muted);
     transition: border-color var(--transition), color var(--transition);
+  }
+  .footer-top {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 12px;
   }
   .footer a { color: var(--text-secondary); text-decoration: none; transition: color var(--transition); }
   .footer a:hover { color: var(--text); }
-  .footer-links { display: flex; align-items: center; gap: 8px; }
+  .footer-links { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
   .sep { color: var(--border); }
   .footer-tag { display: flex; align-items: center; gap: 6px; }
   .lock-icon { font-size: 13px; }
+  .footer-bottom {
+    margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+    text-align: center; font-size: 12px; color: var(--text-muted);
+  }
 </style>

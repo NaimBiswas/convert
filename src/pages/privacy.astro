@@ -1,0 +1,89 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy" description="Data Converter privacy policy — we do not collect, store, or share your data. Everything runs in your browser.">
+  <main class="legal">
+    <h1>Privacy Policy</h1>
+
+    <p><em>Last updated: July 2026</em></p>
+
+    <h2>What This Covers</h2>
+    <p>This privacy policy explains how Data Converter ("we", "I", "this site") handles your information when you use the tools on this website.</p>
+
+    <h2>No Data Collection</h2>
+    <p>All file conversion, parsing, and processing happens entirely in your browser using JavaScript. Your data — whether you paste it, upload it, or fetch it from a URL — never leaves your device. I don't have servers that receive or store your files.</p>
+
+    <h2>No Accounts, No Tracking</h2>
+    <p>You don't need an account to use this tool. I don't use analytics scripts that track your behavior across sites. The only analytics I run is Google Analytics with basic page view data (no user-level tracking), which helps me understand which features people use most.</p>
+
+    <h2>Cookies</h2>
+    <p>I use minimal cookies:</p>
+    <ul>
+      <li>A cookie to remember your theme preference (light/dark mode). This is strictly functional.</li>
+      <li>Google Analytics uses its own cookies for aggregate page view statistics.</li>
+    </ul>
+    <p>I don't use advertising cookies, tracking cookies, or third-party marketing cookies. See our <a href="/cookies">Cookie Policy</a> for details.</p>
+
+    <h2>External Services</h2>
+    <p>If you use the <strong>URL Fetch</strong> feature with the CORS proxy enabled, your request routes through a third-party proxy service. That service sees the URL you request but not your personal information. The CORS proxy is off by default.</p>
+
+    <h2>Changes</h2>
+    <p>If this policy changes, I'll update the date at the top. I'll also post a notice on the site for significant changes.</p>
+
+    <h2>Contact</h2>
+    <p>Questions? <a href="/contact">Get in touch</a>.</p>
+  </main>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  .legal h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .legal em {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 24px;
+  }
+  .legal h2 {
+    font-size: 18px;
+    font-weight: 550;
+    margin: 28px 0 10px;
+    color: var(--text);
+  }
+  .legal p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .legal ul {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .legal li {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+  .legal a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  .legal a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 640px) {
+    .legal { margin: 24px auto; }
+    .legal h1 { font-size: 24px; }
+  }
+</style>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Contact Us" description="Get in touch with the Data Converter team. Report bugs, suggest features, or ask questions.">
+  <main class="legal">
+    <h1>Contact</h1>
+
+    <p>Have a question, found a bug, or want to suggest a feature? I'd love to hear from you.</p>
+
+    <p>The fastest way to reach me is through this form:</p>
+
+    <p><a href="https://forms.gle/your-form-id" target="_blank" rel="noopener">Submit a message via Google Form →</a></p>
+
+    <p>You can also email me directly at <a href="mailto:nayeembiswas2@gmail.com">nayeembiswas2@gmail.com</a>. I try to respond within a day or two.</p>
+
+    <p>If you're reporting a bug, please include what you were converting (source format, target format) and any error messages you saw. That helps me track down the issue much faster.</p>
+  </main>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  .legal h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    letter-spacing: -0.5px;
+  }
+  .legal p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+  .legal a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  .legal a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 640px) {
+    .legal { margin: 24px auto; }
+    .legal h1 { font-size: 24px; }
+  }
+</style>

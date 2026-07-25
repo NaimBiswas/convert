@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Terms & Conditions" description="Data Converter terms and conditions — free to use, no warranty, your responsibility.">
+  <main class="legal">
+    <h1>Terms &amp; Conditions</h1>
+
+    <p><em>Last updated: July 2026</em></p>
+
+    <h2>Use at Your Own Risk</h2>
+    <p>Data Converter is provided free of charge, as-is, without any warranty. I work hard to make sure conversions are accurate, but I can't guarantee they'll be perfect for every edge case. You're responsible for verifying your converted data before using it in production or any important context.</p>
+
+    <h2>What You Can Do</h2>
+    <p>You're free to use this tool for personal, commercial, or educational purposes. No attribution required.</p>
+
+    <h2>What You Can't Do</h2>
+    <ul>
+      <li>Scrape, crawl, or systematically download content from this site.</li>
+      <li>Use the tool to process illegal content or data you don't have rights to.</li>
+      <li>Attempt to break, overload, or exploit the site.</li>
+    </ul>
+
+    <h2>No Liability</h2>
+    <p>I'm not liable for any damages or data loss resulting from your use of this tool. Since all processing happens locally in your browser, I don't have access to your data and can't be responsible for what happens to it.</p>
+
+    <h2>Changes</h2>
+    <p>I may update these terms. Continued use after changes means you accept the updated terms.</p>
+
+    <h2>Contact</h2>
+    <p>If you have questions about these terms, <a href="/contact">reach out</a>.</p>
+  </main>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  .legal h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .legal em {
+    font-size: 13px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 24px;
+  }
+  .legal h2 {
+    font-size: 18px;
+    font-weight: 550;
+    margin: 28px 0 10px;
+    color: var(--text);
+  }
+  .legal p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .legal ul {
+    padding-left: 20px;
+    margin-bottom: 12px;
+  }
+  .legal li {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+  .legal a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  .legal a:hover {
+    text-decoration: underline;
+  }
+  @media (max-width: 640px) {
+    .legal { margin: 24px auto; }
+    .legal h1 { font-size: 24px; }
+  }
+</style>
