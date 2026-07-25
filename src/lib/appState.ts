@@ -1,7 +1,6 @@
 import type { ParseResult, Format } from './converters/types';
 
 const MAX_HISTORY_ENTRIES = 5;
-const STORAGE_KEY = 'convert_history';
 
 export interface AppState {
   fromFormat: Format;
@@ -35,23 +34,6 @@ let state: AppState = {
 
 const listeners = new Set<Listener>();
 
-function loadPersistedHistory(): ParseResult[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    return JSON.parse(raw) as ParseResult[];
-  } catch {
-    return [];
-  }
-}
-
-function persistHistory(history: ParseResult[]): void {
-  try {
-    const toStore = history.slice(-MAX_HISTORY_ENTRIES);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
-  } catch { }
-}
-
 export function getState(): AppState {
   return state;
 }
@@ -82,7 +64,6 @@ export function pushHistory(parseResult: ParseResult): void {
     sortDirection: 'asc',
     searchQuery: '',
   };
-  persistHistory(newHistory);
   listeners.forEach(fn => fn());
 }
 
@@ -90,7 +71,6 @@ export function undo(): void {
   if (state.historyIndex > 0) {
     const idx = state.historyIndex - 1;
     state = { ...state, parseResult: state.history[idx], historyIndex: idx };
-    persistHistory(state.history);
     listeners.forEach(fn => fn());
   }
 }
@@ -99,23 +79,8 @@ export function redo(): void {
   if (state.historyIndex < state.history.length - 1) {
     const idx = state.historyIndex + 1;
     state = { ...state, parseResult: state.history[idx], historyIndex: idx };
-    persistHistory(state.history);
     listeners.forEach(fn => fn());
   }
-}
-
-export function loadPersistedState(): void {
-  const h = loadPersistedHistory();
-  if (h.length > 0) {
-    state = { ...state, history: h, historyIndex: h.length - 1, parseResult: h[h.length - 1] };
-    listeners.forEach(fn => fn());
-  }
-}
-
-export function clearPersistedHistory(): void {
-  localStorage.removeItem(STORAGE_KEY);
-  state = { ...state, history: [], historyIndex: -1, parseResult: null };
-  listeners.forEach(fn => fn());
 }
 
 export function getDisplayData(): { headers: string[]; rows: Record<string, unknown>[]; columnTypes: Record<string, string> } | null {
