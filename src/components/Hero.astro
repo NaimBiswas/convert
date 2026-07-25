@@ -1,6 +1,8 @@
 <section class="hero">
   <h1>Transform your data, instantly</h1>
-  <p>Convert between JSON, Excel, CSV, XML, YAML, and more — all in your browser. Nothing is uploaded.</p>
+  <p class="hero-desc">Metadata Converter is a free online tool that lets developers, analysts, QA engineers, and businesses convert structured data between JSON, XML, CSV, Excel, YAML, and other formats.</p>
+  <p class="hero-desc">Unlike many online converters, everything runs directly inside your browser. Your data is never uploaded to our servers, making conversions secure and private.</p>
+  <p class="hero-desc">Whether you're debugging APIs, migrating databases, transforming configuration files, or preparing spreadsheets, Metadata Converter simplifies the process.</p>
   <div class="trust-badge">
     <span class="trust-icon">🔒</span>
     <span>100% client-side processing — your data never reaches any server</span>
@@ -13,10 +15,11 @@
     font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px;
     transition: color var(--transition);
   }
-  .hero p {
-    color: var(--text-secondary); font-size: 15px; max-width: 480px; margin: 0 auto;
+  .hero-desc {
+    color: var(--text-secondary); font-size: 15px; max-width: 600px; margin: 0 auto 8px;
     transition: color var(--transition);
   }
+  .hero-desc:last-of-type { margin-bottom: 0; }
   .trust-badge {
     display: inline-flex; align-items: center; gap: 8px;
     margin-top: 16px; padding: 8px 18px;
