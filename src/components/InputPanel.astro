@@ -238,7 +238,6 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
           loadSheet(workbook, sheetNames[0]);
         }
 
-        fromSelect.value = 'Excel (XLSX)';
         updateConvertButton();
       } catch {
         alert('Could not read Excel file. Make sure it is a valid .xlsx file.');
@@ -251,6 +250,7 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
     const sheet = workbook.Sheets[name];
     const csv = XLSX.utils.sheet_to_csv(sheet);
     editor.value = csv;
+    fromSelect.value = 'CSV';
     setActiveTab('paste');
   }
 
@@ -349,7 +349,10 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
     const to = toSelect?.value || 'Excel (XLSX)';
     const detected = detectFormat(text);
 
-    const formatToParse = detected || from;
+    let formatToParse = detected || from;
+    if (formatToParse === 'Excel (XLSX)' && loadedFile?.sheets) {
+      formatToParse = 'CSV';
+    }
 
     try {
       let result;
