@@ -69,7 +69,7 @@
   import { parseCSV } from '../lib/converters/csv';
   import { parseXML } from '../lib/converters/xml';
   import { parseYAML } from '../lib/converters/yaml';
-  import { pushHistory, setState, getState, clearPersistedHistory } from '../lib/appState';
+  import { pushHistory, setState, getState } from '../lib/appState';
   import { generateRandomData, encodeBase64, decodeBase64, encodeHex, decodeHex } from '../lib/tools';
   import * as XLSX from 'xlsx';
 
@@ -385,7 +385,7 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
     loadedFile = null;
     validationBadge.style.display = 'none';
     setActiveTab('paste');
-    clearPersistedHistory();
+    setState({ history: [], historyIndex: -1, parseResult: null });
   });
 
   function showValidation(valid: boolean, message: string) {
