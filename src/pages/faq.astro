@@ -7,7 +7,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   '@type': 'FAQPage',
   name: 'Frequently Asked Questions',
   mainEntity: [
-    { '@type': 'Question', name: 'Is my data safe? Do you store anything?', acceptedAnswer: { '@type': 'Answer', text: 'Everything runs in your browser — nothing is uploaded to any server. Your data never leaves your device.' } },
+    { '@type': 'Question', name: 'Is my data safe? Do you store anything?', acceptedAnswer: { '@type': 'Answer', text: 'Everything runs in your browser — nothing is uploaded to any server. Your data never leaves your device. Theme preference is saved locally, but all conversion data is cleared when you close the tab.' } },
     { '@type': 'Question', name: 'What formats do you support?', acceptedAnswer: { '@type': 'Answer', text: 'Input: JSON, CSV, Excel (.xlsx), XML, YAML. Output: JSON, CSV, Excel (.xlsx), XML, YAML, HTML Table, Markdown, PDF.' } },
     { '@type': 'Question', name: 'Is there a file size limit?', acceptedAnswer: { '@type': 'Answer', text: 'The limit depends on your device memory. Most files up to 50-100 MB work fine. Excel uploads are capped at 50 MB.' } },
     { '@type': 'Question', name: 'Do I need an account?', acceptedAnswer: { '@type': 'Answer', text: 'No. There are no accounts, no sign-ups, no logins. Just open the site and start converting.' } },
@@ -22,7 +22,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <details class="faq-item">
         <summary>Is my data safe? Do you store anything?</summary>
         <div class="faq-answer">
-          <p>Everything runs in your browser — nothing is uploaded to any server. Your data never leaves your device. I don't store, log, or even see what you convert. The only thing that persists locally is your theme preference and conversion history, which stays in your browser's localStorage.</p>
+          <p>Everything runs in your browser — nothing is uploaded to any server. Your data never leaves your device. I don't store, log, or even see what you convert. Your theme preference (light/dark mode) is saved locally so it persists between visits. All conversion data is cleared when you close the tab.</p>
         </div>
       </details>
 
