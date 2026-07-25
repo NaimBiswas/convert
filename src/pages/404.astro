@@ -1,0 +1,69 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page Not Found" description="The page you're looking for doesn't exist. Let's get you back on track.">
+  <main class="not-found">
+    <div class="code-block">
+      <div class="line"><span class="kw">Error</span><span class="punct">:</span> <span class="str">404</span></div>
+      <div class="line indent"><span class="prop">message</span><span class="punct">:</span> <span class="str">"Page not found"</span></div>
+      <div class="line indent"><span class="prop">suggestion</span><span class="punct">:</span> <span class="str"><a href="/">Go home →</a></span></div>
+      <div class="cursor-box"><span class="cursor">&nbsp;</span></div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 60vh; padding: 0 16px;
+  }
+  .code-block {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; line-height: 1.8;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 32px 36px;
+    max-width: 480px; width: 100%;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+    transition: background var(--transition), border-color var(--transition),
+                box-shadow var(--transition);
+  }
+  .line { opacity: 0; animation: fadeSlideIn 0.5s ease forwards; }
+  .line:nth-child(1) { animation-delay: 0.1s; }
+  .line:nth-child(2) { animation-delay: 0.4s; }
+  .line:nth-child(3) { animation-delay: 0.7s; }
+  .indent { padding-left: 20px; }
+  .kw { color: var(--secondary); }
+  .punct { color: var(--text-muted); }
+  .str { color: var(--primary); }
+  .str a { color: var(--primary); text-decoration: none; font-style: normal; }
+  .str a:hover { text-decoration: underline; }
+  .prop { color: #5B9E6E; }
+  :root.dark .prop { color: #34D399; }
+
+  .cursor-box { margin-top: 12px; }
+  .cursor {
+    display: inline-block;
+    width: 10px; height: 1.2em;
+    background: var(--primary);
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+    opacity: 0;
+    animation: blink 1s step-end infinite, fadeIn 0s 1s forwards;
+  }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+
+  @media (max-width: 640px) {
+    .code-block { font-size: 14px; padding: 24px 20px; }
+  }
+</style>

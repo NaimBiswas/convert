@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Frequently Asked Questions" description="Common questions about the Data Converter tool — privacy, formats, limits, and troubleshooting.">
+  <main class="faq">
+    <h1>Frequently Asked Questions</h1>
+
+    <div class="faq-list">
+      <details class="faq-item">
+        <summary>Is my data safe? Do you store anything?</summary>
+        <div class="faq-answer">
+          <p>Everything runs in your browser — nothing is uploaded to any server. Your data never leaves your device. I don't store, log, or even see what you convert. The only thing that persists locally is your theme preference and conversion history, which stays in your browser's localStorage.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What formats do you support?</summary>
+        <div class="faq-answer">
+          <p><strong>Input:</strong> JSON, CSV, Excel (.xlsx), XML, YAML</p>
+          <p><strong>Output:</strong> JSON, CSV, Excel (.xlsx), XML, YAML, HTML Table, Markdown, PDF</p>
+          <p>You can convert from any input format to any output format. For example, paste XML and download as CSV, or upload Excel and export as JSON.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Is there a file size limit?</summary>
+        <div class="faq-answer">
+          <p>Since everything runs in your browser, the limit depends on your device's memory. Most files up to 50-100 MB work fine on a typical laptop. Excel uploads are capped at 50 MB in the UI. If you run into performance issues, try splitting your data into smaller files.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do I need an account?</summary>
+        <div class="faq-answer">
+          <p>No. There are no accounts, no sign-ups, no logins. Just open the site and start converting.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can I edit my data after converting?</summary>
+        <div class="faq-answer">
+          <p>Yes. After conversion, you get a full table editor. You can double-click any cell to edit, search and filter rows, sort by columns, add or delete rows and columns, transpose the table, do find-and-replace across all cells, apply case transforms (UPPER, lower, Capitalize) to a column, undo and redo changes, and remove empty rows or duplicates.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary>The conversion looks wrong — what do I do?</summary>
+        <div class="faq-answer">
+          <p>First, make sure your input data is well-formed. JSON needs proper quotes and brackets. CSV needs a header row. For nested JSON or XML, the tool flattens keys with <code>_</code> as a separator — this works best for arrays of objects. If you're still stuck, <a href="/contact">reach out</a> with your source format, target format, and a sample of the data (or the error message) and I'll take a look.</p>
+        </div>
+      </details>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .faq {
+    max-width: 720px;
+    margin: 40px auto;
+    padding: 0 16px;
+  }
+  .faq h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    letter-spacing: -0.5px;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    overflow: hidden;
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .faq-item[open] {
+    border-color: var(--primary);
+  }
+  .faq-item summary {
+    padding: 16px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item summary::after {
+    content: '+';
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform var(--transition), color var(--transition);
+    line-height: 1;
+  }
+  .faq-item[open] summary::after {
+    transform: rotate(45deg);
+    color: var(--primary);
+  }
+  .faq-item summary:hover {
+    background: var(--surface-hover);
+  }
+  .faq-item[open] summary {
+    border-bottom: 1px solid var(--border);
+  }
+  .faq-answer {
+    padding: 16px 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+  .faq-answer p {
+    margin-bottom: 8px;
+  }
+  .faq-answer p:last-child {
+    margin-bottom: 0;
+  }
+  .faq-answer a {
+    color: var(--primary);
+    text-decoration: none;
+  }
+  .faq-answer a:hover {
+    text-decoration: underline;
+  }
+  .faq-answer code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+  @media (max-width: 640px) {
+    .faq { margin: 24px auto; }
+    .faq h1 { font-size: 24px; }
+    .faq-item summary { padding: 14px 16px; font-size: 14px; }
+    .faq-answer { padding: 14px 16px; font-size: 13px; }
+  }
+</style>
