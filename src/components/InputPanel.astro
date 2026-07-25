@@ -276,8 +276,10 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
     let message = '';
 
     if (from === 'Excel (XLSX)') {
-      match = false;
-      message = 'Excel requires file upload — use Upload tab';
+      if (!loadedFile?.sheets) {
+        match = false;
+        message = 'Excel requires file upload — use Upload tab';
+      }
     } else {
       const detected = detectFormat(text);
       if (detected && detected !== from) {
