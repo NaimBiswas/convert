@@ -73,6 +73,7 @@ const pageSchema = schema || {
       function loadAnalytics() {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
+        loadScript('https://www.googletagmanager.com/gtag/js?id=G-CH6QGF1ES3');
         gtag('js', new Date());
         gtag('config', 'G-CH6QGF1ES3');
         loadScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5712552452630675', {crossorigin:'anonymous'});
@@ -93,8 +94,6 @@ const pageSchema = schema || {
         loadAnalytics();
       };
     </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CH6QGF1ES3"></script>
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/png" href="/images/icons/favicon.png" />
