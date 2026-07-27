@@ -18,24 +18,37 @@ import PreviewTable from '../components/PreviewTable.astro';
 
     <section class="landing-content">
       <h2>Why Convert CSV to JSON?</h2>
-      <p>JSON is the native data format for web APIs, JavaScript applications, and NoSQL databases. Converting CSV to JSON lets you take spreadsheet data and use it directly in your code, API requests, or data pipelines.</p>
+      <p>CSV is the lingua franca of spreadsheets and database exports, but JSON is what web APIs, NoSQL databases, and modern JavaScript/TypeScript applications consume natively. Converting CSV to JSON lets you take any tabular data — from bank statements to survey results — and use it directly in your application code.</p>
+      <p>Typical scenarios include loading product inventory from an ERP spreadsheet into a headless CMS, importing customer lists from CSV exports into a Firebase or MongoDB collection, or preparing test fixtures from existing tabular data for unit tests.</p>
+
+      <h2>How Rows Become JSON</h2>
+      <p>Each row in the CSV becomes one JSON object. The first row provides the keys (column headers), and subsequent rows provide the values. For example:</p>
+      <p><code>name,age,city<br>Alice,30,NYC<br>Bob,25,LA</code></p>
+      <p>becomes:</p>
+      <p><code>[&lbrace;"name":"Alice","age":30,"city":"NYC"&rbrace;,&lbrace;"name":"Bob","age":25,"city":"LA"&rbrace;]</code></p>
+      <p>The converter detects column types automatically: quoted strings stay strings, unquoted numbers become numbers, and common date formats are preserved. Empty cells are included as <code>null</code> so downstream code can handle missing data explicitly.</p>
 
       <h2>How to Convert CSV to JSON</h2>
       <ol>
         <li>Select <strong>CSV</strong> as source and <strong>JSON</strong> as target format</li>
-        <li>Paste your CSV data or upload a <code>.csv</code> file</li>
+        <li>Paste your CSV, upload a <code>.csv</code> file, or fetch from a URL</li>
         <li>Click <strong>Convert</strong> or press <kbd>Ctrl+Enter</kbd></li>
-        <li>Preview the JSON output, then download or copy to clipboard</li>
+        <li>Preview the result, edit inline if needed, then download as JSON</li>
       </ol>
 
       <h2>Features</h2>
       <ul>
-        <li>First row auto-detected as column headers</li>
-        <li>Type inference — numbers, booleans, dates detected per column</li>
-        <li>Handles quoted fields, commas inside values, and line breaks</li>
-        <li>Empty values become <code>null</code> in JSON output</li>
-        <li>Sort, filter, and edit data before converting</li>
+        <li>Detects column types: strings, numbers, booleans, dates</li>
+        <li>First row is treated as headers for key names</li>
+        <li>Output as array of objects (default) or array of arrays</li>
+        <li>Preserves empty cells versus missing keys</li>
+        <li>Inline editing, sorting, filtering before download</li>
       </ul>
+
+      <h2>Common Use Cases</h2>
+      <p><strong>API integration:</strong> Your partner sends a CSV of daily transactions. Convert to JSON and POST directly to your REST endpoint.</p>
+      <p><strong>Database seeding:</strong> Export a reference table from MySQL as CSV, convert to JSON, and use it as seed data for MongoDB or a Firebase collection.</p>
+      <p><strong>Frontend development:</strong> A designer provides data in a spreadsheet. Convert to JSON and import it directly into a React/Vue component's state or mock service worker.</p>
     </section>
   </main>
 </BaseLayout>

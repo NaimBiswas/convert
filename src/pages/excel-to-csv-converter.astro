@@ -18,7 +18,11 @@ import PreviewTable from '../components/PreviewTable.astro';
 
     <section class="landing-content">
       <h2>Why Convert Excel to CSV?</h2>
-      <p>CSV is the simplest, most universal data format — every spreadsheet app, database, and data tool can read it. Converting XLSX to CSV removes formatting, macros, and proprietary structures, leaving you with clean, portable tabular data.</p>
+      <p>CSV is the lowest-common-denominator data format — every spreadsheet app, database, ETL pipeline, and data analysis tool can read it without special libraries or licensing. Converting XLSX to CSV strips away formatting, charts, macros, and proprietary binary structures, leaving you with clean, portable tabular data that works everywhere.</p>
+      <p>This is the go-to step when you need to move data between systems: from Excel into PostgreSQL (via <code>COPY</code>), into Python pandas or R for analysis, into a cloud data warehouse like BigQuery or Snowflake, or into a CRM import tool that only accepts CSV files.</p>
+
+      <h2>What CSV Loses (and Why That's Good)</h2>
+      <p>Excel files carry a lot of overhead — cell colors, fonts, merged cells, formulas, charts, pivot tables, macros, and custom XML. CSV drops all of that and keeps only the raw data: rows and columns of plain text separated by commas. This makes CSV files much smaller, faster to parse, and universally compatible. Formulas are evaluated to their current values before export, so you get the results, not the formula syntax.</p>
 
       <h2>How to Convert Excel to CSV</h2>
       <ol>
@@ -37,6 +41,12 @@ import PreviewTable from '../components/PreviewTable.astro';
         <li>Files up to 50 MB supported</li>
         <li>No formatting or metadata carried over — clean data only</li>
       </ul>
+
+      <h2>When to Use This Conversion</h2>
+      <p><strong>Database import:</strong> You have a spreadsheet of customer records to bulk-import into PostgreSQL, MySQL, or SQLite. CSV is the standard input format for <code>COPY</code> and <code>LOAD DATA</code> commands.</p>
+      <p><strong>Data analysis:</strong> Export an Excel report to CSV and load it into Python (pandas), R, or Jupyter Notebook for statistical modeling, visualization, or machine learning.</p>
+      <p><strong>System migration:</strong> Moving from one CRM, ERP, or accounting system to another. Almost every migration tool accepts CSV as the intermediary format.</p>
+      <p><strong>Version control:</strong> Track changes to tabular data in git. CSV files diff cleanly, while binary .xlsx files are unreadable to git.</p>
     </section>
   </main>
 </BaseLayout>

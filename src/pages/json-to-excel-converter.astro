@@ -18,7 +18,12 @@ import PreviewTable from '../components/PreviewTable.astro';
 
     <section class="landing-content">
       <h2>Why Convert JSON to Excel?</h2>
-      <p>JSON is the language of APIs and developers, but Excel is what stakeholders, analysts, and business teams use. Converting JSON to XLSX bridges that gap — take raw API data and deliver it as a polished spreadsheet anyone can open and work with.</p>
+      <p>JSON is the native format for APIs and developer tooling, but Excel is what managers, analysts, and business teams expect. Converting JSON to XLSX bridges that gap — take raw API responses, webhook payloads, or database exports and turn them into clean spreadsheets that anyone can open in Microsoft Excel, Google Sheets, or Apple Numbers without any technical setup.</p>
+      <p>This is especially useful when you need to share data with non-technical stakeholders: instead of handing them a JSON file and explaining how to read it, you deliver a familiar spreadsheet with proper column headers, data types, and formatting.</p>
+
+      <h2>How Nested JSON Appears in Excel</h2>
+      <p>JSON data is often nested — objects within objects, arrays of objects, mixed types. The converter flattens nested keys using an underscore separator. For example, <code>&lbrace;"user": &lbrace;"name": "Alice", "contact": &lbrace;"email": "a@b.com"&rbrace;&rbrace;&rbrace;</code> becomes columns <code>user_name</code> and <code>user_contact_email</code>.</p>
+      <p>Arrays of objects expand into multiple rows. Primitive arrays (like <code>["red", "blue"]</code>) are joined into a single cell with semicolons. Each JSON object becomes one row, and each key-value pair becomes a cell with the correct data type — numbers stay numeric, dates remain dates, so pivot tables and formulas work immediately.</p>
 
       <h2>How to Convert JSON to Excel</h2>
       <ol>
@@ -37,6 +42,11 @@ import PreviewTable from '../components/PreviewTable.astro';
         <li>Custom sheet name and auto-width options before download</li>
         <li>Supports JSON arrays, nested objects, and mixed structures</li>
       </ul>
+
+      <h2>When to Use This</h2>
+      <p><strong>Reporting:</strong> Pull data from your backend API (user signups, revenue, page views) and convert to Excel for a weekly business review presentation.</p>
+      <p><strong>Data analysis:</strong> Export JSON from a database query tool, convert to XLSX, and open in Excel for pivot tables, charts, and what-if analysis.</p>
+      <p><strong>Client delivery:</strong> A client's system sends data as JSON via webhook. Convert to a clean spreadsheet for them to review without needing engineering help.</p>
     </section>
   </main>
 </BaseLayout>

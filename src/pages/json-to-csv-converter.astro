@@ -18,7 +18,12 @@ import PreviewTable from '../components/PreviewTable.astro';
 
     <section class="landing-content">
       <h2>Why Convert JSON to CSV?</h2>
-      <p>CSV (Comma-Separated Values) is the universal format for spreadsheets and databases. Converting JSON to CSV lets you open developer-friendly data in Excel, Google Sheets, or any data analysis tool. Perfect for API responses, configuration files, and data exports.</p>
+      <p>JSON is the native format for APIs and web applications, but CSV is what spreadsheets, databases, and analytics tools speak natively. Converting JSON to CSV lets you take API responses, configuration exports, or webhook payloads and open them directly in Excel, Google Sheets, or import them into PostgreSQL, MySQL, or any data analysis pipeline.</p>
+      <p>Common use cases include exporting user records from a REST API for a marketing team, converting geolocation data from a mapping API into a table for GIS analysis, or transforming e-commerce product catalogs from JSON feeds into CSV for price comparison tools.</p>
+
+      <h2>How Nested JSON Gets Handled</h2>
+      <p>CSV is flat — every row has the same columns. When your JSON has nested objects (like <code>&lbrace;"user": &lbrace;"name": "Alice", "address": &lbrace;"city": "NYC"&rbrace;&rbrace;&rbrace;</code>), the converter flattens keys using an underscore separator: <code>user_name</code>, <code>user_address_city</code>. Arrays of objects expand into multiple rows. Primitive arrays (like <code>["red", "blue"]</code>) are joined with semicolons into a single cell.</p>
+      <p>This means a deeply nested API response becomes a clean, flat table without losing any data. You can see every field as a column heading and every record as a row.</p>
 
       <h2>How to Convert JSON to CSV</h2>
       <ol>
@@ -36,6 +41,11 @@ import PreviewTable from '../components/PreviewTable.astro';
         <li>Smart header detection and column ordering</li>
         <li>Inline editing, sorting, filtering before download</li>
       </ul>
+
+      <h2>Real-World Examples</h2>
+      <p><strong>API data export:</strong> An e-commerce store fetches product data from Shopify's API (JSON). Converting to CSV lets the inventory team import it into their warehouse management spreadsheet.</p>
+      <p><strong>Database migration:</strong> A developer exports user profiles from MongoDB as JSON, converts to CSV, and bulk-imports into PostgreSQL using <code>COPY</code>.</p>
+      <p><strong>Data analysis:</strong> A data analyst pulls JSON from Google Analytics Reporting API, converts to CSV, and opens it in R or Python pandas for statistical analysis.</p>
     </section>
   </main>
 </BaseLayout>
