@@ -1,18 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="How to Handle Large File Conversions Without Losing Data" description="Tips for converting large datasets — memory management, chunking strategies, and what to watch for with files over 10 MB." keywords="large file conversion, big data convert, large csv json, memory efficient conversion" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Large File Conversion',url:'/blog/large-file-conversion'}]}>
+<BaseLayout title="How to Handle Large File Conversions Without Losing Data" description="Tips for converting large datasets — memory management, chunking strategies, and what to watch for with files over 10 MB." keywords="large file conversion, big data convert, large csv json, memory efficient conversion" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Large File Conversion',url:'/blog/large-file-conversion'}]} article={{headline:'How to Handle Large File Conversions Without Losing Data',datePublished:'2026-02-25',description:'Tips for converting large datasets — memory management, chunking strategies, and what to watch for with files over 10 MB.'}}>
   <main class="blog-post">
     <article>
       <h1>How to Handle Large File Conversions Without Losing Data</h1>
-      <p class="post-meta"><time datetime="2026-02-25">February 25, 2026</time></p>
+      <p class="post-meta"><time datetime="2026-02-25">February 25, 2026</time> · by Naim Biswas</p>
 
       <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&amp;h=400&amp;fit=crop" alt="Code editor on a computer screen" class="post-img" loading="lazy" />
 
       <p>Converting a 1 KB JSON file to CSV is trivial. Converting a 200 MB database export with a million rows is a different problem entirely. Large file conversions stress memory limits, browser performance, and data integrity. Here is how to handle them safely.</p>
 
       <h2>Understand Your Constraints</h2>
-      <p>Browser-based tools run in a sandbox with limited memory. A typical browser tab has 500 MB to 2 GB of available memory depending on the device and browser. If your file is 100 MB, loading it entirely into memory leaves less room for the processed output and the converter's internal data structures. Know your limits before you start.</p>
+      <p>Browser-based tools like <a href="/">Data Converter</a> run in a sandbox with limited memory. A typical browser tab has 500 MB to 2 GB of available memory depending on the device and browser. If your file is 100 MB, loading it entirely into memory leaves less room for the processed output and the converter's internal data structures. Know your limits before you start.</p>
       <p>Server-side tools have their own constraints — memory limits on shared hosting, request timeouts, and upload size restrictions. This tool processes everything in your browser, which means no server timeouts but also no server-grade memory.</p>
 
       <h2>Streaming vs. Loading</h2>

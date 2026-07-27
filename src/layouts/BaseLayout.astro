@@ -11,21 +11,25 @@ export interface Props {
   robots?: string;
   schema?: object;
   breadcrumbs?: { name: string; url: string }[];
+  article?: { headline: string; datePublished: string; description: string };
 }
 
+const siteUrl = 'https://metadataconverter.com';
 const {
-  title, description, image = '/og-image.png',
+  title, description, image = `${siteUrl}/og-image.png`,
   keywords, robots = 'index, follow',
-  schema, breadcrumbs,
+  schema, breadcrumbs, article,
 } = Astro.props;
 const siteName = 'Data Converter';
 const url = Astro.url;
+
+const absImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
 
 const pageSchema = schema || {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: siteName,
-  url: 'https://metadataconverter.com',
+  url: siteUrl,
   description,
   applicationCategory: 'UtilityApplication',
   operatingSystem: 'All',
@@ -49,14 +53,14 @@ const pageSchema = schema || {
     <meta property="og:type" content="website" />
     <meta property="og:title" content={`${title} — ${siteName}`} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={absImage} />
     <meta property="og:url" content={url} />
     <meta property="og:site_name" content={siteName} />
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={`${title} — ${siteName}`} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={absImage} />
 
     <script is:inline>
       function loadScript(src, attrs = {}) {
@@ -107,8 +111,17 @@ const pageSchema = schema || {
         '@type': 'ListItem',
         position: i + 1,
         name: item.name,
-        item: `https://metadataconverter.com${item.url}`,
+        item: `${siteUrl}${item.url}`,
       })),
+    })} />}
+    {article && <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: article.headline,
+      description: article.description,
+      datePublished: article.datePublished,
+      author: { '@type': 'Person', name: 'Naim Biswas', url: 'https://github.com/NaimBiswas' },
+      publisher: { '@type': 'Organization', name: 'Data Converter', url: siteUrl },
     })} />}
   </head>
   <body>

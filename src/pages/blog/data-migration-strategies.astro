@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Data Migration Strategies: From Spreadsheets to Databases" description="A guide to migrating data from Excel and CSV files into relational databases, NoSQL stores, and cloud data warehouses." keywords="data migration, spreadsheet to database, excel to database, csv import database" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Data Migration Strategies',url:'/blog/data-migration-strategies'}]}>
+<BaseLayout title="Data Migration Strategies: From Spreadsheets to Databases" description="A guide to migrating data from Excel and CSV files into relational databases, NoSQL stores, and cloud data warehouses." keywords="data migration, spreadsheet to database, excel to database, csv import database" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Data Migration Strategies',url:'/blog/data-migration-strategies'}]} article={{headline:'Data Migration Strategies: From Spreadsheets to Databases',datePublished:'2026-02-28',description:'A guide to migrating data from Excel and CSV files into relational databases, NoSQL stores, and cloud data warehouses.'}}>
   <main class="blog-post">
     <article>
       <h1>Data Migration Strategies: From Spreadsheets to Databases</h1>
-      <p class="post-meta"><time datetime="2026-02-28">February 28, 2026</time></p>
+      <p class="post-meta"><time datetime="2026-02-28">February 28, 2026</time> · by Naim Biswas</p>
 
       <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=800&amp;h=400&amp;fit=crop" alt="Data server with blinking lights" class="post-img" loading="lazy" />
 
@@ -18,7 +18,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <p>Spreadsheets are flat; databases are normalized. A single spreadsheet with columns for customer name, order date, and product name may need to become three tables: <code>customers</code>, <code>products</code>, and <code>orders</code>. Identify primary keys, foreign key relationships, and constraints before importing. Resist the temptation to import the spreadsheet as a single table — that defeats the purpose of using a database.</p>
 
       <h2>Step 3: Convert to CSV</h2>
-      <p>CSV is the universal import format for databases. Most database systems (PostgreSQL, MySQL, SQLite, SQL Server) have built-in commands for bulk CSV import: <code>COPY</code>, <code>LOAD DATA INFILE</code>, or <code>BULK INSERT</code>. Convert each sheet to CSV using a tool like this one. Ensure the CSV output uses UTF-8 encoding and consistent quoting.</p>
+      <p>CSV is the universal import format for databases. Most database systems (PostgreSQL, MySQL, SQLite, SQL Server) have built-in commands for bulk CSV import: <code>COPY</code>, <code>LOAD DATA INFILE</code>, or <code>BULK INSERT</code>. Convert each sheet to CSV using <a href="/excel-to-csv-converter">a tool like this one</a>. Ensure the CSV output uses UTF-8 encoding and consistent quoting.</p>
 
       <h2>Step 4: Import and Validate</h2>
       <p>Import the CSV into a staging table (a temporary copy of the target table structure). This lets you run validation queries before moving data into the production schema. Check for:</p>

@@ -1,18 +1,18 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Handling Excel Formulas When Converting to CSV" description="What happens to Excel formulas, conditional formatting, and macros when you convert to plain CSV? Everything you need to know." keywords="excel formulas to csv, convert excel formulas, xlsx to csv formulas, formula evaluation" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Excel Formulas to CSV',url:'/blog/excel-formulas-to-csv'}]}>
+<BaseLayout title="Handling Excel Formulas When Converting to CSV" description="What happens to Excel formulas, conditional formatting, and macros when you convert to plain CSV? Everything you need to know." keywords="excel formulas to csv, convert excel formulas, xlsx to csv formulas, formula evaluation" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Excel Formulas to CSV',url:'/blog/excel-formulas-to-csv'}]} article={{headline:'Handling Excel Formulas When Converting to CSV',datePublished:'2026-03-02',description:'What happens to Excel formulas, conditional formatting, and macros when you convert to plain CSV? Everything you need to know.'}}>
   <main class="blog-post">
     <article>
       <h1>Handling Excel Formulas When Converting to CSV</h1>
-      <p class="post-meta"><time datetime="2026-03-02">March 2, 2026</time></p>
+      <p class="post-meta"><time datetime="2026-03-02">March 2, 2026</time> · by Naim Biswas</p>
 
       <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&amp;h=400&amp;fit=crop" alt="Modern workspace with laptop" class="post-img" loading="lazy" />
 
       <p>Excel files are alive — cells contain formulas that reference other cells, perform calculations, and update dynamically. CSV files are static — they store only values, not logic. Converting Excel to CSV means deciding what to do with those formulas. Here is what happens and what you need to watch out for.</p>
 
       <h2>Formulas Become Values</h2>
-      <p>When you convert an Excel sheet to CSV, every formula is evaluated to its current value before export. A cell containing <code>=SUM(A1:A10)</code> becomes the actual sum, like <code>45000</code>. This is almost always what you want — CSV cannot represent formulas, so the next best thing is the computed result.</p>
+      <p>When you <a href="/excel-to-csv-converter">convert an Excel sheet to CSV</a>, every formula is evaluated to its current value before export. A cell containing <code>=SUM(A1:A10)</code> becomes the actual sum, like <code>45000</code>. This is almost always what you want — CSV cannot represent formulas, so the next best thing is the computed result.</p>
       <p>However, this means the output is a snapshot. If the source data changes later, the CSV will not update. The formula logic is lost. If you need to preserve the calculation logic, keep the original .xlsx file as the source of truth and regenerate the CSV when needed.</p>
 
       <h2>Volatile Functions</h2>
