@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConverterBar from '../components/ConverterBar.astro';
+import InputPanel from '../components/InputPanel.astro';
+import PreviewTable from '../components/PreviewTable.astro';
+---
+
+<BaseLayout title="JSON to Excel Converter — Convert JSON to XLSX Online Free" description="Convert JSON to Excel (.xlsx) online free. Paste JSON or upload a file, get a downloadable spreadsheet. Handles nested objects, arrays, and large datasets. 100% browser-based." keywords="json to excel, json to xlsx, json to excel converter, convert json to excel, json to xlsx online" breadcrumbs={[{name:'Home',url:'/'},{name:'JSON to Excel Converter',url:'/json-to-excel-converter'}]}>
+  <main class="landing">
+    <section class="landing-hero">
+      <h1>JSON to Excel Converter</h1>
+      <p class="landing-desc">Convert JSON data into a downloadable Excel spreadsheet (<code>.xlsx</code>). Perfect for taking API responses, configuration files, or web data and turning them into business-ready spreadsheets with proper column types and formatting.</p>
+    </section>
+
+    <ConverterBar from="JSON" to="Excel (XLSX)" />
+    <InputPanel />
+    <PreviewTable />
+
+    <section class="landing-content">
+      <h2>Why Convert JSON to Excel?</h2>
+      <p>JSON is the language of APIs and developers, but Excel is what stakeholders, analysts, and business teams use. Converting JSON to XLSX bridges that gap — take raw API data and deliver it as a polished spreadsheet anyone can open and work with.</p>
+
+      <h2>How to Convert JSON to Excel</h2>
+      <ol>
+        <li>Select <strong>JSON</strong> as source and <strong>Excel (XLSX)</strong> as target format</li>
+        <li>Paste your JSON, upload a <code>.json</code> file, or fetch from a URL</li>
+        <li>Click <strong>Convert</strong> or press <kbd>Ctrl+Enter</kbd></li>
+        <li>Preview the table, customize the sheet name and column widths</li>
+        <li>Download as <code>.xlsx</code></li>
+      </ol>
+
+      <h2>Features</h2>
+      <ul>
+        <li>Nested JSON objects flattened into columns with <code>_</code> separator</li>
+        <li>Arrays of objects become rows in the spreadsheet</li>
+        <li>Type-aware columns — numbers, dates, and text preserved</li>
+        <li>Custom sheet name and auto-width options before download</li>
+        <li>Supports JSON arrays, nested objects, and mixed structures</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .landing { max-width: 1000px; margin: 0 auto; }
+  .landing-hero { text-align: center; padding: 40px 16px 24px; }
+  .landing-hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .landing-desc { font-size: 15px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+  .landing-desc code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .landing-content { padding: 40px 16px 60px; max-width: 720px; margin: 0 auto; }
+  .landing-content h2 { font-size: 22px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .landing-content p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+  .landing-content ul, .landing-content ol { padding-left: 20px; margin-bottom: 12px; }
+  .landing-content li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .landing-content kbd { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); }
+  @media (max-width: 640px) {
+    .landing-hero h1 { font-size: 24px; }
+    .landing-hero { padding: 24px 16px 16px; }
+    .landing-content h2 { font-size: 18px; }
+  }
+</style>

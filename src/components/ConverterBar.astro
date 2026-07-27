@@ -1,12 +1,17 @@
 ---
 const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Markdown'];
+export interface Props {
+  from?: string;
+  to?: string;
+}
+const { from: fromProp = 'JSON', to: toProp = 'Excel (XLSX)' } = Astro.props;
 ---
 
-<div class="converter-bar">
+<div class="converter-bar" data-from={fromProp} data-to={toProp}>
   <div class="format-group">
     <select class="format-select" id="from-format">
       {formats.map(f => (
-        <option value={f} selected={f === 'JSON'}>{f}</option>
+        <option value={f} selected={f === fromProp}>{f}</option>
       ))}
     </select>
     <span class="format-select-arrow">▼</span>
@@ -21,7 +26,7 @@ const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Ma
   <div class="format-group">
     <select class="format-select" id="to-format">
       {formats.map(f => (
-        <option value={f} selected={f === 'Excel (XLSX)'}>{f}</option>
+        <option value={f} selected={f === toProp}>{f}</option>
       ))}
     </select>
     <span class="format-select-arrow">▼</span>
@@ -32,6 +37,17 @@ const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Ma
   const from = document.getElementById('from-format') as HTMLSelectElement;
   const to = document.getElementById('to-format') as HTMLSelectElement;
   const swap = document.getElementById('swapBtn');
+  const bar = document.querySelector('.converter-bar') as HTMLElement;
+
+  import { setState } from '../lib/appState';
+
+  if (bar) {
+    const fromVal = bar.getAttribute('data-from');
+    const toVal = bar.getAttribute('data-to');
+    if (fromVal) from.value = fromVal;
+    if (toVal) to.value = toVal;
+    setState({ fromFormat: from.value as any, toFormat: to.value as any });
+  }
 
   swap?.addEventListener('click', () => {
     const tmp = from.value;

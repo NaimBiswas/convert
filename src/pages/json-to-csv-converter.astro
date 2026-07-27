@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConverterBar from '../components/ConverterBar.astro';
+import InputPanel from '../components/InputPanel.astro';
+import PreviewTable from '../components/PreviewTable.astro';
+---
+
+<BaseLayout title="JSON to CSV Converter — Convert JSON to CSV Online Free" description="Convert JSON to CSV online free. Paste JSON, upload a file, or fetch from URL. Handles nested objects, arrays, and large files. 100% browser-based, no uploads." keywords="json to csv, json to csv converter, convert json to csv, json to csv online, json to csv free" breadcrumbs={[{name:'Home',url:'/'},{name:'JSON to CSV Converter',url:'/json-to-csv-converter'}]}>
+  <main class="landing">
+    <section class="landing-hero">
+      <h1>JSON to CSV Converter</h1>
+      <p class="landing-desc">Convert your JSON data to CSV format instantly — right in your browser. Supports nested objects (flattened with <code>_</code> separator), arrays of objects, and large files. No uploads, no servers, no limits.</p>
+    </section>
+
+    <ConverterBar from="JSON" to="CSV" />
+    <InputPanel />
+    <PreviewTable />
+
+    <section class="landing-content">
+      <h2>Why Convert JSON to CSV?</h2>
+      <p>CSV (Comma-Separated Values) is the universal format for spreadsheets and databases. Converting JSON to CSV lets you open developer-friendly data in Excel, Google Sheets, or any data analysis tool. Perfect for API responses, configuration files, and data exports.</p>
+
+      <h2>How to Convert JSON to CSV</h2>
+      <ol>
+        <li>Select <strong>JSON</strong> as source and <strong>CSV</strong> as target format</li>
+        <li>Paste your JSON, upload a <code>.json</code> file, or fetch from a URL</li>
+        <li>Click <strong>Convert</strong> or press <kbd>Ctrl+Enter</kbd></li>
+        <li>Preview the result, edit inline if needed, then download as CSV</li>
+      </ol>
+
+      <h2>Features</h2>
+      <ul>
+        <li>Handles nested JSON objects — flattens keys with <code>_</code> separator</li>
+        <li>Arrays of objects become rows; primitive arrays join with semicolons</li>
+        <li>Type inference for numbers, booleans, dates, and strings</li>
+        <li>Smart header detection and column ordering</li>
+        <li>Inline editing, sorting, filtering before download</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .landing { max-width: 1000px; margin: 0 auto; }
+  .landing-hero { text-align: center; padding: 40px 16px 24px; }
+  .landing-hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .landing-desc { font-size: 15px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+  .landing-desc code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .landing-content { padding: 40px 16px 60px; max-width: 720px; margin: 0 auto; }
+  .landing-content h2 { font-size: 22px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .landing-content p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+  .landing-content ul, .landing-content ol { padding-left: 20px; margin-bottom: 12px; }
+  .landing-content li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .landing-content kbd { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); }
+  @media (max-width: 640px) {
+    .landing-hero h1 { font-size: 24px; }
+    .landing-hero { padding: 24px 16px 16px; }
+    .landing-content h2 { font-size: 18px; }
+  }
+</style>

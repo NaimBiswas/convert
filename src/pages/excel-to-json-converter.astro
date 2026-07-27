@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConverterBar from '../components/ConverterBar.astro';
+import InputPanel from '../components/InputPanel.astro';
+import PreviewTable from '../components/PreviewTable.astro';
+---
+
+<BaseLayout title="Excel to JSON Converter — Convert XLSX to JSON Online Free" description="Convert Excel (.xlsx) to JSON online free. Upload your spreadsheet and get clean JSON output. Multi-sheet support, type inference, and nested object handling. 100% browser-based." keywords="excel to json, xlsx to json, excel to json converter, convert excel to json, xlsx to json online" breadcrumbs={[{name:'Home',url:'/'},{name:'Excel to JSON Converter',url:'/excel-to-json-converter'}]}>
+  <main class="landing">
+    <section class="landing-hero">
+      <h1>Excel to JSON Converter</h1>
+      <p class="landing-desc">Convert your Excel spreadsheets (<code>.xlsx</code>) to JSON format with one click. Supports multiple sheets, column type detection, and large files up to 50 MB. All processing happens in your browser.</p>
+    </section>
+
+    <ConverterBar from="Excel (XLSX)" to="JSON" />
+    <InputPanel />
+    <PreviewTable />
+
+    <section class="landing-content">
+      <h2>Why Convert Excel to JSON?</h2>
+      <p>Excel is everywhere in business, but JSON is what web applications and APIs speak. Converting XLSX to JSON lets you take spreadsheet data — inventory lists, customer records, financial data — and use it directly in your code, databases, or cloud services.</p>
+
+      <h2>How to Convert Excel to JSON</h2>
+      <ol>
+        <li>Select <strong>Excel (XLSX)</strong> as source and <strong>JSON</strong> as target format</li>
+        <li>Upload your <code>.xlsx</code> file via drag & drop or browse</li>
+        <li>Pick a sheet if the workbook has multiple sheets</li>
+        <li>Click <strong>Convert</strong> or press <kbd>Ctrl+Enter</kbd></li>
+        <li>Preview, edit, and download as JSON</li>
+      </ol>
+
+      <h2>Features</h2>
+      <ul>
+        <li>Multi-sheet workbook support — select which sheet to convert</li>
+        <li>First row auto-detected as JSON property names</li>
+        <li>Type inference for numbers, dates, booleans, and strings</li>
+        <li>Empty cells become <code>null</code> in JSON</li>
+        <li>Files up to 50 MB supported</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .landing { max-width: 1000px; margin: 0 auto; }
+  .landing-hero { text-align: center; padding: 40px 16px 24px; }
+  .landing-hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .landing-desc { font-size: 15px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+  .landing-desc code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .landing-content { padding: 40px 16px 60px; max-width: 720px; margin: 0 auto; }
+  .landing-content h2 { font-size: 22px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .landing-content p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+  .landing-content ul, .landing-content ol { padding-left: 20px; margin-bottom: 12px; }
+  .landing-content li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .landing-content kbd { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); }
+  @media (max-width: 640px) {
+    .landing-hero h1 { font-size: 24px; }
+    .landing-hero { padding: 24px 16px 16px; }
+    .landing-content h2 { font-size: 18px; }
+  }
+</style>

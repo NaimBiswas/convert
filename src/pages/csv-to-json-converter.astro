@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ConverterBar from '../components/ConverterBar.astro';
+import InputPanel from '../components/InputPanel.astro';
+import PreviewTable from '../components/PreviewTable.astro';
+---
+
+<BaseLayout title="CSV to JSON Converter — Convert CSV to JSON Online Free" description="Convert CSV to JSON online free. Paste CSV data or upload a .csv file. Smart header detection, type inference, and nested object support. 100% browser-based." keywords="csv to json, csv to json converter, convert csv to json, csv to json online, csv to json free" breadcrumbs={[{name:'Home',url:'/'},{name:'CSV to JSON Converter',url:'/csv-to-json-converter'}]}>
+  <main class="landing">
+    <section class="landing-hero">
+      <h1>CSV to JSON Converter</h1>
+      <p class="landing-desc">Turn your CSV spreadsheets into clean JSON objects — instantly. Perfect for importing tabular data into APIs, databases, or JavaScript applications. Smart column typing and header detection built in.</p>
+    </section>
+
+    <ConverterBar from="CSV" to="JSON" />
+    <InputPanel />
+    <PreviewTable />
+
+    <section class="landing-content">
+      <h2>Why Convert CSV to JSON?</h2>
+      <p>JSON is the native data format for web APIs, JavaScript applications, and NoSQL databases. Converting CSV to JSON lets you take spreadsheet data and use it directly in your code, API requests, or data pipelines.</p>
+
+      <h2>How to Convert CSV to JSON</h2>
+      <ol>
+        <li>Select <strong>CSV</strong> as source and <strong>JSON</strong> as target format</li>
+        <li>Paste your CSV data or upload a <code>.csv</code> file</li>
+        <li>Click <strong>Convert</strong> or press <kbd>Ctrl+Enter</kbd></li>
+        <li>Preview the JSON output, then download or copy to clipboard</li>
+      </ol>
+
+      <h2>Features</h2>
+      <ul>
+        <li>First row auto-detected as column headers</li>
+        <li>Type inference — numbers, booleans, dates detected per column</li>
+        <li>Handles quoted fields, commas inside values, and line breaks</li>
+        <li>Empty values become <code>null</code> in JSON output</li>
+        <li>Sort, filter, and edit data before converting</li>
+      </ul>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .landing { max-width: 1000px; margin: 0 auto; }
+  .landing-hero { text-align: center; padding: 40px 16px 24px; }
+  .landing-hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .landing-desc { font-size: 15px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+  .landing-content { padding: 40px 16px 60px; max-width: 720px; margin: 0 auto; }
+  .landing-content h2 { font-size: 22px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .landing-content p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+  .landing-content ul, .landing-content ol { padding-left: 20px; margin-bottom: 12px; }
+  .landing-content li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .landing-content kbd { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); }
+  @media (max-width: 640px) {
+    .landing-hero h1 { font-size: 24px; }
+    .landing-hero { padding: 24px 16px 16px; }
+    .landing-content h2 { font-size: 18px; }
+  }
+</style>
