@@ -2,15 +2,15 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const posts = [
-  { slug: 'json-to-csv-best-practices', title: 'JSON to CSV: Best Practices for Nested Data', date: '2026-03-20', desc: 'Learn how to handle deeply nested JSON when converting to CSV. Practical strategies for flattening, key naming, and data preservation.' },
-  { slug: 'csv-to-json-tutorial', title: 'How to Convert CSV to JSON: A Complete Tutorial', date: '2026-03-18', desc: 'A step-by-step guide to converting CSV to JSON. Covers type inference, header mapping, and handling edge cases like empty cells.' },
-  { slug: 'excel-vs-csv', title: 'Excel vs CSV: When to Use Each Format', date: '2026-03-15', desc: 'Excel and CSV serve different purposes. Here is when to stick with spreadsheets and when plain CSV is the better choice.' },
-  { slug: 'json-vs-xml-vs-yaml', title: 'JSON vs XML vs YAML: Choosing the Right Data Format', date: '2026-03-12', desc: 'A practical comparison of JSON, XML, and YAML. Learn which format fits your project based on readability, size, and tooling.' },
-  { slug: 'data-cleaning-tips', title: '5 Data Cleaning Tips Before Converting Spreadsheets', date: '2026-03-10', desc: 'Clean data converts better. Five actionable tips to prepare your spreadsheets before converting to JSON, CSV, or other formats.' },
-  { slug: 'why-json-is-popular', title: 'Why JSON Became the Universal Data Format for Web APIs', date: '2026-03-05', desc: 'A look at the design decisions and ecosystem factors that made JSON the default data format for modern web APIs.' },
-  { slug: 'excel-formulas-to-csv', title: 'Handling Excel Formulas When Converting to CSV', date: '2026-03-02', desc: 'What happens to Excel formulas, conditional formatting, and macros when you convert to plain CSV? Everything you need to know.' },
-  { slug: 'data-migration-strategies', title: 'Data Migration Strategies: From Spreadsheets to Databases', date: '2026-02-28', desc: 'A guide to migrating data from Excel and CSV files into relational databases, NoSQL stores, and cloud data warehouses.' },
-  { slug: 'large-file-conversion', title: 'How to Handle Large File Conversions Without Losing Data', date: '2026-02-25', desc: 'Tips for converting large datasets — memory management, chunking strategies, and what to watch for with files over 10 MB.' },
+  { slug: 'json-to-csv-best-practices', title: 'JSON to CSV: Best Practices for Nested Data', date: '2026-03-20', desc: 'Learn how to handle deeply nested JSON when converting to CSV. Practical strategies for flattening, key naming, and data preservation.', img: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'csv-to-json-tutorial', title: 'How to Convert CSV to JSON: A Complete Tutorial', date: '2026-03-18', desc: 'A step-by-step guide to converting CSV to JSON. Covers type inference, header mapping, and handling edge cases like empty cells.', img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'excel-vs-csv', title: 'Excel vs CSV: When to Use Each Format', date: '2026-03-15', desc: 'Excel and CSV serve different purposes. Here is when to stick with spreadsheets and when plain CSV is the better choice.', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'json-vs-xml-vs-yaml', title: 'JSON vs XML vs YAML: Choosing the Right Data Format', date: '2026-03-12', desc: 'A practical comparison of JSON, XML, and YAML. Learn which format fits your project based on readability, size, and tooling.', img: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'data-cleaning-tips', title: '5 Data Cleaning Tips Before Converting Spreadsheets', date: '2026-03-10', desc: 'Clean data converts better. Five actionable tips to prepare your spreadsheets before converting to JSON, CSV, or other formats.', img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'why-json-is-popular', title: 'Why JSON Became the Universal Data Format for Web APIs', date: '2026-03-05', desc: 'A look at the design decisions and ecosystem factors that made JSON the default data format for modern web APIs.', img: 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'excel-formulas-to-csv', title: 'Handling Excel Formulas When Converting to CSV', date: '2026-03-02', desc: 'What happens to Excel formulas, conditional formatting, and macros when you convert to plain CSV? Everything you need to know.', img: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'data-migration-strategies', title: 'Data Migration Strategies: From Spreadsheets to Databases', date: '2026-02-28', desc: 'A guide to migrating data from Excel and CSV files into relational databases, NoSQL stores, and cloud data warehouses.', img: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=400&amp;h=240&amp;fit=crop' },
+  { slug: 'large-file-conversion', title: 'How to Handle Large File Conversions Without Losing Data', date: '2026-02-25', desc: 'Tips for converting large datasets — memory management, chunking strategies, and what to watch for with files over 10 MB.', img: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&amp;h=240&amp;fit=crop' },
 ];
 ---
 <BaseLayout title="Blog" description="Articles and guides about data conversion, JSON, CSV, Excel, and data processing tips." keywords="data conversion blog, json tips, csv guide, excel to json, data processing" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'}]}>
@@ -18,13 +18,16 @@ const posts = [
     <h1>Blog</h1>
     <p class="blog-subtitle">Tips, guides, and deep dives into data conversion and processing.</p>
 
-    <div class="post-list">
+    <div class="post-grid">
       {posts.map((post) => (
         <article class="post-card">
           <a href={`/blog/${post.slug}`} class="post-link">
-            <h2>{post.title}</h2>
-            <p class="post-desc">{post.desc}</p>
-            <time datetime={post.date}>{post.date}</time>
+            <img src={post.img} alt="" class="card-img" loading="lazy" />
+            <div class="card-body">
+              <h2>{post.title}</h2>
+              <p class="card-desc">{post.desc}</p>
+              <time datetime={post.date}>{post.date}</time>
+            </div>
           </a>
         </article>
       ))}
@@ -36,16 +39,26 @@ const posts = [
   .blog-index { max-width: 720px; margin: 40px auto; padding: 0 16px; }
   .blog-index h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
   .blog-subtitle { font-size: 15px; color: var(--text-secondary); margin-bottom: 32px; line-height: 1.6; }
-  .post-list { display: flex; flex-direction: column; gap: 0; }
-  .post-card { border-bottom: 1px solid var(--border); padding: 24px 0; }
-  .post-card:last-child { border-bottom: none; }
-  .post-link { text-decoration: none; display: block; }
-  .post-link h2 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: var(--text); transition: color var(--transition); }
-  .post-link:hover h2 { color: var(--primary); }
-  .post-desc { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 6px; }
-  .post-link time { font-size: 12px; color: var(--text-secondary); opacity: 0.6; }
+  .post-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  .post-card {
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    background: var(--surface); transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .post-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+  .post-link { text-decoration: none; display: flex; flex-direction: column; }
+  .card-img { width: 100%; height: 200px; object-fit: cover; display: block; }
+  .card-body { padding: 20px; }
+  .card-body h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: var(--text); line-height: 1.4; transition: color var(--transition); }
+  .post-card:hover .card-body h2 { color: var(--primary); }
+  .card-desc { font-size: 14px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 10px; }
+  .card-body time { font-size: 12px; color: var(--text-secondary); opacity: 0.6; }
+  @media (min-width: 640px) {
+    .post-grid { grid-template-columns: 1fr 1fr; }
+    .blog-index { max-width: 800px; }
+  }
   @media (max-width: 640px) {
     .blog-index { margin: 24px auto; }
     .blog-index h1 { font-size: 24px; }
+    .card-img { height: 180px; }
   }
 </style>
