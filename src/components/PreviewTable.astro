@@ -78,6 +78,7 @@
   import { stringifyXML } from '../lib/converters/xml';
   import { stringifyYAML } from '../lib/converters/yaml';
   import { toHTMLTable, toMarkdown, toPDF, downloadBlob, escapeHtml } from '../lib/exportUtils';
+  import jsPDF from 'jspdf';
 
   const root = document.getElementById('previewRoot')!;
   const sectionLabel = document.getElementById('sectionLabel')!;
@@ -539,8 +540,7 @@
     downloadBlob(toMarkdown(rows, headers), getFilename('.md'), 'text/markdown');
   });
 
-  downloadPDF.addEventListener('click', async () => {
-    const jsPDF = (await import('jspdf')).default;
+  downloadPDF.addEventListener('click', () => {
     const rows = getExportRows();
     const headers = getExportHeaders();
     if (!rows) return;
