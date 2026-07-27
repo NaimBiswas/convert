@@ -78,6 +78,7 @@
   import { stringifyXML } from '../lib/converters/xml';
   import { stringifyYAML } from '../lib/converters/yaml';
   import { toHTMLTable, toMarkdown, toPDF, downloadBlob, escapeHtml } from '../lib/exportUtils';
+  import * as XLSX from 'xlsx';
   import jsPDF from 'jspdf';
 
   const root = document.getElementById('previewRoot')!;
@@ -484,10 +485,9 @@
     return 'converted' + ext;
   }
 
-  downloadXLSX.addEventListener('click', async () => {
+  downloadXLSX.addEventListener('click', () => {
     const rows = getExportRows();
     if (!rows) return;
-    const XLSX = await import('xlsx');
     const sheetName = 'Sheet1';
     const ws = XLSX.utils.json_to_sheet(rows);
     const wb = XLSX.utils.book_new();
