@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="5 Data Cleaning Tips Before Converting Spreadsheets" description="Clean data converts better. Five actionable tips to prepare your spreadsheets before converting to JSON, CSV, or other formats." keywords="data cleaning tips, spreadsheet cleanup, data preparation, convert spreadsheets" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Data Cleaning Tips',url:'/blog/data-cleaning-tips'}]}>
+  <main class="blog-post">
+    <article>
+      <h1>5 Data Cleaning Tips Before Converting Spreadsheets</h1>
+      <p class="post-meta"><time datetime="2026-03-10">March 10, 2026</time></p>
+
+      <p>Converting a messy spreadsheet to JSON or CSV just moves the mess into a new format. A few minutes of cleanup before conversion saves hours of debugging downstream. Here are five tips to get your data conversion-ready.</p>
+
+      <h2>1. Standardize Your Headers</h2>
+      <p>Column headers become JSON keys or CSV column names. Inconsistent headers create inconsistent output. Use short, descriptive names without spaces, special characters, or line breaks. Stick to lowercase with underscores or camelCase — <code>first_name</code> or <code>firstName</code>, but pick one convention and apply it everywhere. Avoid duplicate column names, which break JSON output entirely.</p>
+
+      <h2>2. Check for Consistent Data Types</h2>
+      <p>A column called &ldquo;age&rdquo; should contain numbers in every row. If some cells contain text like &ldquo;N/A&rdquo; or &ldquo;unknown,&rdquo; the converter may treat the entire column as strings. Standardize missing values as empty cells rather than text placeholders. For date columns, use a single format throughout — ISO 8601 (<code>2026-03-10</code>) is the safest choice because it sorts correctly and is unambiguous.</p>
+
+      <h2>3. Remove Merged Cells</h2>
+      <p>Merged cells are common in human-readable spreadsheets but cause problems during conversion. A merged cell only has a value in the top-left cell; the rest appear empty. Unmerge all cells before converting, and fill the value down or across as needed. Most converters handle this automatically now, but it is better to have clean source data.</p>
+
+      <h2>4. Eliminate Extra Whitespace</h2>
+      <p>Leading or trailing spaces in cells are invisible in Excel but become visible problems in converted data. A value like <code>"Alice "</code> (with a trailing space) will produce a different JSON string than <code>"Alice"</code>. Use Excel's TRIM function or a quick find-and-rereplace to strip extra whitespace from all cells before conversion.</p>
+
+      <h2>5. Handle Empty Rows and Columns</h2>
+      <p>Spreadsheets often have hundreds of empty rows at the bottom or empty columns that were used as spacers. These become null values in JSON or empty fields in CSV, bloating the output. Delete any rows or columns that do not contain data before converting. A quick way to check: select all cells, press Ctrl+Shift+End, and verify the used range matches your actual data.</p>
+
+      <h2>The Payoff</h2>
+      <p>These five steps take ten minutes but produce dramatically cleaner output. Clean source data means faster integration, fewer bugs, and less manual post-processing. Make data cleaning part of your conversion workflow — your future self will thank you.</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>

@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Excel vs CSV: When to Use Each Format" description="Excel and CSV serve different purposes. Here is when to stick with spreadsheets and when plain CSV is the better choice." keywords="excel vs csv, xlsx vs csv, spreadsheet formats, when to use csv" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Excel vs CSV',url:'/blog/excel-vs-csv'}]}>
+  <main class="blog-post">
+    <article>
+      <h1>Excel vs CSV: When to Use Each Format</h1>
+      <p class="post-meta"><time datetime="2026-03-15">March 15, 2026</time></p>
+
+      <p>Excel (.xlsx) and CSV (.csv) are the two most common formats for tabular data, but they serve fundamentally different purposes. Choosing the right one depends on who needs the data and what they need to do with it.</p>
+
+      <h2>What Excel Gives You</h2>
+      <p>Excel files are rich documents. They can contain multiple sheets, cell formatting (colors, fonts, borders), merged cells, formulas, charts, pivot tables, conditional formatting, data validation rules, and macros. An Excel workbook is closer to a mini application than a plain data file.</p>
+      <p>Use Excel when:</p>
+      <ul>
+        <li>You need formatting and visual presentation</li>
+        <li>You are building reports or dashboards for human readers</li>
+        <li>You use formulas that reference other cells or sheets</li>
+        <li>You need multiple related tables in a single file</li>
+        <li>You are working with stakeholders who expect a polished spreadsheet</li>
+      </ul>
+
+      <h2>What CSV Gives You</h2>
+      <p>CSV is pure data: rows and columns of plain text separated by commas. No formatting, no formulas, no macros. Just the values. This simplicity is its superpower — every programming language, database, and data tool can read and write CSV without special libraries.</p>
+      <p>Use CSV when:</p>
+      <ul>
+        <li>You are moving data between systems (database imports/exports, ETL pipelines)</li>
+        <li>You are processing data programmatically (Python, R, JavaScript, etc.)</li>
+        <li>You need version control — CSV files diff cleanly in git</li>
+        <li>You want the smallest possible file size</li>
+        <li>You are publishing open data for others to download and use</li>
+      </ul>
+
+      <h2>The Gray Area</h2>
+      <p>Many tools blur the line. Excel can open CSV files and apply formatting on the fly. Google Sheets treats both formats as native. But if you save a formatted Excel file as CSV, all formatting is lost — only the raw cell values remain. Formulas are evaluated to their current values, so <code>=SUM(A1:A10)</code> becomes a number.</p>
+
+      <h2>Converting Between Them</h2>
+      <p>Converting Excel to CSV strips away everything except the data. This is useful when you need to migrate data out of a spreadsheet into a database or analysis tool. Converting CSV to Excel adds a container layer — you get the same data but now it can be opened, formatted, and shared as a professional spreadsheet.</p>
+
+      <h2>Which Should You Use?</h2>
+      <p>If you are asking the question, the answer is usually CSV. CSV is the interchange format — it is what you use when data needs to move. Excel is the presentation format — it is what you use when data needs to be read by people. Both are essential tools, and knowing when to use each one saves time and prevents data loss.</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post ul { padding-left: 20px; margin-bottom: 14px; }
+  .blog-post li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>

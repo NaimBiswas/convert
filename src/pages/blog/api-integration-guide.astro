@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Using Converted Data in API Integrations" description="How to prepare and use converted data for REST API calls, webhook payloads, and data pipeline integrations." keywords="api integration, data conversion api, rest api data, webhook payload" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'API Integration Guide',url:'/blog/api-integration-guide'}]}>
+  <main class="blog-post">
+    <article>
+      <h1>Using Converted Data in API Integrations</h1>
+      <p class="post-meta"><time datetime="2026-03-08">March 8, 2026</time></p>
+
+      <p>APIs communicate in JSON. Spreadsheets communicate in rows and columns. Bridging the gap between them is one of the most common data tasks in modern development. Here is how to prepare and use converted data in API integrations.</p>
+
+      <h2>From Spreadsheet to API Payload</h2>
+      <p>Your CRM exports customer data as CSV. Your e-commerce platform needs customer data as JSON via a REST API. The workflow is straightforward: convert the CSV to an array of JSON objects, then POST each object (or the batch) to the API endpoint.</p>
+      <p>The critical step is ensuring the JSON keys match the API's expected field names. If the CSV header is <code>Full Name</code> but the API expects <code>full_name</code>, the request will fail or the field will be ignored. Review the API documentation and rename CSV columns accordingly before converting.</p>
+
+      <h2>Handling Nested Payloads</h2>
+      <p>Many APIs expect nested JSON structures:</p>
+      <p><code>&lbrace;"user": &lbrace;"name": "Alice", "address": &lbrace;"city": "NYC"&rbrace;&rbrace;&rbrace;</code></p>
+      <p>CSV cannot represent nesting directly, so you need to map flat columns to nested keys. The converter handles this by flattening nested JSON to CSV (and vice versa), but when building API payloads from CSV, you may need to post-process the output to reconstruct the nesting structure.</p>
+
+      <h2>Batch Operations</h2>
+      <p>Uploading one row at a time is slow. Most APIs support batch endpoints that accept arrays of objects. Convert your entire spreadsheet to a JSON array and send it in a single request. Watch for payload size limits — some APIs cap requests at 10 MB or 1000 records. For larger datasets, split the JSON array into chunks and send them sequentially.</p>
+
+      <h2>Webhook Payloads</h2>
+      <p>Webhooks send data as JSON payloads to a callback URL. If you are testing a webhook integration or replaying missed events, you may need to convert stored data (from a database export or log file) into the same JSON structure the webhook would have sent. This requires careful field mapping — the converted JSON must match the exact schema the receiving system expects.</p>
+
+      <h2>Authentication and Headers</h2>
+      <p>Converted data is just the body of the request. API integrations also require proper headers: <code>Content-Type: application/json</code>, authorization tokens (Bearer, API key, or Basic Auth), and sometimes custom headers for tracing or idempotency. The converter handles the data; your integration script handles the transport.</p>
+
+      <h2>Testing Your Integration</h2>
+      <p>Before running a full data load, test with a single row. Convert one CSV row to JSON, send it to the API, and verify the response. Check for validation errors, missing required fields, and type mismatches. Once the single row works, scale up to the full dataset.</p>
+
+      <h2>Summary</h2>
+      <p>Data conversion is the first step in any API integration that involves spreadsheet data. Clean headers, correct field names, and proper type handling ensure your converted JSON passes validation on the first attempt.</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>

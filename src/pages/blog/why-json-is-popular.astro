@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="Why JSON Became the Universal Data Format for Web APIs" description="A look at the design decisions and ecosystem factors that made JSON the default data format for modern web APIs." keywords="json popularity, why json, json web apis, json vs xml history" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'Why JSON Became Universal',url:'/blog/why-json-is-popular'}]}>
+  <main class="blog-post">
+    <article>
+      <h1>Why JSON Became the Universal Data Format for Web APIs</h1>
+      <p class="post-meta"><time datetime="2026-03-05">March 5, 2026</time></p>
+
+      <p>In the early 2000s, XML was the undisputed king of web data interchange. SOAP APIs, RSS feeds, and configuration files all used XML. Today, JSON dominates. How did a format originally scoped as &ldquo;a harmless subset of JavaScript&rdquo; become the universal language of web APIs?</p>
+
+      <h2>It Came From JavaScript</h2>
+      <p>JSON was first specified by Douglas Crockford in the early 2000s as a lightweight data format derived from JavaScript object literal syntax. Because it was already valid JavaScript, any web application could parse JSON using <code>eval()</code> or the built-in <code>JSON.parse()</code> method (added in ES5). No parser library needed — the browser already understood it.</p>
+      <p>This was a massive advantage over XML, which required complex DOM parsers or SAX parsers. For frontend developers consuming API responses, JSON was immediately usable in a way XML never was.</p>
+
+      <h2>Smaller Payloads</h2>
+      <p>JSON is significantly more compact than XML. An XML document requires opening and closing tags for every field (<code>&lt;name&gt;Alice&lt;/name&gt;</code>), while JSON uses a lightweight key-value syntax (<code>"name": "Alice"</code>). For large datasets, this difference translates to 30-50% smaller payloads — a big deal on mobile networks and slow connections.</p>
+
+      <h2>Native Type System</h2>
+      <p>JSON has a simple but expressive type system: strings, numbers, booleans, null, arrays, and objects. XML, by contrast, treats everything as text. A number in XML is just text that happens to contain digits — the application must parse it. JSON handles types natively, which reduces boilerplate and eliminates a class of bugs.</p>
+
+      <h2>The REST Revolution</h2>
+      <p>The shift from SOAP (XML-based) to REST (format-agnostic) APIs coincided with JSON's rise. REST emphasized simplicity, statelessness, and resource-oriented design. JSON fit REST's philosophy perfectly — lightweight, easy to work with, and human-readable. Frameworks like Ruby on Rails, Express.js, and Django all adopted JSON as their default output format, cementing its dominance.</p>
+
+      <h2>Ecosystem Momentum</h2>
+      <p>Once JSON became the default for web APIs, the ecosystem snowballed. JSON Schema emerged for validation. JSON Web Tokens (JWT) became the standard for authentication. MongoDB chose BSON (binary JSON) as its document format. Tools like jq made JSON manipulation easy on the command line. Every language gained first-class JSON support in its standard library.</p>
+
+      <h2>Where JSON Falls Short</h2>
+      <p>JSON is not perfect. It does not support comments, which makes it less ideal for configuration files (YAML is better there). It has no built-in schema enforcement (though JSON Schema fills this gap). And deeply nested JSON can be hard to read. But for its primary use case — data interchange between web services — JSON remains the right tool for the job.</p>
+
+      <h2>The Verdict</h2>
+      <p>JSON won because it was simple, fast, and already present in the browser. No committee designed it to be universal — it earned that status through practical utility. Twenty years later, it is hard to imagine the web without it.</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>

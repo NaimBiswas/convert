@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="JSON to CSV: Best Practices for Nested Data" description="Learn how to handle deeply nested JSON when converting to CSV. Practical strategies for flattening, key naming, and data preservation." keywords="json to csv nested, flatten json, nested json best practices" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'JSON to CSV Best Practices',url:'/blog/json-to-csv-best-practices'}]}>
+  <main class="blog-post">
+    <article>
+      <h1>JSON to CSV: Best Practices for Nested Data</h1>
+      <p class="post-meta"><time datetime="2026-03-20">March 20, 2026</time></p>
+
+      <p>Converting JSON to CSV is straightforward when your data is flat — an array of objects with the same keys. But real-world JSON is rarely that simple. APIs return nested objects, arrays of varying lengths, and mixed data types. Here is how to handle those cases without losing information.</p>
+
+      <h2>The Flattening Problem</h2>
+      <p>CSV is a flat format: every row has the same set of columns. JSON can nest arbitrarily deep. The standard approach is to flatten keys using a separator. For example:</p>
+      <p><code>&lbrace;"user": &lbrace;"name": "Alice", "address": &lbrace;"city": "NYC"&rbrace;&rbrace;&rbrace;</code></p>
+      <p>becomes columns <code>user_name</code> and <code>user_address_city</code>. The underscore separator is a convention, but consistency matters more than the choice of character. Some tools use dots (<code>user.address.city</code>) or brackets (<code>user[address][city]</code>).</p>
+
+      <h2>Handling Arrays Within Objects</h2>
+      <p>Arrays are the trickiest part. When an object contains an array of primitives (like <code>"tags": ["red", "blue", "green"]</code>), the common approach is to join them with a delimiter — semicolons work well since CSV already uses commas. This keeps each parent row intact.</p>
+      <p>When an object contains an array of objects (like <code>"orders": [&lbrace;"id": 1&rbrace;, &lbrace;"id": 2&rbrace;]</code>), you have two options: expand each nested object into its own row (repeating the parent data), or keep them as a JSON string in a single cell. The right choice depends on your downstream use case.</p>
+
+      <h2>Type Inference</h2>
+      <p>CSV is text-only, but most spreadsheet applications infer types when opening a file. The converter should output numbers without quotes (<code>42</code> not <code>"42"</code>), booleans as <code>true</code>/<code>false</code>, and dates in a consistent format like ISO 8601 (<code>2026-03-20</code>). This lets Excel and Google Sheets apply the correct column types automatically.</p>
+
+      <h2>Key Naming Conventions</h2>
+      <p>Stick to lowercase with underscores for flattened keys. Avoid special characters, spaces, or leading digits. This ensures the resulting CSV imports cleanly into databases and analysis tools without manual column renaming.</p>
+
+      <h2>Empty and Missing Values</h2>
+      <p>Not every JSON object will have every key. Decide upfront how to handle missing values: empty strings, <code>null</code>, or simply omitting the cell. The safest choice for most databases is to output an empty cell, which most import tools interpret as NULL.</p>
+
+      <h2>Summary</h2>
+      <p>Nested JSON to CSV conversion is a mapping problem. Choose a consistent separator for keys, decide how to flatten arrays, and maintain clean types. A good converter handles all of this automatically — which is exactly what this tool does.</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>

@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout title="JSON vs XML vs YAML: Choosing the Right Data Format" description="A practical comparison of JSON, XML, and YAML. Learn which format fits your project based on readability, size, and tooling." keywords="json vs xml vs yaml, data formats comparison, structured data formats" breadcrumbs={[{name:'Home',url:'/'},{name:'Blog',url:'/blog'},{name:'JSON vs XML vs YAML',url:'/blog/json-vs-xml-vs-yaml'}]}>
+  <main class="blog-post">
+    <article>
+      <h1>JSON vs XML vs YAML: Choosing the Right Data Format</h1>
+      <p class="post-meta"><time datetime="2026-03-12">March 12, 2026</time></p>
+
+      <p>JSON, XML, and YAML are the three dominant formats for structured data. Each has strengths and trade-offs. The right choice depends on your use case, ecosystem, and who will be reading the data.</p>
+
+      <h2>JSON — The Web Standard</h2>
+      <p>JSON (JavaScript Object Notation) is the de facto standard for web APIs. It is lightweight, natively supports objects, arrays, strings, numbers, booleans, and null, and can be parsed in any modern language without external dependencies. Its syntax is a subset of JavaScript, so frontend code can consume it directly.</p>
+      <p><strong>Strengths:</strong> Fast to parse, compact, native JavaScript support, great for APIs and config files.</p>
+      <p><strong>Weaknesses:</strong> No comments, no schema validation out of the box (though JSON Schema exists), less readable for deeply nested structures.</p>
+      <p><strong>Best for:</strong> REST APIs, web application data, configuration files, data interchange between services.</p>
+
+      <h2>XML — The Enterprise Veteran</h2>
+      <p>XML (eXtensible Markup Language) has been around since the late 1990s. It uses a tag-based syntax with attributes and namespaces. XML is verbose but extremely flexible — you can represent almost any data structure, including mixed content (text with inline elements).</p>
+      <p><strong>Strengths:</strong> Schema validation (XSD), namespaces for avoiding name collisions, XSLT for transformations, robust tooling in enterprise ecosystems.</p>
+      <p><strong>Weaknesses:</strong> Verbose, slower to parse, more complex tooling, heavier payload size.</p>
+      <p><strong>Best for:</strong> Document storage, SOAP APIs, legacy enterprise systems, formats like SVG and RSS.</p>
+
+      <h2>YAML — The Human-Friendly Option</h2>
+      <p>YAML (YAML Ain't Markup Language) prioritizes human readability. It uses indentation instead of brackets or tags, making it the most readable of the three. It also supports comments, which JSON does not.</p>
+      <p><strong>Strengths:</strong> Highly readable, supports comments, anchors and aliases for reusing data, good for configuration files.</p>
+      <p><strong>Weaknesses:</strong> Indentation-sensitive (can cause subtle bugs), less universal than JSON, slower to parse, complex specification.</p>
+      <p><strong>Best for:</strong> Configuration files (Docker Compose, Kubernetes, CI/CD pipelines), data that humans need to edit frequently.</p>
+
+      <h2>Conversion Between Formats</h2>
+      <p>Modern data tools support all three formats. Converting JSON to YAML makes configuration files more readable. Converting XML to JSON makes API integration smoother. Converting YAML to JSON makes it parseable in environments that lack a YAML parser. The converter on this site handles all of these conversions — JSON, XML, YAML, CSV, and Excel — in a single interface.</p>
+
+      <h2>Which to Choose?</h2>
+      <p>If you are building a new project: use JSON for APIs and data interchange, YAML for configuration files, and XML only if you need the advanced features (namespaces, schemas, XSLT) or are working in a legacy ecosystem. None of these formats is going away — they coexist for good reason.</p>
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>
