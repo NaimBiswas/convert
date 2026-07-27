@@ -71,8 +71,6 @@
   import { parseYAML } from '../lib/converters/yaml';
   import { pushHistory, setState, getState } from '../lib/appState';
   import { generateRandomData, encodeBase64, decodeBase64, encodeHex, decodeHex } from '../lib/tools';
-  import * as XLSX from 'xlsx';
-
   const editor = document.getElementById('codeEditor') as HTMLTextAreaElement;
   const tabs = document.querySelectorAll('#inputTabs .input-tab');
   const loadExample = document.getElementById('loadExample')!;
@@ -219,11 +217,12 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
     reader.readAsText(file);
   }
 
-  function readBinaryFile(file: File) {
+  async function readBinaryFile(file: File) {
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       const data = reader.result as ArrayBuffer;
       try {
+        const XLSX = await import('xlsx');
         const workbook = XLSX.read(data, { type: 'array' });
         const sheetNames = workbook.SheetNames;
         loadedFile = { name: file.name, data, sheets: sheetNames };
@@ -246,16 +245,17 @@ Yuki Tanaka,yuki.tanaka@bridge.jp,42,Product Manager,true`,
     reader.readAsArrayBuffer(file);
   }
 
-  function loadSheet(workbook: XLSX.WorkBook, name: string) {
+  function loadSheet(workbook: import('xlsx').WorkBook, name: string) {
     const sheet = workbook.Sheets[name];
-    const csv = XLSX.utils.sheet_to_csv(sheet);
+    const csv = (workbook as any).utils.sheet_to_csv(sheet);
     editor.value = csv;
     fromSelect.value = 'CSV';
     setActiveTab('paste');
   }
 
-  sheetSelect.addEventListener('change', () => {
+  sheetSelect.addEventListener('change', async () => {
     if (!loadedFile?.data) return;
+    const XLSX = await import('xlsx');
     const workbook = XLSX.read(loadedFile.data as ArrayBuffer, { type: 'array' });
     loadSheet(workbook, sheetSelect.value);
   });
