@@ -7,6 +7,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <h1>How to Handle Large File Conversions Without Losing Data</h1>
       <p class="post-meta"><time datetime="2026-02-25">February 25, 2026</time></p>
 
+      <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&amp;h=400&amp;fit=crop" alt="Code editor on a computer screen" class="post-img" loading="lazy" />
+
       <p>Converting a 1 KB JSON file to CSV is trivial. Converting a 200 MB database export with a million rows is a different problem entirely. Large file conversions stress memory limits, browser performance, and data integrity. Here is how to handle them safely.</p>
 
       <h2>Understand Your Constraints</h2>
@@ -52,5 +54,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
   .blog-post a { color: var(--primary); text-decoration: none; }
   .blog-post a:hover { text-decoration: underline; }
+  .post-img { width: 100%; border-radius: 10px; margin: 16px 0 24px; }
   @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
 </style>

@@ -7,6 +7,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <h1>Handling Excel Formulas When Converting to CSV</h1>
       <p class="post-meta"><time datetime="2026-03-02">March 2, 2026</time></p>
 
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&amp;h=400&amp;fit=crop" alt="Modern workspace with laptop" class="post-img" loading="lazy" />
+
       <p>Excel files are alive — cells contain formulas that reference other cells, perform calculations, and update dynamically. CSV files are static — they store only values, not logic. Converting Excel to CSV means deciding what to do with those formulas. Here is what happens and what you need to watch out for.</p>
 
       <h2>Formulas Become Values</h2>
@@ -44,5 +46,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
   .blog-post a { color: var(--primary); text-decoration: none; }
   .blog-post a:hover { text-decoration: underline; }
+  .post-img { width: 100%; border-radius: 10px; margin: 16px 0 24px; }
   @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
 </style>

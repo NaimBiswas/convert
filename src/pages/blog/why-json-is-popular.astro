@@ -7,6 +7,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <h1>Why JSON Became the Universal Data Format for Web APIs</h1>
       <p class="post-meta"><time datetime="2026-03-05">March 5, 2026</time></p>
 
+      <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&amp;h=400&amp;fit=crop" alt="Server rack with network cables" class="post-img" loading="lazy" />
+
       <p>In the early 2000s, XML was the undisputed king of web data interchange. SOAP APIs, RSS feeds, and configuration files all used XML. Today, JSON dominates. How did a format originally scoped as &ldquo;a harmless subset of JavaScript&rdquo; become the universal language of web APIs?</p>
 
       <h2>It Came From JavaScript</h2>
@@ -43,5 +45,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
   .blog-post a { color: var(--primary); text-decoration: none; }
   .blog-post a:hover { text-decoration: underline; }
+  .post-img { width: 100%; border-radius: 10px; margin: 16px 0 24px; }
   @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
 </style>
