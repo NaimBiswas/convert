@@ -1,35 +1,66 @@
 ---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { languages, locales, defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale?: Locale;
+  path?: string;
+}
+
+const { locale: localeProp, path } = Astro.props;
+const locale: Locale = localeProp && isLocale(localeProp) ? localeProp : defaultLocale;
+const currentPath = path || '/';
+const t = ui[locale];
+const th = t.header;
+
+const converterLinks = [
+  { slug: 'json-to-csv-converter', label: th.jsonToCsv },
+  { slug: 'csv-to-json-converter', label: th.csvToJson },
+  { slug: 'excel-to-json-converter', label: th.excelToJson },
+  { slug: 'json-to-excel-converter', label: th.jsonToExcel },
+  { slug: 'excel-to-csv-converter', label: th.excelToCsv },
+];
 ---
 
 <header class="header">
   <div class="header-left">
-    <a href="/" class="logo">
+    <a href={getRelativeLocaleUrl(locale, '/')} class="logo">
       <div class="logo-icon">C</div>
-      <span class="logo-text">Convert</span>
+      <span class="logo-text">{th.logoText}</span>
     </a>
   </div>
   <div class="header-right">
-    <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    <button class="hamburger" id="hamburger" aria-label={th.menuAria}>☰</button>
     <nav class="header-nav" id="headerNav">
-      <a href="/">Home</a>
-      <a href="/docs">Docs</a>
-      <a href="/faq">FAQ</a>
-      <a href="/blog">Blog</a>
-      <a href="/about">About</a>
+      <a href={getRelativeLocaleUrl(locale, '/')}>{th.home}</a>
+      <a href={getRelativeLocaleUrl(locale, '/docs')}>{th.docs}</a>
+      <a href={getRelativeLocaleUrl(locale, '/faq')}>{th.faq}</a>
+      <a href={getRelativeLocaleUrl(locale, '/blog')}>{th.blog}</a>
+      <a href={getRelativeLocaleUrl(locale, '/about')}>{th.about}</a>
       <div class="dropdown" id="convertersDropdown">
-        <button class="dropdown-btn">Converters ▾</button>
+        <button class="dropdown-btn">{th.converters} ▾</button>
         <div class="dropdown-menu">
-          <a href="/json-to-csv-converter">JSON to CSV</a>
-          <a href="/csv-to-json-converter">CSV to JSON</a>
-          <a href="/excel-to-json-converter">Excel to JSON</a>
-          <a href="/json-to-excel-converter">JSON to Excel</a>
-          <a href="/excel-to-csv-converter">Excel to CSV</a>
+          {converterLinks.map((link) => (
+            <a href={getRelativeLocaleUrl(locale, `/${link.slug}`)}>{link.label}</a>
+          ))}
         </div>
       </div>
-      <a href="https://github.com/NaimBiswas/convert/issues/new" target="_blank" rel="noopener" class="report-btn">Report Issue</a>
-      <span class="badge">v1.0</span>
+      <a href="https://github.com/NaimBiswas/convert/issues/new" target="_blank" rel="noopener" class="report-btn">{th.reportIssue}</a>
+      <span class="badge">{th.versionBadge}</span>
+      <div class="dropdown lang-dropdown" id="langDropdown">
+        <button class="dropdown-btn" aria-label={th.language}>{languages[locale].native} ▾</button>
+        <div class="dropdown-menu lang-menu">
+          {locales.map((loc) => (
+            <a href={getRelativeLocaleUrl(loc, currentPath)} class={loc === locale ? 'current-lang' : ''}>
+              {languages[loc].native}
+            </a>
+          ))}
+        </div>
+      </div>
     </nav>
-    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
+    <button class="theme-btn" id="themeToggle" aria-label={th.themeAria}>🌙</button>
   </div>
 </header>
 
@@ -47,16 +78,19 @@
   hamburger.addEventListener('click', () => {
     nav.classList.toggle('open');
   });
-  const dropdown = document.getElementById('convertersDropdown');
-  if (dropdown) {
+  const setupDropdown = (id: string) => {
+    const dropdown = document.getElementById(id);
+    if (!dropdown) return;
     dropdown.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdown.classList.toggle('open');
     });
-    document.addEventListener('click', () => {
-      dropdown.classList.remove('open');
-    });
-  }
+  };
+  setupDropdown('convertersDropdown');
+  setupDropdown('langDropdown');
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown.open').forEach((el) => el.classList.remove('open'));
+  });
 </script>
 
 <style>
@@ -121,8 +155,10 @@
     transition: background var(--transition);
   }
   .dropdown-menu a:hover { background: var(--surface-hover); color: var(--text); }
+  .dropdown-menu a.current-lang { color: var(--primary); font-weight: 550; }
   .dropdown.open .dropdown-menu { display: block; }
   .dropdown.open .dropdown-btn { color: var(--text); }
+  .lang-menu { left: auto; right: 0; transform: none; min-width: 140px; }
 
   .hamburger {
     display: none; width: 36px; height: 36px; border-radius: 8px;
@@ -144,7 +180,7 @@
     }
     .header-nav.open { display: flex; }
     .header-nav a, .dropdown-btn { display: block; padding: 8px 0; font-size: 14px; }
-    .dropdown-menu {
+    .dropdown-menu, .lang-menu {
       position: static; transform: none; box-shadow: none;
       border: none; margin-top: 0; padding-left: 16px; background: transparent;
     }

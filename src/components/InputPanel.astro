@@ -1,27 +1,40 @@
+---
+import { defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale: Locale = Astro.props.locale && isLocale(Astro.props.locale) ? Astro.props.locale : defaultLocale;
+const t = ui[locale].tool;
+---
+
 <div class="input-header">
   <div class="input-tabs" id="inputTabs">
-    <button class="input-tab active" data-tab="paste" id="tabPaste">Paste</button>
-    <button class="input-tab" data-tab="upload" id="tabUpload">Upload</button>
-    <button class="input-tab" data-tab="url">URL</button>
+    <button class="input-tab active" data-tab="paste" id="tabPaste">{t.paste}</button>
+    <button class="input-tab" data-tab="upload" id="tabUpload">{t.upload}</button>
+    <button class="input-tab" data-tab="url">{t.url}</button>
   </div>
   <div class="input-actions">
-    <button class="btn" id="loadExample">↻ Load Example</button>
-    <button class="btn" id="formatBtn" title="Pretty-print">▦ Format</button>
-    <button class="btn" id="clearBtn">✕ Clear</button>
-    <button class="btn" id="validateBtn" style="color:var(--success);border-color:var(--success);">✓ Validate</button>
+    <button class="btn" id="loadExample">↻ {t.loadExample}</button>
+    <button class="btn" id="formatBtn" title="Pretty-print">▦ {t.format}</button>
+    <button class="btn" id="clearBtn">✕ {t.clear}</button>
+    <button class="btn" id="validateBtn" style="color:var(--success);border-color:var(--success);">✓ {t.validate}</button>
   </div>
 </div>
 
 <div class="privacy-notice">
   <span>🔒</span>
-    <span>Processed entirely in your browser — no storage, no servers. URL fetch with proxy enabled routes through a 3rd party.</span>
+    <span>{t.privacyNotice}</span>
 </div>
 
 <div id="uploadZone" class="upload-zone" style="display:none">
   <div class="drop-inner">
     <div class="upload-icon">📂</div>
-    <p class="upload-text">Drag & drop a file here, or <span class="upload-link" id="browseLink">browse</span></p>
-    <p class="upload-hint">Supports: JSON, CSV, XML, YAML, Excel (XLSX)</p>
+    <p class="upload-text">{t.dragDropText} <span class="upload-link" id="browseLink">{t.browse}</span></p>
+    <p class="upload-hint">{t.uploadSupports}</p>
     <input type="file" id="fileInput" accept=".json,.csv,.xml,.yaml,.yml,.xlsx" hidden />
   </div>
 </div>
@@ -29,36 +42,36 @@
 <div id="urlZone" class="url-zone" style="display:none">
   <div class="url-row">
     <input type="text" id="urlInput" class="url-input" placeholder="https://example.com/data.json" />
-    <button class="btn" id="fetchBtn">⬇ Fetch</button>
+    <button class="btn" id="fetchBtn">⬇ {t.fetch}</button>
   </div>
   <label class="url-option">
     <input type="checkbox" id="corsProxyCheck" />
-    <span>Use CORS proxy (for APIs that don't allow direct fetch)</span>
+    <span>{t.corsProxy}</span>
   </label>
 </div>
 
 <div id="sheetBar" class="sheet-bar" style="display:none">
-  <span style="font-size:13px;color:var(--text-secondary)">Sheet:</span>
+  <span style="font-size:13px;color:var(--text-secondary)">{t.sheet}</span>
   <select id="sheetSelect" class="sheet-select"></select>
   <span id="sheetCount" style="font-size:12px;color:var(--text-muted)"></span>
 </div>
 
-<textarea class="code-editor" id="codeEditor" placeholder="Paste your data here..."></textarea>
+<textarea class="code-editor" id="codeEditor" placeholder={t.editorPlaceholder}></textarea>
 
 <div id="validationBadge" class="validation-badge" style="display:none"></div>
 
 <div class="convert-row">
-  <button class="btn-convert" id="convertBtn">⟳ Convert</button>
-  <button class="btn-ghost" id="swapBtn2">⇄ Swap</button>
-  <button class="btn-ghost" id="resetBtn">↻ Reset</button>
+  <button class="btn-convert" id="convertBtn">⟳ {t.convert}</button>
+  <button class="btn-ghost" id="swapBtn2">⇄ {t.swap}</button>
+  <button class="btn-ghost" id="resetBtn">↻ {t.reset}</button>
   <div class="tools-dropdown">
-    <button class="btn-ghost" id="toolsBtn">🔧 Tools ▾</button>
+    <button class="btn-ghost" id="toolsBtn">🔧 {t.tools} ▾</button>
     <div class="tools-menu" id="toolsMenu" style="display:none">
-      <button class="tool-menu-item" id="genDataBtn">🎲 Generate random data</button>
-      <button class="tool-menu-item" id="base64EncodeBtn">🔐 Base64 Encode</button>
-      <button class="tool-menu-item" id="base64DecodeBtn">🔓 Base64 Decode</button>
-      <button class="tool-menu-item" id="hexEncodeBtn">🔢 Hex Encode</button>
-      <button class="tool-menu-item" id="hexDecodeBtn">🔢 Hex Decode</button>
+      <button class="tool-menu-item" id="genDataBtn">🎲 {t.generateRandomData}</button>
+      <button class="tool-menu-item" id="base64EncodeBtn">🔐 {t.base64Encode}</button>
+      <button class="tool-menu-item" id="base64DecodeBtn">🔓 {t.base64Decode}</button>
+      <button class="tool-menu-item" id="hexEncodeBtn">🔢 {t.hexEncode}</button>
+      <button class="tool-menu-item" id="hexDecodeBtn">🔢 {t.hexDecode}</button>
     </div>
   </div>
 </div>

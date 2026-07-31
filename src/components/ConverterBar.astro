@@ -1,10 +1,17 @@
 ---
+import { defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
 const formats = ['JSON', 'CSV', 'Excel (XLSX)', 'XML', 'YAML', 'HTML Table', 'Markdown'];
 export interface Props {
   from?: string;
   to?: string;
+  locale?: Locale;
 }
 const { from: fromProp = 'JSON', to: toProp = 'Excel (XLSX)' } = Astro.props;
+const locale: Locale = Astro.props.locale && isLocale(Astro.props.locale) ? Astro.props.locale : defaultLocale;
+const swapTitle = ui[locale].tool.swapFormats;
 ---
 
 <div class="converter-bar" data-from={fromProp} data-to={toProp}>
@@ -19,7 +26,7 @@ const { from: fromProp = 'JSON', to: toProp = 'Excel (XLSX)' } = Astro.props;
 
   <div class="bridge">
     <span class="bridge-line"></span>
-    <button class="swap-btn" id="swapBtn" title="Swap formats">⇄</button>
+    <button class="swap-btn" id="swapBtn" title={swapTitle}>⇄</button>
     <span class="bridge-line"></span>
   </div>
 

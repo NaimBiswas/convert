@@ -1,35 +1,48 @@
+---
+import { defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale: Locale = Astro.props.locale && isLocale(Astro.props.locale) ? Astro.props.locale : defaultLocale;
+const t = ui[locale].tool;
+---
+
 <div id="previewRoot" style="display:none">
-  <div class="section-label" id="sectionLabel">Preview</div>
+  <div class="section-label" id="sectionLabel">{t.preview}</div>
 
   <div class="toolbar" id="toolbar">
     <div class="toolbar-left">
-      <input type="text" id="searchInput" class="search-input" placeholder="Search rows..." />
-      <button class="tool-btn" id="findReplaceBtn" title="Find & Replace">🔍</button>
-      <button class="tool-btn" id="transposeBtn" title="Transpose">↕⇄</button>
-      <button class="tool-btn" id="caseBtn" title="Case transforms">Aa</button>
+      <input type="text" id="searchInput" class="search-input" placeholder={t.searchPlaceholder} />
+      <button class="tool-btn" id="findReplaceBtn" title={t.findReplace}>🔍</button>
+      <button class="tool-btn" id="transposeBtn" title={t.transpose}>↕⇄</button>
+      <button class="tool-btn" id="caseBtn" title={t.caseTransforms}>Aa</button>
     </div>
     <div class="toolbar-right">
-      <button class="tool-btn" id="undoBtn" title="Undo (Ctrl+Z)" disabled>↩ Undo</button>
-      <button class="tool-btn" id="redoBtn" title="Redo (Ctrl+Shift+Z)" disabled>↪ Redo</button>
-      <button class="tool-btn" id="addRowBtn" title="Add row">+ Row</button>
-      <button class="tool-btn" id="addColBtn" title="Add column">+ Col</button>
+      <button class="tool-btn" id="undoBtn" title={`${t.undo} (Ctrl+Z)`} disabled>↩ {t.undo}</button>
+      <button class="tool-btn" id="redoBtn" title={`${t.redo} (Ctrl+Shift+Z)`} disabled>↪ {t.redo}</button>
+      <button class="tool-btn" id="addRowBtn" title={t.addRow}>+ {t.addRow}</button>
+      <button class="tool-btn" id="addColBtn" title={t.addColumn}>+ {t.addColumn}</button>
     </div>
   </div>
 
   <div id="findReplaceBar" class="find-bar" style="display:none">
-    <input type="text" id="findInput" class="find-input" placeholder="Find..." />
-    <input type="text" id="replaceInput" class="find-input" placeholder="Replace with..." />
-    <button class="tool-btn" id="replaceBtn">Replace</button>
-    <button class="tool-btn" id="replaceAllBtn">Replace All</button>
+    <input type="text" id="findInput" class="find-input" placeholder={t.findPlaceholder} />
+    <input type="text" id="replaceInput" class="find-input" placeholder={t.replacePlaceholder} />
+    <button class="tool-btn" id="replaceBtn">{t.replace}</button>
+    <button class="tool-btn" id="replaceAllBtn">{t.replaceAll}</button>
     <button class="tool-btn" id="closeFindBtn">✕</button>
   </div>
 
   <div id="caseBar" class="find-bar" style="display:none">
-    <span style="font-size:13px;color:var(--text-secondary)">Transform column:</span>
+    <span style="font-size:13px;color:var(--text-secondary)">{t.transformColumn}</span>
     <select id="caseColSelect" class="find-input" style="width:auto"></select>
-    <button class="tool-btn" id="caseUpper">UPPER</button>
-    <button class="tool-btn" id="caseLower">lower</button>
-    <button class="tool-btn" id="caseCapitalize">Capitalize</button>
+    <button class="tool-btn" id="caseUpper">{t.uppercase}</button>
+    <button class="tool-btn" id="caseLower">{t.lowercase}</button>
+    <button class="tool-btn" id="caseCapitalize">{t.capitalize}</button>
     <button class="tool-btn" id="closeCaseBtn">✕</button>
   </div>
 
@@ -43,8 +56,8 @@
     <div class="table-footer" id="tableFooter">
       <span id="tableMeta"></span>
       <div class="footer-actions">
-        <button class="tool-btn sm" id="delEmptyRowsBtn" title="Delete empty rows">✕ Empty</button>
-        <button class="tool-btn sm" id="delDupesBtn" title="Remove duplicates">✕ Dups</button>
+        <button class="tool-btn sm" id="delEmptyRowsBtn" title={t.deleteEmptyRows}>✕ {t.empty}</button>
+        <button class="tool-btn sm" id="delDupesBtn" title={t.removeDuplicates}>✕ {t.dups}</button>
       </div>
       <div class="pagination" id="pagination"></div>
     </div>
@@ -67,7 +80,7 @@
   </div>
   <div class="privacy-footnote">
     <span>🔒</span>
-    <span>No data uploaded — everything stays on your machine. Deleted when you close the tab.</span>
+    <span>{t.privacyFootnote}</span>
   </div>
 </div>
 

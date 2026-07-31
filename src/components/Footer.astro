@@ -1,33 +1,48 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale: Locale = Astro.props.locale && isLocale(Astro.props.locale) ? Astro.props.locale : defaultLocale;
+const t = ui[locale].footer;
+const loc = (p: string) => getRelativeLocaleUrl(locale, p);
+---
+
 <footer class="footer">
   <div class="footer-top">
     <span class="footer-tag">
       <span class="lock-icon">🔒</span>
-      No servers. No storage. No tracking. Your data never leaves your device.
+      {t.tagline}
     </span>
     <div class="footer-links">
-      <a href="/">Home</a>
+      <a href={loc('/')}>{t.home}</a>
       <span class="sep">·</span>
-      <a href="/docs">Docs</a>
+      <a href={loc('/docs')}>{t.docs}</a>
       <span class="sep">·</span>
-      <a href="/faq">FAQ</a>
+      <a href={loc('/faq')}>{t.faq}</a>
       <span class="sep">·</span>
-      <a href="/blog">Blog</a>
+      <a href={loc('/blog')}>{t.blog}</a>
       <span class="sep">·</span>
-      <a href="/about">About</a>
+      <a href={loc('/about')}>{t.about}</a>
       <span class="sep">·</span>
-      <a href="/contact">Contact</a>
+      <a href={loc('/contact')}>{t.contact}</a>
       <span class="sep">·</span>
-      <a href="/privacy">Privacy</a>
+      <a href={loc('/privacy')}>{t.privacy}</a>
       <span class="sep">·</span>
-      <a href="/terms">Terms</a>
+      <a href={loc('/terms')}>{t.terms}</a>
       <span class="sep">·</span>
-      <a href="/cookies">Cookies</a>
+      <a href={loc('/cookies')}>{t.cookies}</a>
       <span class="sep">·</span>
-      <a href="https://github.com/NaimBiswas/convert" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/NaimBiswas/convert" target="_blank" rel="noopener">{t.github}</a>
     </div>
   </div>
   <div class="footer-bottom">
-    &copy; {new Date().getFullYear()} Data Converter. All rights reserved.
+    &copy; {new Date().getFullYear()} {t.copyright}
   </div>
 </footer>
 

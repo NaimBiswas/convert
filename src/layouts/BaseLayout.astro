@@ -1,11 +1,17 @@
 ---
+import { getAbsoluteLocaleUrl, getRelativeLocaleUrl } from 'astro:i18n';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { defaultLocale, languages, locales, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
 
 export interface Props {
   title: string;
   description: string;
+  locale?: Locale;
+  path?: string;
   image?: string;
   keywords?: string;
   robots?: string;
@@ -20,7 +26,14 @@ const {
   keywords, robots = 'index, follow',
   schema, breadcrumbs, article,
 } = Astro.props;
-const siteName = 'Data Converter';
+
+const rawLocale = Astro.props.locale;
+const locale: Locale = rawLocale && isLocale(rawLocale) ? rawLocale : defaultLocale;
+const path = Astro.props.path;
+const isLocalized = !!path;
+
+const t = ui[locale];
+const siteName = t.layout.siteName;
 const url = Astro.url;
 
 const absImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
@@ -39,7 +52,7 @@ const pageSchema = schema || {
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={languages[locale].htmlLang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -54,6 +67,7 @@ const pageSchema = schema || {
     <link rel="canonical" href={url} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={languages[locale].ogLocale} />
     <meta property="og:title" content={`${title} — ${siteName}`} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={absImage} />
@@ -64,6 +78,13 @@ const pageSchema = schema || {
     <meta name="twitter:title" content={`${title} — ${siteName}`} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={absImage} />
+
+    {isLocalized && locales.map((loc) => (
+      <link rel="alternate" hreflang={languages[loc].htmlLang} href={getAbsoluteLocaleUrl(loc, path)} />
+    ))}
+    {isLocalized && (
+      <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl(defaultLocale, path)} />
+    )}
 
     <script is:inline>
       function loadScript(src, attrs = {}) {
@@ -134,13 +155,13 @@ const pageSchema = schema || {
   <body>
     <amp-auto-ads type="adsense" data-ad-client="ca-pub-5712552452630675"></amp-auto-ads>
     <div id="cookie-banner" class="cookie-banner" style="display:none">
-      <span>This site uses cookies for analytics and ads. <a href="/cookies">Learn more</a>.</span>
-      <button onclick="acceptCookies()">Got it</button>
+      <span>{t.layout.cookieBanner} <a href={getRelativeLocaleUrl(locale, t.layout.cookiesPath)}>{t.layout.cookieLearnMore}</a>.</span>
+      <button onclick="acceptCookies()">{t.layout.cookieGotIt}</button>
     </div>
     <div class="app">
-      <Header />
+      <Header locale={locale} path={path} />
       <div class="main"><slot /></div>
-      <Footer />
+      <Footer locale={locale} />
     </div>
     <script>
       import { initTheme } from '../lib/theme';

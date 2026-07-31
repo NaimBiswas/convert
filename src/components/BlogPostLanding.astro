@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HtmlBlocks from './HtmlBlocks.astro';
+import { blogContent } from '../i18n/pages';
+import { localizeHrefs, localizeBreadcrumbs } from '../i18n/pages/utils';
+import type { Locale } from '../i18n/languages';
+import type { BlogSlug } from '../i18n/pages';
+
+export interface Props {
+  locale: Locale;
+  slug: BlogSlug;
+  path: string;
+}
+
+const { locale, slug, path } = Astro.props;
+const c = blogContent[locale].posts[slug];
+const crumbs = localizeBreadcrumbs(locale, c.breadcrumbs);
+const lh = (html: string) => localizeHrefs(locale, html);
+---
+
+<BaseLayout
+  title={c.meta.title}
+  description={c.meta.description}
+  keywords={c.meta.keywords}
+  locale={locale}
+  path={path}
+  breadcrumbs={crumbs}
+  article={{
+    headline: c.h1,
+    datePublished: c.dateISO,
+    description: c.meta.description,
+  }}
+>
+  <main class="blog-post">
+    <article>
+      <h1>{c.h1}</h1>
+      <p class="post-meta">
+        <time datetime={c.dateISO}>{c.dateDisplay}</time> · {c.byline}
+      </p>
+
+      <img src={c.heroImg} alt={c.heroAlt} class="post-img" loading="lazy" />
+
+      <p set:html={lh(c.intro)} />
+
+      {c.sections.map((section) => (
+        <Fragment>
+          <h2>{section.heading}</h2>
+          <HtmlBlocks blocks={section.blocks} locale={locale} />
+        </Fragment>
+      ))}
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .blog-post { max-width: 720px; margin: 40px auto; padding: 0 16px; }
+  .blog-post h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .post-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; opacity: 0.7; }
+  .blog-post h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .blog-post p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 14px; }
+  .blog-post ul { padding-left: 20px; margin-bottom: 14px; }
+  .blog-post li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .blog-post code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .blog-post a { color: var(--primary); text-decoration: none; }
+  .blog-post a:hover { text-decoration: underline; }
+  .post-img { width: 100%; border-radius: 10px; margin: 16px 0 24px; }
+  @media (max-width: 640px) { .blog-post { margin: 24px auto; } .blog-post h1 { font-size: 24px; } }
+</style>

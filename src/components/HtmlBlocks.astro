@@ -1,0 +1,72 @@
+---
+import { localizeHrefs } from '../i18n/pages/utils';
+import type { Locale } from '../i18n/languages';
+import type { HtmlBlock } from '../i18n/pages';
+
+export interface Props {
+  blocks: HtmlBlock[];
+  locale: Locale;
+}
+
+const { blocks, locale } = Astro.props;
+const lh = (html: string) => localizeHrefs(locale, html);
+---
+
+{blocks.map((block) => {
+  if (block.type === 'p') return <p set:html={lh(block.html)} />;
+  if (block.type === 'cookieTable')
+    return (
+      <table class="cookie-table">
+        <thead>
+          <tr>
+            <th>{block.columns.cookie}</th>
+            <th>{block.columns.purpose}</th>
+            <th>{block.columns.duration}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {block.rows.map((row) => (
+            <tr>
+              <td><code>{row.cookie}</code></td>
+              <td>{row.purpose}</td>
+              <td>{row.duration}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  const items = block.items.map((item) => <li set:html={lh(item)} />);
+  return block.type === 'ul' ? <ul>{items}</ul> : <ol>{items}</ol>;
+})}
+
+<style>
+  .cookie-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .cookie-table th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 500;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .cookie-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+  .cookie-table code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 4px;
+  }
+</style>
