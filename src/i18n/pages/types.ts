@@ -103,7 +103,12 @@ export type BlogSlug =
   | 'why-json-is-popular'
   | 'excel-formulas-to-csv'
   | 'data-migration-strategies'
-  | 'large-file-conversion';
+  | 'large-file-conversion'
+  | 'json-to-csv-converter-guide'
+  | 'csv-to-json-converter-guide'
+  | 'excel-to-json-converter-guide'
+  | 'json-to-excel-converter-guide'
+  | 'excel-to-csv-converter-guide';
 
 export interface BlogCardContent {
   title: string;
@@ -121,7 +126,7 @@ export interface BlogIndexContent {
   subtitle: string;
   breadcrumbs: Breadcrumb[];
   order: BlogSlug[];
-  posts: Record<BlogSlug, BlogCardContent>;
+  posts: Partial<Record<BlogSlug, BlogCardContent>>;
 }
 
 export interface BlogSection {
@@ -144,5 +149,5 @@ export interface BlogPostContent {
 
 export interface BlogContent {
   index: BlogIndexContent;
-  posts: Record<BlogSlug, BlogPostContent>;
+  posts: Partial<Record<BlogSlug, BlogPostContent>>;
 }
