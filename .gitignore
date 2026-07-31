@@ -39,3 +39,4 @@ project-plan.md
 .dev.vars*
 !.dev.vars.example
 !.env.example
+TOPICAL-MAP.md
