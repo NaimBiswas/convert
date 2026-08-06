@@ -27,4 +27,9 @@ export default defineConfig({
     },
   })],
   adapter: cloudflare(),
+  vite: {
+    optimizeDeps: {
+      exclude: ['@astrojs/cloudflare'],
+    },
+  },
 });

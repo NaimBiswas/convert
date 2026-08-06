@@ -1,0 +1,49 @@
+<div class="ad-slot" aria-label="Advertisement">
+  <span class="ad-label">Advertisement</span>
+  <div class="ad-frame">
+    <span class="ad-placeholder">Your ad here</span>
+  </div>
+</div>
+
+<style>
+  .ad-slot {
+    position: fixed;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+    z-index: 50;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ad-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .ad-frame {
+    width: 160px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    transition: border-color var(--transition), background var(--transition);
+  }
+  .ad-frame:hover { border-color: var(--primary); }
+  .ad-placeholder {
+    font-size: 12px;
+    font-weight: 450;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 1440px) {
+    .ad-slot { display: none; }
+  }
+</style>

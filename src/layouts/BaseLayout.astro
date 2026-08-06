@@ -4,7 +4,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AdBanner from '../components/AdBanner.astro';
-import SidebarAd from '../components/SidebarAd.astro';
+import SidebarAdSlot from '../components/SidebarAdSlot.astro';
 import { defaultLocale, languages, locales, isLocale } from '../i18n/languages';
 import { ui } from '../i18n/ui';
 import type { Locale } from '../i18n/languages';
@@ -59,9 +59,17 @@ const pageSchema = schema || {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="7312be417be827254e839cdf846a35e91dff6528" content="7312be417be827254e839cdf846a35e91dff6528" />
+    <!-- ads -->
+    <!-- google adsense -->
     <meta name="google-adsense-account" content="ca-pub-5712552452630675">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5712552452630675" crossorigin="anonymous"></script>
 
+    <!-- monetag -->
+    <script>(function(s){s.dataset.zone='11439435',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script>(function(s){s.dataset.zone='11439434',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <script src="https://5gvci.com/act/files/tag.min.js?z=11439433" data-cfasync="false" async></script>
+    <script>(function(s){s.dataset.zone='11431620',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    
     <title>{title} - {siteName}</title>
     <meta name="description" content={description} />
     {keywords && <meta name="keywords" content={keywords} />}
@@ -150,9 +158,7 @@ const pageSchema = schema || {
     })} />}
   </head>
   <body>
-    <script is:inline src="https://pl30621055.effectivecpmnetwork.com/ac/a4/1a/aca41a0c4554774695478245b0ebd511.js"></script>
-    <script is:inline src="https://pl30621056.effectivecpmnetwork.com/4e/f5/77/4ef577470f6219de39711c5270cf1428.js"></script>
-    <script is:inline src="https://pimplehardnesscarnivorous.com/ac/a4/1a/aca41a0c4554774695478245b0ebd511.js"></script>
+
     <amp-auto-ads type="adsense" data-ad-client="ca-pub-5712552452630675"></amp-auto-ads>
     <div id="cookie-banner" class="cookie-banner" style="display:none">
       <span>{t.layout.cookieBanner} <a href={getRelativeLocaleUrl(locale, t.layout.cookiesPath)}>{t.layout.cookieLearnMore}</a>.</span>
@@ -165,7 +171,7 @@ const pageSchema = schema || {
         <slot />
       </div>
       <Footer locale={locale} />
-      <SidebarAd />
+      <SidebarAdSlot />
     </div>
     <script>
       import { initTheme } from '../lib/theme';
