@@ -508,6 +508,12 @@ export const esHome: HomeContent = {
         link: '/json-to-excel-converter',
         icon: 'xml',
       },
+      {
+        title: 'Conversor de imágenes',
+        desc: 'Convierte imágenes a PNG, JPG o WebP en tu navegador. Control de calidad, vista previa de dimensiones y descarga instantánea.',
+        link: '/image-converter',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {
@@ -578,6 +584,21 @@ export const esHome: HomeContent = {
         label: 'YAML',
         targets: ['JSON', 'CSV', 'Excel', 'XML', 'HTML', 'Markdown', 'PDF'],
         tag: 'Docker, Kubernetes, CI/CD',
+      },
+      {
+        label: 'PNG',
+        targets: ['JPG', 'WebP'],
+        tag: 'Gráficos web, logos, transparencia',
+      },
+      {
+        label: 'JPG',
+        targets: ['PNG', 'WebP'],
+        tag: 'Fotos, compartir, la web',
+      },
+      {
+        label: 'WebP',
+        targets: ['JPG', 'PNG'],
+        tag: 'Imágenes web pequeñas y rápidas',
       },
     ],
   },

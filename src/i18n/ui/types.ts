@@ -21,6 +21,12 @@ export interface HeaderStrings {
   excelToJson: string;
   jsonToExcel: string;
   excelToCsv: string;
+  imageConverter: string;
+  pngToJpg: string;
+  jpgToPng: string;
+  webpToJpg: string;
+  jpgToWebp: string;
+  pngToWebp: string;
   reportIssue: string;
   versionBadge: string;
   language: string;
@@ -100,9 +106,27 @@ export interface LayoutStrings {
   cookiesPath: string;
 }
 
+export interface ImageToolStrings {
+  privacy: string;
+  dragDropText: string;
+  browse: string;
+  supports: string;
+  target: string;
+  quality: string;
+  convert: string;
+  result: string;
+  fileName: string;
+  dimensions: string;
+  outputFormat: string;
+  fileSize: string;
+  download: string;
+  convertAnother: string;
+}
+
 export interface UIStrings {
   header: HeaderStrings;
   footer: FooterStrings;
   tool: ToolStrings;
   layout: LayoutStrings;
+  image: ImageToolStrings;
 }

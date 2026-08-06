@@ -508,6 +508,12 @@ export const hiHome: HomeContent = {
         link: '/json-to-excel-converter',
         icon: 'xml',
       },
+      {
+        title: 'इमेज कन्वर्टर',
+        desc: 'अपने ब्राउज़र में छवियों को PNG, JPG या WebP में बदलें। क्वालिटी स्लाइडर, आयाम पूर्वावलोकन और तुरंत डाउनलोड।',
+        link: '/image-converter',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {
@@ -578,6 +584,21 @@ export const hiHome: HomeContent = {
         label: 'YAML',
         targets: ['JSON', 'CSV', 'Excel', 'XML', 'HTML', 'Markdown', 'PDF'],
         tag: 'Docker, Kubernetes, CI/CD',
+      },
+      {
+        label: 'PNG',
+        targets: ['JPG', 'WebP'],
+        tag: 'वेब ग्राफिक्स, लोगो, ट्रांसपेरेंसी',
+      },
+      {
+        label: 'JPG',
+        targets: ['PNG', 'WebP'],
+        tag: 'फ़ोटो, साझा करना, वेब',
+      },
+      {
+        label: 'WebP',
+        targets: ['JPG', 'PNG'],
+        tag: 'छोटी, तेज़ वेब छवियां',
       },
     ],
   },

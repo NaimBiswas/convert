@@ -508,6 +508,12 @@ export const jaHome: HomeContent = {
         link: '/json-to-excel-converter',
         icon: 'xml',
       },
+      {
+        title: '画像変換',
+        desc: 'ブラウザ内で画像をPNG・JPG・WebPに変換。品質スライダー、寸法プレビュー、即時ダウンロード。',
+        link: '/image-converter',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {
@@ -578,6 +584,21 @@ export const jaHome: HomeContent = {
         label: 'YAML',
         targets: ['JSON', 'CSV', 'Excel', 'XML', 'HTML', 'Markdown', 'PDF'],
         tag: 'Docker、Kubernetes、CI/CD',
+      },
+      {
+        label: 'PNG',
+        targets: ['JPG', 'WebP'],
+        tag: 'Web グラフィック、ロゴ、透過',
+      },
+      {
+        label: 'JPG',
+        targets: ['PNG', 'WebP'],
+        tag: '写真、共有、Web',
+      },
+      {
+        label: 'WebP',
+        targets: ['JPG', 'PNG'],
+        tag: '小さく高速な Web 画像',
       },
     ],
   },

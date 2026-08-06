@@ -7,6 +7,7 @@ import { de, deHome } from './de';
 import { fr, frHome } from './fr';
 import { hi, hiHome } from './hi';
 import { ja, jaHome } from './ja';
+import { imageConverters } from './image';
 
 export type {
   HomeContent,
@@ -19,13 +20,13 @@ export type {
 } from './types';
 
 export const converterContent: Record<Locale, ConverterContentMap> = {
-  en: enConverters,
-  es,
-  pt,
-  de,
-  fr,
-  hi,
-  ja,
+  en: { ...enConverters, ...imageConverters.en },
+  es: { ...es, ...imageConverters.es },
+  pt: { ...pt, ...imageConverters.pt },
+  de: { ...de, ...imageConverters.de },
+  fr: { ...fr, ...imageConverters.fr },
+  hi: { ...hi, ...imageConverters.hi },
+  ja: { ...ja, ...imageConverters.ja },
 };
 
 export const homeContent: Record<Locale, HomeContent> = {

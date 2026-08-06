@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ImageInput from './ImageInput.astro';
+import ImagePreview from './ImagePreview.astro';
+import { converterContent } from '../i18n/content';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale: Locale;
+  slug: keyof typeof converterContent['en'];
+}
+
+const { locale, slug } = Astro.props;
+const c = converterContent[locale][slug];
+const defaultTo = c.to === 'WEBP' ? 'WEBP' : c.to === 'PNG' ? 'PNG' : 'JPG';
+---
+
+<BaseLayout
+  title={c.meta.title}
+  description={c.meta.description}
+  keywords={c.meta.keywords}
+  locale={locale}
+  path={c.path}
+>
+  <main class="landing">
+    <section class="landing-hero">
+      <h1>{c.h1}</h1>
+      <p class="landing-desc" set:html={c.desc} />
+    </section>
+
+    <ImageInput locale={locale} defaultTo={defaultTo} />
+    <ImagePreview locale={locale} />
+
+    <section class="landing-content">
+      {c.sections.map((section) => (
+        <Fragment>
+          <h2>{section.heading}</h2>
+          {section.blocks.map((block) => {
+            if (block.type === 'p') return <p set:html={block.html} />;
+            if (block.type === 'code')
+              return <p class="code-block"><code set:html={block.html} /></p>;
+            if (block.type === 'list') {
+              const items = block.items.map((item) => <li set:html={item} />);
+              return block.ordered ? <ol>{items}</ol> : <ul>{items}</ul>;
+            }
+            return null;
+          })}
+        </Fragment>
+      ))}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .landing { max-width: 1000px; margin: 0 auto; }
+  .landing-hero { text-align: center; padding: 40px 16px 24px; }
+  .landing-hero h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .landing-desc { font-size: 15px; color: var(--text-secondary); max-width: 640px; margin: 0 auto; line-height: 1.7; }
+  .landing-desc code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .landing-content { padding: 40px 16px 60px; max-width: 720px; margin: 0 auto; }
+  .landing-content h2 { font-size: 22px; font-weight: 600; margin: 32px 0 12px; letter-spacing: -0.3px; }
+  .landing-content p { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin-bottom: 12px; }
+  .landing-content code { font-family: 'JetBrains Mono', monospace; font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  .landing-content .code-block code {
+    display: block; padding: 14px 16px; margin: 12px 0; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); overflow-x: auto; line-height: 1.6;
+  }
+  .landing-content ul, .landing-content ol { padding-left: 20px; margin-bottom: 12px; }
+  .landing-content li { font-size: 14px; line-height: 1.8; color: var(--text-secondary); }
+  .landing-content kbd { font-family: 'JetBrains Mono', monospace; font-size: 12px; padding: 2px 7px; border-radius: 5px; border: 1px solid var(--border); background: var(--surface); }
+  @media (max-width: 640px) {
+    .landing-hero h1 { font-size: 24px; }
+    .landing-hero { padding: 24px 16px 16px; }
+    .landing-content h2 { font-size: 18px; }
+  }</style>

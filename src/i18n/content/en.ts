@@ -1,4 +1,4 @@
-import type { HomeContent, ConverterContentMap } from './types';
+﻿import type { HomeContent, ConverterContentMap } from './types';
 
 export const converterContent: ConverterContentMap = {
   'json-to-csv': {
@@ -508,6 +508,12 @@ export const homeContent: HomeContent = {
         link: '/json-to-excel-converter',
         icon: 'xml',
       },
+      {
+        title: 'Image Converter',
+        desc: 'Convert images to PNG, JPG, or WebP in your browser. Quality slider, dimension preview, and instant download.',
+        link: '/image-converter',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {
@@ -578,6 +584,21 @@ export const homeContent: HomeContent = {
         label: 'YAML',
         targets: ['JSON', 'CSV', 'Excel', 'XML', 'HTML', 'Markdown', 'PDF'],
         tag: 'Docker, Kubernetes, CI/CD',
+      },
+      {
+        label: 'PNG',
+        targets: ['JPG', 'WebP'],
+        tag: 'Web graphics, logos, transparency',
+      },
+      {
+        label: 'JPG',
+        targets: ['PNG', 'WebP'],
+        tag: 'Photos, sharing, the web',
+      },
+      {
+        label: 'WebP',
+        targets: ['JPG', 'PNG'],
+        tag: 'Small, fast web images',
       },
     ],
   },

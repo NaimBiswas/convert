@@ -108,7 +108,13 @@ export type BlogSlug =
   | 'csv-to-json-converter-guide'
   | 'excel-to-json-converter-guide'
   | 'json-to-excel-converter-guide'
-  | 'excel-to-csv-converter-guide';
+  | 'excel-to-csv-converter-guide'
+  | 'image-converter-guide'
+  | 'png-to-jpg-converter-guide'
+  | 'jpg-to-png-converter-guide'
+  | 'webp-to-jpg-converter-guide'
+  | 'jpg-to-webp-converter-guide'
+  | 'png-to-webp-converter-guide';
 
 export interface BlogCardContent {
   title: string;

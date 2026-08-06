@@ -30,7 +30,13 @@ export type ConverterSlug =
   | 'csv-to-json'
   | 'excel-to-json'
   | 'json-to-excel'
-  | 'excel-to-csv';
+  | 'excel-to-csv'
+  | 'image-converter'
+  | 'png-to-jpg'
+  | 'jpg-to-png'
+  | 'webp-to-jpg'
+  | 'jpg-to-webp'
+  | 'png-to-webp';
 
 export type ConverterContentMap = Record<ConverterSlug, ConverterContent>;
 

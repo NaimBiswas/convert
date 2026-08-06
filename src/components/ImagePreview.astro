@@ -1,0 +1,162 @@
+---
+import { defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale: Locale = Astro.props.locale && isLocale(Astro.props.locale) ? Astro.props.locale : defaultLocale;
+const t = ui[locale].image;
+---
+
+<div id="imagePreviewRoot" style="display:none">
+  <div class="section-label" id="imageSectionLabel">{t.result}</div>
+
+  <div class="preview-body">
+    <div class="preview-image-wrap">
+      <img id="imagePreviewImg" alt="" />
+    </div>
+
+    <div class="preview-info">
+      <div class="info-grid">
+        <div class="info-cell">
+          <span class="info-label">{t.fileName}</span>
+          <span class="info-value" id="imageFileName">—</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-label">{t.dimensions}</span>
+          <span class="info-value" id="imageDimensions">—</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-label">{t.outputFormat}</span>
+          <span class="info-value" id="imageOutputFormat">—</span>
+        </div>
+        <div class="info-cell">
+          <span class="info-label">{t.fileSize}</span>
+          <span class="info-value" id="imageFileSize">—</span>
+        </div>
+      </div>
+
+      <div class="preview-actions">
+        <button class="btn-download primary" id="imageDownloadBtn">⬇ {t.download}</button>
+        <button class="btn-ghost" id="imageResetBtn">↻ {t.convertAnother}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  import type { ConvertedImage } from '../lib/converters/image';
+  import { downloadBlob } from '../lib/exportUtils';
+  import { imageExt } from '../lib/converters/image';
+
+  const root = document.getElementById('imagePreviewRoot')!;
+  const sectionLabel = document.getElementById('imageSectionLabel')!;
+  const img = document.getElementById('imagePreviewImg') as HTMLImageElement;
+  const fileName = document.getElementById('imageFileName')!;
+  const dimensions = document.getElementById('imageDimensions')!;
+  const outputFormat = document.getElementById('imageOutputFormat')!;
+  const fileSize = document.getElementById('imageFileSize')!;
+  const downloadBtn = document.getElementById('imageDownloadBtn')!;
+  const resetBtn = document.getElementById('imageResetBtn')!;
+
+  let current: ConvertedImage | null = null;
+  let sourceName = 'image';
+
+  function formatBytes(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+  }
+
+  function updateFileName() {
+    if (current) {
+      fileName.textContent = `${sourceName}.${imageExt(current.format)}`;
+    }
+  }
+
+  window.addEventListener('image-selected', (e) => {
+    if (current && current.objectUrl) URL.revokeObjectURL(current.objectUrl);
+    root.style.display = 'none';
+    current = null;
+    sourceName = (e as CustomEvent).detail?.name?.replace(/\.\w+$/, '') || 'image';
+  });
+
+  window.addEventListener('image-converted', (e) => {
+    current = (e as CustomEvent).detail as ConvertedImage;
+    sectionLabel.textContent = 'Result';
+    img.src = current.objectUrl;
+    img.alt = `Converted ${current.format} image`;
+    dimensions.textContent = `${current.width} × ${current.height} px`;
+    outputFormat.textContent = current.format;
+    fileSize.textContent = formatBytes(current.size);
+    updateFileName();
+    root.style.display = 'block';
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    if (!current) return;
+    const ext = imageExt(current.format);
+    downloadBlob(current.blob, `${sourceName}.${ext}`, current.blob.type);
+  });
+
+  resetBtn.addEventListener('click', () => {
+    root.style.display = 'none';
+    if (current && current.objectUrl) URL.revokeObjectURL(current.objectUrl);
+    current = null;
+    window.dispatchEvent(new CustomEvent('image-reset'));
+  });
+</script>
+
+<style>
+  .section-label {
+    display: flex; align-items: center; gap: 8px; margin: 36px 0 12px;
+    font-size: 13px; font-weight: 500; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    transition: color var(--transition);
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+    transition: background var(--transition);
+  }
+  .preview-body {
+    display: flex; gap: 20px; padding: 20px;
+    border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); transition: all var(--transition);
+  }
+  .preview-image-wrap {
+    flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center;
+    background: var(--code-bg); border-radius: var(--radius-sm);
+    border: 1px solid var(--border); padding: 16px; overflow: hidden;
+  }
+  .preview-image-wrap img {
+    max-width: 100%; max-height: 360px; object-fit: contain; border-radius: 4px;
+  }
+  .preview-info { width: 260px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; justify-content: center; }
+  .info-grid { display: flex; flex-direction: column; gap: 8px; }
+  .info-cell { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .info-label { font-size: 12px; color: var(--text-muted); }
+  .info-value { font-size: 13px; font-weight: 550; color: var(--text); }
+  .preview-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-download {
+    padding: 9px 18px; font-size: 13px; font-weight: 500; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary);
+    cursor: pointer; font-family: 'Inter', sans-serif; display: inline-flex; align-items: center; gap: 6px;
+    transition: all var(--transition);
+  }
+  .btn-download.primary { border-color: var(--primary); color: var(--primary); }
+  .btn-download.primary:hover { background: var(--primary-glow); }
+  .btn-ghost {
+    padding: 9px 16px; font-size: 13px; font-weight: 500; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-secondary);
+    cursor: pointer; font-family: 'Inter', sans-serif; transition: all var(--transition);
+  }
+  .btn-ghost:hover { border-color: var(--text-muted); color: var(--text); }
+  @media (max-width: 640px) {
+    .preview-body { flex-direction: column; }
+    .preview-info { width: 100%; }
+  }
+</style>
