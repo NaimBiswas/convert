@@ -16,6 +16,9 @@ export interface HeaderStrings {
   terms: string;
   cookies: string;
   converters: string;
+  categoryCsv: string;
+  categoryExcel: string;
+  categoryImage: string;
   jsonToCsv: string;
   csvToJson: string;
   excelToJson: string;

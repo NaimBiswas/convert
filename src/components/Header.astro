@@ -1,5 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { languages, locales, defaultLocale, isLocale } from '../i18n/languages';
 import { ui } from '../i18n/ui';
 import type { Locale } from '../i18n/languages';
@@ -15,18 +16,47 @@ const currentPath = path || '/';
 const t = ui[locale];
 const th = t.header;
 
-const converterLinks = [
-  { slug: 'json-to-csv-converter', label: th.jsonToCsv },
-  { slug: 'csv-to-json-converter', label: th.csvToJson },
-  { slug: 'excel-to-json-converter', label: th.excelToJson },
-  { slug: 'json-to-excel-converter', label: th.jsonToExcel },
-  { slug: 'excel-to-csv-converter', label: th.excelToCsv },
-  { slug: 'image-converter', label: th.imageConverter },
-  { slug: 'png-to-jpg-converter', label: th.pngToJpg },
-  { slug: 'jpg-to-png-converter', label: th.jpgToPng },
-  { slug: 'webp-to-jpg-converter', label: th.webpToJpg },
-  { slug: 'jpg-to-webp-converter', label: th.jpgToWebp },
-  { slug: 'png-to-webp-converter', label: th.pngToWebp },
+const toolIcons: Record<string, string> = {
+  jsonToCsv: 'fa-solid fa-code',
+  csvToJson: 'fa-solid fa-table',
+  excelToJson: 'fa-solid fa-file-excel',
+  jsonToExcel: 'fa-solid fa-file-code',
+  excelToCsv: 'fa-solid fa-table-columns',
+  imageConverter: 'fa-solid fa-image',
+  pngToJpg: 'fa-solid fa-file-image',
+  jpgToPng: 'fa-solid fa-camera',
+  webpToJpg: 'fa-solid fa-file',
+  jpgToWebp: 'fa-solid fa-layer-group',
+  pngToWebp: 'fa-solid fa-images',
+};
+
+const converterCategories = [
+  {
+    label: th.categoryCsv,
+    items: [
+      { slug: 'json-to-csv-converter', label: th.jsonToCsv, icon: 'jsonToCsv' },
+      { slug: 'csv-to-json-converter', label: th.csvToJson, icon: 'csvToJson' },
+    ],
+  },
+  {
+    label: th.categoryExcel,
+    items: [
+      { slug: 'excel-to-json-converter', label: th.excelToJson, icon: 'excelToJson' },
+      { slug: 'json-to-excel-converter', label: th.jsonToExcel, icon: 'jsonToExcel' },
+      { slug: 'excel-to-csv-converter', label: th.excelToCsv, icon: 'excelToCsv' },
+    ],
+  },
+  {
+    label: th.categoryImage,
+    items: [
+      { slug: 'image-converter', label: th.imageConverter, icon: 'imageConverter' },
+      { slug: 'png-to-jpg-converter', label: th.pngToJpg, icon: 'pngToJpg' },
+      { slug: 'jpg-to-png-converter', label: th.jpgToPng, icon: 'jpgToPng' },
+      { slug: 'webp-to-jpg-converter', label: th.webpToJpg, icon: 'webpToJpg' },
+      { slug: 'jpg-to-webp-converter', label: th.jpgToWebp, icon: 'jpgToWebp' },
+      { slug: 'png-to-webp-converter', label: th.pngToWebp, icon: 'pngToWebp' },
+    ],
+  },
 ];
 ---
 
@@ -45,14 +75,22 @@ const converterLinks = [
       <a href={getRelativeLocaleUrl(locale, '/faq')}>{th.faq}</a>
       <a href={getRelativeLocaleUrl(locale, '/blog')}>{th.blog}</a>
       <a href={getRelativeLocaleUrl(locale, '/about')}>{th.about}</a>
-      <div class="dropdown" id="convertersDropdown">
-        <button class="dropdown-btn">{th.converters} ▾</button>
-        <div class="dropdown-menu">
-          {converterLinks.map((link) => (
-            <a href={getRelativeLocaleUrl(locale, `/${link.slug}`)}>{link.label}</a>
-          ))}
+      <div class="dropdown menu-dropdown" id="convertersDropdown">
+          <button class="dropdown-btn">{th.converters} ▾</button>
+          <div class="dropdown-menu menu-panel">
+            {converterCategories.map((cat) => (
+              <div class="menu-category">
+                <span class="menu-category-label">{cat.label}</span>
+                {cat.items.map((link) => (
+                  <a class="menu-item" href={getRelativeLocaleUrl(locale, `/${link.slug}`)}>
+                    <i class={`menu-icon ${toolIcons[link.icon]}`} aria-hidden="true"></i>
+                    <span>{link.label}</span>
+                  </a>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
       <a href="https://github.com/NaimBiswas/convert/issues/new" target="_blank" rel="noopener" class="report-btn">{th.reportIssue}</a>
       <span class="badge">{th.versionBadge}</span>
       <div class="dropdown lang-dropdown" id="langDropdown">
@@ -166,6 +204,39 @@ const converterLinks = [
   .dropdown.open .dropdown-btn { color: var(--text); }
   .lang-menu { left: auto; right: 0; transform: none; min-width: 140px; }
 
+  .menu-dropdown { position: static; }
+  .menu-panel {
+    position: absolute; left: 0; right: 0; top: 100%;
+    transform: none; margin-top: 0;
+    display: none; grid-template-columns: repeat(3, 1fr);
+    gap: 20px; padding: 20px 24px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); border-top-left-radius: 0; border-top-right-radius: 0;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.14); z-index: 200;
+  }
+  .menu-dropdown.open .menu-panel { display: grid; }
+  .menu-category { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .menu-category-label {
+    font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-muted);
+    padding: 0 10px 6px; border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+  }
+  .menu-item {
+    display: flex; align-items: center; gap: 0;
+    padding: 7px 10px; border-radius: var(--radius-sm);
+    font-size: 13px; line-height: 1.25; white-space: nowrap;
+    color: var(--text-secondary); text-decoration: none;
+    transition: background var(--transition), color var(--transition);
+  }
+  .menu-item:hover { background: var(--surface-hover); color: var(--text); }
+  .menu-icon {
+    flex: 0 0 auto; width: 18px; height: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--primary); opacity: 0.95;
+    margin-right: 10px;
+  }
+
   .hamburger {
     display: none; width: 36px; height: 36px; border-radius: 8px;
     background: var(--surface); border: 1px solid var(--border);
@@ -180,16 +251,23 @@ const converterLinks = [
     .header-nav {
       display: none; position: absolute; top: 64px; left: 0; right: 0;
       flex-direction: column; background: var(--surface);
-      border-bottom: 1px solid var(--border); padding: 12px 24px;
-      gap: 8px; z-index: 100;
+      border-bottom: 1px solid var(--border); padding: 12px 24px 20px;
+      gap: 4px; z-index: 100;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
     .header-nav.open { display: flex; }
-    .header-nav a, .dropdown-btn { display: block; padding: 8px 0; font-size: 14px; }
-    .dropdown-menu, .lang-menu {
+    .header-nav > a, .header-nav > .dropdown > .dropdown-btn { display: block; padding: 8px 0; font-size: 14px; }
+    .dropdown, .lang-dropdown { width: 100%; }
+    .dropdown-menu, .lang-menu, .menu-panel {
       position: static; transform: none; box-shadow: none;
       border: none; margin-top: 0; padding-left: 16px; background: transparent;
     }
+    .lang-menu { min-width: 0; padding: 0 0 0 16px; }
+    .menu-panel { grid-template-columns: 1fr; gap: 16px; padding: 10px 0 6px 16px; }
+    .menu-category { gap: 6px; }
+    .menu-category-label { border-bottom: none; }
+    .menu-item { padding: 8px 8px; font-size: 14px; }
     .badge { display: none; }
+    .report-btn { display: none; }
   }
 </style>
