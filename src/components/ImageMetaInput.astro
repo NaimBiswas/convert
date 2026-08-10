@@ -1,0 +1,142 @@
+---
+import { defaultLocale, isLocale } from '../i18n/languages';
+import { ui } from '../i18n/ui';
+import type { Locale } from '../i18n/languages';
+
+export interface Props {
+  locale?: Locale;
+}
+
+const locale: Locale = Astro.props.locale && isLocale(Astro.props.locale) ? Astro.props.locale : defaultLocale;
+const t = ui[locale].image;
+---
+
+<div class="image-meta-input">
+  <div class="privacy-notice">
+    <span>🔒</span>
+    <span>{t.privacy}</span>
+  </div>
+
+  <div id="metaDropZone" class="drop-zone" role="button" tabindex="0" aria-label={t.dragDropText}>
+    <div class="drop-inner">
+      <div class="upload-icon">🖼️</div>
+      <p class="drop-text">{t.dragDropText} <span class="browse-link" id="metaBrowseLink">{t.browse}</span></p>
+      <p class="drop-hint">{t.metaSupports}</p>
+      <input type="file" id="metaFileInput" accept="image/jpeg,image/png,image/webp,image/jpg,.jpeg,.jpg,.png,.webp" hidden />
+    </div>
+  </div>
+
+  <div id="metaValidation" class="validation-badge" style="display:none"></div>
+</div>
+
+<script>
+  const dropZone = document.getElementById('metaDropZone')!;
+  const browseLink = document.getElementById('metaBrowseLink')!;
+  const fileInput = document.getElementById('metaFileInput') as HTMLInputElement;
+  const validation = document.getElementById('metaValidation')!;
+
+  function showValidation(valid: boolean, message: string) {
+    validation.style.display = 'flex';
+    validation.className = `validation-badge ${valid ? 'valid' : 'invalid'}`;
+    validation.textContent = (valid ? '✓ ' : '✗ ') + message;
+  }
+
+  function clearValidation() {
+    validation.style.display = 'none';
+  }
+
+  function handleFile(file: File | null) {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      showValidation(false, 'Unsupported file type — please upload an image.');
+      return;
+    }
+    if (file.size > 30 * 1024 * 1024) {
+      showValidation(false, `File too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Max: 30 MB`);
+      return;
+    }
+    clearValidation();
+    window.dispatchEvent(new CustomEvent('meta-file-selected', { detail: { file } }));
+  }
+
+  browseLink.addEventListener('click', (e) => {
+    e.stopPropagation();
+    fileInput.click();
+  });
+
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  dropZone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
+
+  ['dragover', 'dragenter'].forEach((ev) => {
+    dropZone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropZone.classList.add('drag-over');
+    });
+  });
+
+  ['dragleave', 'dragend'].forEach((ev) => {
+    dropZone.addEventListener(ev, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+    });
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer?.files[0];
+    if (file) handleFile(file);
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files?.[0];
+    if (file) handleFile(file);
+    fileInput.value = '';
+  });
+
+  window.addEventListener('meta-reset', () => {
+    clearValidation();
+  });
+</script>
+
+<style>
+  .image-meta-input { max-width: 640px; margin: 0 auto; }
+  .privacy-notice {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-bottom: 12px; padding: 8px 14px; border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--success) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--success) 15%, transparent);
+    font-size: 12px; font-weight: 450; color: var(--success); text-align: center;
+  }
+  .drop-zone {
+    border: 2px dashed var(--border); border-radius: var(--radius);
+    padding: 48px 24px; cursor: pointer; text-align: center;
+    background: var(--surface); transition: all var(--transition); outline: none;
+  }
+  .drop-zone:hover { border-color: var(--text-muted); }
+  .drop-zone.drag-over { border-color: var(--primary); background: var(--primary-glow); }
+  .drop-zone:focus-visible { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--primary-glow); }
+  .upload-icon { font-size: 40px; margin-bottom: 10px; }
+  .drop-text { font-size: 15px; color: var(--text-secondary); margin-bottom: 6px; }
+  .browse-link { color: var(--primary); cursor: pointer; font-weight: 500; text-decoration: underline; }
+  .drop-hint { font-size: 12px; color: var(--text-muted); }
+  .validation-badge {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    margin-top: 10px; padding: 8px 14px; border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 500;
+  }
+  .validation-badge.valid {
+    background: color-mix(in srgb, var(--success) 10%, transparent);
+    color: var(--success); border: 1px solid color-mix(in srgb, var(--success) 20%, transparent);
+  }
+  .validation-badge.invalid {
+    background: color-mix(in srgb, var(--error) 10%, transparent);
+    color: var(--error); border: 1px solid color-mix(in srgb, var(--error) 20%, transparent);
+  }
+</style>

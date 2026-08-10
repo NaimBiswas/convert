@@ -514,6 +514,18 @@ export const homeContent: HomeContent = {
         link: '/image-converter',
         icon: 'image',
       },
+      {
+        title: 'Image Metadata Viewer',
+        desc: 'Inspect EXIF, GPS, IPTC, XMP, and ICC metadata hidden inside your photos — camera settings, location, timestamps, and more.',
+        link: '/image-metadata-viewer',
+        icon: 'image',
+      },
+      {
+        title: 'Remove Metadata',
+        desc: 'Strip EXIF, GPS, and other hidden data from photos before sharing. Lossless, private, and done entirely in your browser.',
+        link: '/remove-image-metadata',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {

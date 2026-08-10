@@ -1,7 +1,11 @@
 ﻿import type { ConverterContent, ConverterContentMap } from './types';
 
-type ImageSlug = 'image-converter' | 'png-to-jpg' | 'jpg-to-png' | 'webp-to-jpg' | 'jpg-to-webp' | 'png-to-webp';
+type ConvertSlug = 'png-to-jpg' | 'jpg-to-png' | 'webp-to-jpg' | 'jpg-to-webp' | 'png-to-webp';
+type MetaSlug = 'image-metadata-viewer' | 'remove-image-metadata';
+export type ImageSlug = 'image-converter' | ConvertSlug | MetaSlug;
 export type ImageMap = Pick<ConverterContentMap, ImageSlug>;
+type ConverterImageMap = Pick<ConverterContentMap, 'image-converter' | ConvertSlug>;
+type MetaImageMap = Pick<ConverterContentMap, MetaSlug>;
 
 interface ToolCopy {
   title: string;
@@ -11,9 +15,19 @@ interface ToolCopy {
   desc: string;
 }
 
+interface MetaToolCopy extends ToolCopy {
+  whyHeading: string;
+  whyNote: string;
+  howHeading: string;
+  howSteps: string[];
+  featuresHeading: string;
+  features: string[];
+}
+
 interface ImageCopy {
   universal: ToolCopy;
-  tools: Record<Exclude<ImageSlug, 'image-converter'>, ToolCopy>;
+  tools: Record<ConvertSlug, ToolCopy>;
+  meta: Record<MetaSlug, MetaToolCopy>;
   whyHeading: string;
   whyNote: Record<string, string>;
   howHeading: string;
@@ -22,7 +36,7 @@ interface ImageCopy {
   features: string[];
 }
 
-const PAIR: Record<Exclude<ImageSlug, 'image-converter'>, { from: string; to: string }> = {
+const PAIR: Record<ConvertSlug, { from: string; to: string }> = {
   'png-to-jpg': { from: 'PNG', to: 'JPG' },
   'jpg-to-png': { from: 'JPG', to: 'PNG' },
   'webp-to-jpg': { from: 'WEBP', to: 'JPG' },
@@ -30,8 +44,8 @@ const PAIR: Record<Exclude<ImageSlug, 'image-converter'>, { from: string; to: st
   'png-to-webp': { from: 'PNG', to: 'WEBP' },
 };
 
-function build(copy: ImageCopy): ImageMap {
-  const toolSlugs = Object.keys(PAIR) as Exclude<ImageSlug, 'image-converter'>[];
+function build(copy: ImageCopy): ConverterImageMap {
+  const toolSlugs = Object.keys(PAIR) as ConvertSlug[];
 
   const universal: ConverterContent = {
     meta: {
@@ -52,7 +66,7 @@ function build(copy: ImageCopy): ImageMap {
     ],
   };
 
-  const tools = toolSlugs.reduce<Record<Exclude<ImageSlug, 'image-converter'>, ConverterContent>>((acc, slug) => {
+  const tools = toolSlugs.reduce<Record<ConvertSlug, ConverterContent>>((acc, slug) => {
     const t = copy.tools[slug];
     const { from, to } = PAIR[slug];
     acc[slug] = {
@@ -69,12 +83,35 @@ function build(copy: ImageCopy): ImageMap {
       ],
     };
     return acc;
-  }, {} as Record<Exclude<ImageSlug, 'image-converter'>, ConverterContent>);
+  }, {} as Record<ConvertSlug, ConverterContent>);
 
   return { 'image-converter': universal, ...tools };
 }
 
-export { build, PAIR };
+function buildMeta(copy: ImageCopy): MetaImageMap {
+  const METAS: MetaSlug[] = ['image-metadata-viewer', 'remove-image-metadata'];
+  const out = {} as MetaImageMap;
+  for (const slug of METAS) {
+    const t = copy.meta[slug];
+    out[slug] = {
+      meta: { title: t.title, description: t.description, keywords: t.keywords },
+      h1: t.h1,
+      desc: t.desc,
+      from: 'Image',
+      to: slug === 'image-metadata-viewer' ? 'Metadata' : 'Clean Image',
+      slug,
+      path: `/${slug}`,
+      sections: [
+        { heading: t.whyHeading, blocks: [{ type: 'p', html: t.whyNote }] },
+        { heading: t.howHeading, blocks: [{ type: 'list', ordered: true, items: t.howSteps }] },
+        { heading: t.featuresHeading, blocks: [{ type: 'list', ordered: false, items: t.features }] },
+      ],
+    };
+  }
+  return out;
+}
+
+export { build, buildMeta, PAIR };
 
 const enCopy: ImageCopy = {
   universal: {
@@ -125,6 +162,60 @@ const enCopy: ImageCopy = {
       keywords: 'png to webp, png to webp converter, convert png to webp, png to webp online, webp from png',
       h1: 'PNG to WebP Converter',
       desc: 'Convert PNG to WebP instantly in your browser. WebP keeps transparency while producing files far smaller than PNG — the ideal format for web graphics and logos.',
+    },
+  },
+  meta: {
+    'image-metadata-viewer': {
+      title: 'Image Metadata Viewer — See EXIF, GPS & More Online Free',
+      description:
+        'View image metadata (EXIF, GPS, IPTC, XMP, ICC) online free. Inspect camera settings, GPS coordinates and hidden file info. No upload, 100% browser-based.',
+      keywords: 'image metadata viewer, exif viewer online, view metadata, exif data viewer, gps metadata, photo metadata viewer',
+      h1: 'Image Metadata Viewer',
+      desc: 'Drop an image to see every piece of hidden metadata it carries — camera model, shutter speed, GPS coordinates, timestamps, and software. Everything is read locally in your browser; nothing is ever uploaded.',
+      whyHeading: 'What Is Image Metadata?',
+      whyNote:
+        'Every photo taken on a phone or camera is wrapped in hidden metadata. The most common type is <strong>EXIF</strong> — camera settings like make, model, ISO, focal length, and often the exact <strong>GPS coordinates</strong> where the shot was taken. Photos may also carry <strong>IPTC</strong> (captions, keywords, copyright), <strong>XMP</strong> (Adobe metadata), and <strong>ICC color profiles</strong>. This metadata is invisible in normal viewers — which is exactly why it is useful to inspect it, and often wise to remove it before sharing.',
+      howHeading: 'How to View Metadata',
+      howSteps: [
+        'Drag &amp; drop an image or click <strong>browse</strong>',
+        'Wait a moment while the metadata is read locally',
+        'Browse the metadata table — EXIF, GPS, IPTC, XMP, and more',
+        'Export the metadata as JSON if you need a record',
+      ],
+      featuresHeading: 'Features',
+      features: [
+        'Reads EXIF, GPS, IPTC, XMP, ICC, and PNG text metadata',
+        'GPS coordinates shown as readable latitude and longitude',
+        'Works with JPG, PNG, and WebP',
+        'Export all metadata as a JSON download',
+        '100% browser-based — the image never leaves your device',
+      ],
+    },
+    'remove-image-metadata': {
+      title: 'Remove Image Metadata — Strip EXIF & GPS Online Free',
+      description:
+        'Remove image metadata (EXIF, GPS, IPTC, XMP) online free. Strip hidden location and camera data before sharing photos. Lossless, no upload, 100% browser-based.',
+      keywords: 'remove metadata from image, strip exif, remove exif online, remove gps data, strip metadata from photo, exif remover',
+      h1: 'Remove Image Metadata',
+      desc: 'Remove the hidden metadata from your photos — GPS location, camera details, timestamps, and more — right in your browser. The image pixels stay untouched; only the metadata is stripped.',
+      whyHeading: 'Why Remove Metadata?',
+      whyNote:
+        'Photos taken on phones contain more data than you might think. The embedded <strong>EXIF</strong> block records the exact <strong>GPS coordinates</strong>, timestamp, camera make and model, and related details. Share such a photo and that information travels with it — anyone can see exactly where and when it was taken. Removing metadata before publishing protects your privacy and prepares images for print or submissions where embedded data is unwanted.',
+      howHeading: 'How to Remove Metadata',
+      howSteps: [
+        'Drag &amp; drop a JPG, PNG, or WebP image',
+        'The tool detects any hidden metadata',
+        'Click <strong>Remove metadata</strong>',
+        'Download the clean image — pixels are unchanged',
+      ],
+      featuresHeading: 'Features',
+      features: [
+        'Strips EXIF, GPS, IPTC, XMP, and comments',
+        'Lossless — image pixels are never re-encoded',
+        'Shows exactly what was removed',
+        'Works with JPG, PNG, and WebP',
+        'All processing happens in your browser',
+      ],
     },
   },
   whyHeading: 'Why Convert Images?',
@@ -210,6 +301,60 @@ const deCopy: ImageCopy = {
       desc: 'Konvertieren Sie PNG sofort im Browser in WebP. WebP behält Transparenz bei und erzeugt deutlich kleinere Dateien als PNG — das ideale Format für Webgrafiken und Logos.',
     },
   },
+  meta: {
+    'image-metadata-viewer': {
+      title: 'Bild-Metadaten ansehen — EXIF, GPS & mehr online kostenlos',
+      description:
+        'Bild-Metadaten (EXIF, GPS, IPTC, XMP, ICC) online kostenlos ansehen. Kameraeinstellungen, GPS-Koordinaten und versteckte Dateiinfos prüfen. Kein Upload, 100% im Browser.',
+      keywords: 'bild metadaten ansehen, exif anzeigen online, metadaten lesen, exif daten anzeigen, gps metadaten, foto metadaten ansehen',
+      h1: 'Bild-Metadaten ansehen',
+      desc: 'Ziehen Sie ein Bild hinein, um alle versteckten Metadaten zu sehen — Kameramodell, Verschlusszeit, GPS-Koordinaten, Zeitstempel und Software. Alles wird lokal im Browser gelesen; nichts wird hochgeladen.',
+      whyHeading: 'Was sind Bild-Metadaten?',
+      whyNote:
+        'Jedes Foto von Handy oder Kamera enthält versteckte Metadaten. Am häufigsten ist <strong>EXIF</strong> — Kameraeinstellungen wie Hersteller, Modell, ISO, Brennweite und oft die genauen <strong>GPS-Koordinaten</strong> des Aufnahmeorts. Fotos können außerdem <strong>IPTC</strong> (Bildunterschriften, Stichwörter, Urheberrecht), <strong>XMP</strong> (Adobe-Metadaten) und <strong>ICC-Farbprofile</strong> tragen. Diese Daten sind in normalen Viewern unsichtbar — deshalb lohnt es sich, sie zu prüfen, und oft ist es ratsam, sie vor dem Teilen zu entfernen.',
+      howHeading: 'So sehen Sie Metadaten',
+      howSteps: [
+        'Bild per Drag &amp; drop hineinziehen oder <strong>Durchsuchen</strong> klicken',
+        'Einen Moment warten, während die Metadaten lokal gelesen werden',
+        'Die Metadaten-Tabelle durchsehen — EXIF, GPS, IPTC, XMP und mehr',
+        'Metadaten bei Bedarf als JSON exportieren',
+      ],
+      featuresHeading: 'Funktionen',
+      features: [
+        'Liest EXIF, GPS, IPTC, XMP, ICC und PNG-Textmetadaten',
+        'GPS-Koordinaten als lesbare Breiten- und Längengrade',
+        'Funktioniert mit JPG, PNG und WebP',
+        'Export aller Metadaten als JSON-Download',
+        '100% im Browser — das Bild verlässt nie Ihr Gerät',
+      ],
+    },
+    'remove-image-metadata': {
+      title: 'Bild-Metadaten entfernen — EXIF & GPS online kostenlos löschen',
+      description:
+        'Bild-Metadaten (EXIF, GPS, IPTC, XMP) online kostenlos entfernen. Versteckte Standort- und Kamera-Daten vor dem Teilen löschen. Verlustfrei, kein Upload, 100% im Browser.',
+      keywords: 'metadaten aus bild entfernen, exif entfernen, exif online löschen, gps daten entfernen, metadaten aus foto entfernen, exif entferner',
+      h1: 'Bild-Metadaten entfernen',
+      desc: 'Entfernen Sie die versteckten Metadaten aus Ihren Fotos — GPS-Standort, Kameradetails, Zeitstempel und mehr — direkt im Browser. Die Pixel bleiben unverändert; nur die Metadaten werden entfernt.',
+      whyHeading: 'Warum Metadaten entfernen?',
+      whyNote:
+        'Handyfotos enthalten mehr Daten, als Sie denken. Der eingebettete <strong>EXIF</strong>-Block speichert die genauen <strong>GPS-Koordinaten</strong>, den Zeitstempel, Kamera-Marke und -Modell und weitere Details. Teilen Sie ein solches Foto, reisen diese Informationen mit — jeder kann sehen, wo und wann es aufgenommen wurde. Das Entfernen von Metadaten vor der Veröffentlichung schützt Ihre Privatsphäre und bereitet Bilder für Druck oder Einreichungen vor, bei denen eingebettete Daten unerwünscht sind.',
+      howHeading: 'So entfernen Sie Metadaten',
+      howSteps: [
+        'Ein JPG-, PNG- oder WebP-Bild per Drag &amp; drop hineinziehen',
+        'Das Tool erkennt versteckte Metadaten',
+        'Auf <strong>Metadaten entfernen</strong> klicken',
+        'Das bereinigte Bild herunterladen — Pixel bleiben unverändert',
+      ],
+      featuresHeading: 'Funktionen',
+      features: [
+        'Entfernt EXIF, GPS, IPTC, XMP und Kommentare',
+        'Verlustfrei — Pixel werden nie neu kodiert',
+        'Zeigt genau, was entfernt wurde',
+        'Funktioniert mit JPG, PNG und WebP',
+        'Die gesamte Verarbeitung erfolgt im Browser',
+      ],
+    },
+  },
   whyHeading: 'Warum Bilder konvertieren?',
   whyNote: {
     universal:
@@ -291,6 +436,60 @@ const esCopy: ImageCopy = {
       keywords: 'png a webp, conversor png a webp, convertir png a webp, png a webp online, webp desde png',
       h1: 'Conversor de PNG a WebP',
       desc: 'Convierte PNG a WebP al instante en tu navegador. WebP mantiene la transparencia con archivos mucho más pequeños que PNG — el formato ideal para gráficos y logos web.',
+    },
+  },
+  meta: {
+    'image-metadata-viewer': {
+      title: 'Visor de Metadatos de Imagen — Ver EXIF, GPS y más gratis online',
+      description:
+        'Ve los metadatos de imagen (EXIF, GPS, IPTC, XMP, ICC) gratis online. Inspecciona ajustes de cámara, coordenadas GPS e información oculta. Sin subidas, 100% en tu navegador.',
+      keywords: 'visor de metadatos de imagen, visor exif online, ver metadatos, ver datos exif, metadatos gps, visor de metadatos de fotos',
+      h1: 'Visor de Metadatos de Imagen',
+      desc: 'Suelta una imagen para ver todos los metadatos ocultos que contiene: modelo de cámara, velocidad de obturación, coordenadas GPS, fechas y software. Todo se lee localmente en tu navegador; nunca se sube nada.',
+      whyHeading: '¿Qué son los metadatos de imagen?',
+      whyNote:
+        'Toda foto tomada con un móvil o cámara lleva metadatos ocultos. El tipo más común es <strong>EXIF</strong>: ajustes de cámara como fabricante, modelo, ISO, distancia focal y a menudo las <strong>coordenadas GPS</strong> exactas del lugar donde se tomó. Las fotos también pueden tener <strong>IPTC</strong> (pies de foto, palabras clave, derechos de autor), <strong>XMP</strong> (metadatos de Adobe) y <strong>perfiles de color ICC</strong>. Estos datos son invisibles en los visores normales, por lo que conviene inspeccionarlos y, a menudo, eliminarlos antes de compartir.',
+      howHeading: 'Cómo ver los metadatos',
+      howSteps: [
+        'Arrastra y suelta una imagen o haz clic en <strong>explorar</strong>',
+        'Espera un momento mientras se leen los metadatos localmente',
+        'Revisa la tabla de metadatos: EXIF, GPS, IPTC, XMP y más',
+        'Exporta los metadatos como JSON si necesitas un registro',
+      ],
+      featuresHeading: 'Características',
+      features: [
+        'Lee metadatos EXIF, GPS, IPTC, XMP, ICC y texto de PNG',
+        'Coordenadas GPS como latitud y longitud legibles',
+        'Funciona con JPG, PNG y WebP',
+        'Exporta todos los metadatos como descarga JSON',
+        '100% en tu navegador: la imagen nunca sale de tu dispositivo',
+      ],
+    },
+    'remove-image-metadata': {
+      title: 'Eliminar Metadatos de Imagen — Quitar EXIF y GPS gratis online',
+      description:
+        'Elimina metadatos de imagen (EXIF, GPS, IPTC, XMP) gratis online. Quita la ubicación oculta y los datos de cámara antes de compartir fotos. Sin pérdida, sin subidas, 100% en tu navegador.',
+      keywords: 'eliminar metadatos de imagen, quitar exif, eliminar exif online, quitar datos gps, quitar metadatos de foto, eliminador de exif',
+      h1: 'Eliminar Metadatos de Imagen',
+      desc: 'Elimina los metadatos ocultos de tus fotos — ubicación GPS, detalles de cámara, fechas y más — directamente en tu navegador. Los píxeles permanecen intactos; solo se eliminan los metadatos.',
+      whyHeading: '¿Por qué eliminar metadatos?',
+      whyNote:
+        'Las fotos de móvil contienen más datos de los que imaginas. El bloque <strong>EXIF</strong> incrustado registra las <strong>coordenadas GPS</strong> exactas, la fecha, la marca y el modelo de la cámara y otros detalles. Si compartes esa foto, la información viaja con ella: cualquiera puede ver dónde y cuándo se tomó. Eliminar los metadatos antes de publicar protege tu privacidad y prepara las imágenes para impresión o envíos donde no se desea información incrustada.',
+      howHeading: 'Cómo eliminar metadatos',
+      howSteps: [
+        'Arrastra y suelta una imagen JPG, PNG o WebP',
+        'La herramienta detecta los metadatos ocultos',
+        'Haz clic en <strong>Eliminar metadatos</strong>',
+        'Descarga la imagen limpia: los píxeles no cambian',
+      ],
+      featuresHeading: 'Características',
+      features: [
+        'Elimina EXIF, GPS, IPTC, XMP y comentarios',
+        'Sin pérdida: los píxeles nunca se recodifican',
+        'Muestra exactamente qué se eliminó',
+        'Funciona con JPG, PNG y WebP',
+        'Todo el proceso ocurre en tu navegador',
+      ],
     },
   },
   whyHeading: '¿Por qué convertir imágenes?',
@@ -376,6 +575,60 @@ const ptCopy: ImageCopy = {
       desc: 'Converta PNG para WebP instantaneamente no navegador. WebP mantém a transparência com arquivos muito menores que PNG — o formato ideal para gráficos e logos web.',
     },
   },
+  meta: {
+    'image-metadata-viewer': {
+      title: 'Visualizador de Metadados de Imagem — Veja EXIF, GPS e mais grátis online',
+      description:
+        'Veja metadados de imagem (EXIF, GPS, IPTC, XMP, ICC) grátis online. Inspecione configurações da câmera, coordenadas GPS e informações ocultas. Sem upload, 100% no navegador.',
+      keywords: 'visualizador de metadados de imagem, visualizar exif online, ver metadados, ver dados exif, metadados gps, visualizador de metadados de foto',
+      h1: 'Visualizador de Metadados de Imagem',
+      desc: 'Solte uma imagem para ver todos os metadados ocultos que ela contém — modelo da câmera, velocidade do obturador, coordenadas GPS, datas e software. Tudo é lido localmente no seu navegador; nada é enviado.',
+      whyHeading: 'O que são metadados de imagem?',
+      whyNote:
+        'Toda foto tirada com celular ou câmera traz metadados ocultos. O tipo mais comum é <strong>EXIF</strong>: configurações como fabricante, modelo, ISO, distância focal e muitas vezes as <strong>coordenadas GPS</strong> exatas do local da foto. As fotos também podem carregar <strong>IPTC</strong> (legendas, palavras-chave, direitos autorais), <strong>XMP</strong> (metadados da Adobe) e <strong>perfis de cor ICC</strong>. Esses dados são invisíveis nos visualizadores comuns — por isso vale inspecioná-los e, muitas vezes, removê-los antes de compartilhar.',
+      howHeading: 'Como ver os metadados',
+      howSteps: [
+        'Arraste e solte uma imagem ou clique em <strong>explorar</strong>',
+        'Aguarde um momento enquanto os metadados são lidos localmente',
+        'Navegue pela tabela de metadados — EXIF, GPS, IPTC, XMP e mais',
+        'Exporte os metadados como JSON se precisar de um registro',
+      ],
+      featuresHeading: 'Recursos',
+      features: [
+        'Lê metadados EXIF, GPS, IPTC, XMP, ICC e texto de PNG',
+        'Coordenadas GPS como latitude e longitude legíveis',
+        'Funciona com JPG, PNG e WebP',
+        'Exporta todos os metadados como download JSON',
+        '100% no navegador — a imagem nunca sai do seu dispositivo',
+      ],
+    },
+    'remove-image-metadata': {
+      title: 'Remover Metadados de Imagem — Tirar EXIF e GPS grátis online',
+      description:
+        'Remova metadados de imagem (EXIF, GPS, IPTC, XMP) grátis online. Apague a localização oculta e os dados da câmera antes de compartilhar fotos. Sem perda, sem upload, 100% no navegador.',
+      keywords: 'remover metadados de imagem, remover exif, remover exif online, remover dados gps, remover metadados de foto, removedor de exif',
+      h1: 'Remover Metadados de Imagem',
+      desc: 'Remova os metadados ocultos das suas fotos — localização GPS, detalhes da câmera, datas e mais — direto no navegador. Os pixels continuam intactos; apenas os metadados são removidos.',
+      whyHeading: 'Por que remover metadados?',
+      whyNote:
+        'Fotos de celular contêm mais dados do que você imagina. O bloco <strong>EXIF</strong> embutido registra as <strong>coordenadas GPS</strong> exatas, a data, a marca e o modelo da câmera e outros detalhes. Se você compartilhar essa foto, a informação viaja junto: qualquer pessoa pode ver onde e quando ela foi tirada. Remover os metadados antes de publicar protege sua privacidade e prepara as imagens para impressão ou envios em que dados embutidos não são desejados.',
+      howHeading: 'Como remover metadados',
+      howSteps: [
+        'Arraste e solte uma imagem JPG, PNG ou WebP',
+        'A ferramenta detecta os metadados ocultos',
+        'Clique em <strong>Remover metadados</strong>',
+        'Baixe a imagem limpa — os pixels não mudam',
+      ],
+      featuresHeading: 'Recursos',
+      features: [
+        'Remove EXIF, GPS, IPTC, XMP e comentários',
+        'Sem perda — os pixels nunca são recodificados',
+        'Mostra exatamente o que foi removido',
+        'Funciona com JPG, PNG e WebP',
+        'Todo o processamento acontece no navegador',
+      ],
+    },
+  },
   whyHeading: 'Por que converter imagens?',
   whyNote: {
     universal:
@@ -457,6 +710,60 @@ const frCopy: ImageCopy = {
       keywords: 'png en webp, convertisseur png en webp, convertir png en webp, png en webp en ligne, webp depuis png',
       h1: 'Convertisseur PNG en WebP',
       desc: 'Convertissez PNG en WebP instantanément dans votre navigateur. WebP conserve la transparence avec des fichiers bien plus légers que PNG — le format idéal pour les graphiques et logos web.',
+    },
+  },
+  meta: {
+    'image-metadata-viewer': {
+      title: 'Visionneuse de métadonnées d\u2019image — voir EXIF, GPS et plus gratuitement en ligne',
+      description:
+        'Visionnez les métadonnées d\u2019image (EXIF, GPS, IPTC, XMP, ICC) gratuitement en ligne. Inspectez les réglages de l\u2019appareil, les coordonnées GPS et les informations cachées. Sans envoi, 100% dans le navigateur.',
+      keywords: 'visionneuse métadonnées image, voir exif en ligne, voir les métadonnées, données exif, métadonnées gps, métadonnées photo',
+      h1: 'Visionneuse de métadonnées d\u2019image',
+      desc: 'Déposez une image pour voir toutes les métadonnées cachées qu\u2019elle contient — modèle d\u2019appareil, vitesse d\u2019obturation, coordonnées GPS, dates et logiciel. Tout est lu localement dans votre navigateur ; rien n\u2019est jamais envoyé.',
+      whyHeading: 'Qu\u2019est-ce que les métadonnées d\u2019image\u00a0?',
+      whyNote:
+        'Chaque photo prise avec un téléphone ou un appareil photo renferme des métadonnées cachées. Le type le plus courant est <strong>EXIF</strong> : fabricant, modèle, ISO, distance focale et souvent les <strong>coordonnées GPS</strong> exactes du lieu de prise de vue. Les photos peuvent aussi contenir de l\u2019<strong>IPTC</strong> (légendes, mots-clés, droits d\u2019auteur), du <strong>XMP</strong> (métadonnées Adobe) et des <strong>profils de couleurs ICC</strong>. Ces données sont invisibles dans les visionneuses classiques — c\u2019est pourquoi il est utile de les inspecter, et souvent prudent de les supprimer avant de partager.',
+      howHeading: 'Comment voir les métadonnées',
+      howSteps: [
+        'Glissez-déposez une image ou cliquez sur <strong>parcourir</strong>',
+        'Patientez un instant pendant la lecture locale des métadonnées',
+        'Parcourez le tableau des métadonnées — EXIF, GPS, IPTC, XMP et plus',
+        'Exportez les métadonnées en JSON si vous en avez besoin',
+      ],
+      featuresHeading: 'Fonctionnalités',
+      features: [
+        'Lit les métadonnées EXIF, GPS, IPTC, XMP, ICC et texte PNG',
+        'Coordonnées GPS affichées en latitude et longitude lisibles',
+        'Fonctionne avec JPG, PNG et WebP',
+        'Export de toutes les métadonnées en téléchargement JSON',
+        '100% dans le navigateur — l\u2019image ne quitte jamais votre appareil',
+      ],
+    },
+    'remove-image-metadata': {
+      title: 'Supprimer les métadonnées d\u2019image — retirer EXIF et GPS gratuitement en ligne',
+      description:
+        'Supprimez les métadonnées d\u2019image (EXIF, GPS, IPTC, XMP) gratuitement en ligne. Retirez la localisation cachée et les données de l\u2019appareil avant de partager. Sans perte, sans envoi, 100% dans le navigateur.',
+      keywords: 'supprimer métadonnées image, supprimer exif, retirer exif en ligne, supprimer données gps, retirer métadonnées photo, suppresseur d\u2019exif',
+      h1: 'Supprimer les métadonnées d\u2019image',
+      desc: 'Supprimez les métadonnées cachées de vos photos — localisation GPS, détails de l\u2019appareil, dates et plus — directement dans votre navigateur. Les pixels restent intacts ; seules les métadonnées sont supprimées.',
+      whyHeading: 'Pourquoi supprimer les métadonnées\u00a0?',
+      whyNote:
+        'Les photos de téléphone contiennent plus de données que vous ne le pensez. Le bloc <strong>EXIF</strong> intégré enregistre les <strong>coordonnées GPS</strong> exactes, la date, la marque et le modèle de l\u2019appareil et d\u2019autres détails. Partagez une telle photo et ces informations voyagent avec elle — n\u2019importe qui peut voir où et quand elle a été prise. Supprimer les métadonnées avant publication protège votre vie privée et prépare les images à l\u2019impression ou aux envois où les données intégrées ne sont pas souhaitées.',
+      howHeading: 'Comment supprimer les métadonnées',
+      howSteps: [
+        'Glissez-déposez une image JPG, PNG ou WebP',
+        'L\u2019outil détecte les métadonnées cachées',
+        'Cliquez sur <strong>Supprimer les métadonnées</strong>',
+        'Téléchargez l\u2019image nettoyée — les pixels sont inchangés',
+      ],
+      featuresHeading: 'Fonctionnalités',
+      features: [
+        'Supprime EXIF, GPS, IPTC, XMP et commentaires',
+        'Sans perte — les pixels ne sont jamais réencodés',
+        'Affiche exactement ce qui a été supprimé',
+        'Fonctionne avec JPG, PNG et WebP',
+        'Tout le traitement se fait dans le navigateur',
+      ],
     },
   },
   whyHeading: 'Pourquoi convertir des images\u00a0?',
@@ -542,6 +849,60 @@ const hiCopy: ImageCopy = {
       desc: 'PNG को तुरंत अपने ब्राउज़र में WebP में बदलें। WebP ट्रांसपेरेंसी बनाए रखता है और PNG से कहीं छोटे फ़ाइल बनाता है — वेब ग्राफिक्स और लोगो के लिए आदर्श।',
     },
   },
+  meta: {
+    'image-metadata-viewer': {
+      title: 'इमेज मेटाडेटा व्यूअर — EXIF, GPS और अधिक मुफ्त में ऑनलाइन देखें',
+      description:
+        'इमेज मेटाडेटा (EXIF, GPS, IPTC, XMP, ICC) मुफ्त में ऑनलाइन देखें। कैमरा सेटिंग्स, GPS निर्देशांक और छिपी फ़ाइल जानकारी देखें। कोई अपलोड नहीं, 100% ब्राउज़र में।',
+      keywords: 'इमेज मेटाडेटा व्यूअर, एक्सिफ व्यूअर ऑनलाइन, मेटाडेटा देखें, एक्सिफ डेटा देखें, जीपीएस मेटाडेटा, फोटो मेटाडेटा व्यूअर',
+      h1: 'इमेज मेटाडेटा व्यूअर',
+      desc: 'छवि में छिपे सभी मेटाडेटा देखने के लिए उसे यहां डालें — कैमरा मॉडल, शटर स्पीड, GPS निर्देशांक, समय-चिह्न और सॉफ़्टवेयर। सब कुछ आपके ब्राउज़र में स्थानीय रूप से पढ़ा जाता है; कुछ भी अपलोड नहीं होता।',
+      whyHeading: 'इमेज मेटाडेटा क्या है?',
+      whyNote:
+        'फोन या कैमरे से ली गई हर फोटो में छिपा हुआ मेटाडेटा होता है। सबसे आम तरह <strong>EXIF</strong> है — कैमरा सेटिंग्स जैसे निर्माता, मॉडल, ISO, फोकल लंबाई और अक्सर फोटो खींचने का सटीक <strong>GPS निर्देशांक</strong>। फोटो पर <strong>IPTC</strong> (कैप्शन, कीवर्ड, कॉपीराइट), <strong>XMP</strong> (Adobe मेटाडेटा) और <strong>ICC कलर प्रोफाइल</strong> भी हो सकते हैं। सामान्य व्यूअर में ये दिखाई नहीं देते — इसलिए इनकी जांच करना उपयोगी है, और साझा करने से पहले इन्हें हटाना अक्सर समझदारी है।',
+      howHeading: 'मेटाडेटा कैसे देखें',
+      howSteps: [
+        'छवि को खींचें और छोड़ें या <strong>ब्राउज़ करें</strong> पर क्लिक करें',
+        'मेटाडेटा स्थानीय रूप से पढ़े जाने तक क्षण भर प्रतीक्षा करें',
+        'मेटाडेटा तालिका देखें — EXIF, GPS, IPTC, XMP और अधिक',
+        'रिकॉर्ड चाहिए तो मेटाडेटा को JSON में निर्यात करें',
+      ],
+      featuresHeading: 'विशेषताएं',
+      features: [
+        'EXIF, GPS, IPTC, XMP, ICC और PNG टेक्स्ट मेटाडेटा पढ़ता है',
+        'GPS निर्देशांक पठनीय अक्षांश और देशांतर के रूप में',
+        'JPG, PNG और WebP के साथ काम करता है',
+        'सभी मेटाडेटा को JSON डाउनलोड के रूप में निर्यात',
+        '100% ब्राउज़र-आधारित — छवि कभी डिवाइस से बाहर नहीं जाती',
+      ],
+    },
+    'remove-image-metadata': {
+      title: 'इमेज मेटाडेटा हटाएं — EXIF और GPS मुफ्त में ऑनलाइन हटाएं',
+      description:
+        'इमेज मेटाडेटा (EXIF, GPS, IPTC, XMP) मुफ्त में ऑनलाइन हटाएं। फोटो साझा करने से पहले छिपा स्थान और कैमरा डेटा हटाएं। बिना नुकसान, कोई अपलोड नहीं, 100% ब्राउज़र में।',
+      keywords: 'इमेज से मेटाडेटा हटाएं, एक्सिफ हटाएं, एक्सिफ ऑनलाइन हटाएं, जीपीएस डेटा हटाएं, फोटो से मेटाडेटा हटाएं, एक्सिफ रिमूवर',
+      h1: 'इमेज मेटाडेटा हटाएं',
+      desc: 'अपनी फोटो के छिपे मेटाडेटा — GPS स्थान, कैमरा विवरण, समय-चिह्न और अधिक — सीधे अपने ब्राउज़र में हटाएं। पिक्सेल अपरिवर्तित रहते हैं; केवल मेटाडेटा हटाया जाता है।',
+      whyHeading: 'मेटाडेटा क्यों हटाएं?',
+      whyNote:
+        'फोन की फोटो में आपकी कल्पना से अधिक डेटा होता है। एम्बेडेड <strong>EXIF</strong> ब्लॉक सटीक <strong>GPS निर्देशांक</strong>, समय-चिह्न, कैमरा निर्माता-मॉडल और संबंधित विवरण दर्ज करता है। ऐसी फोटो साझा करने पर यह जानकारी साथ चलती है — कोई भी देख सकता है कि इसे कहाँ और कब लिया गया। प्रकाशित करने से पहले मेटाडेटा हटाना आपकी गोपनीयता की रक्षा करता है और छपाई या प्रस्तुतियों के लिए छवियों को तैयार करता है जहाँ एम्बेडेड डेटा अवांछित है।',
+      howHeading: 'मेटाडेटा कैसे हटाएं',
+      howSteps: [
+        'JPG, PNG या WebP छवि को खींचें और छोड़ें',
+        'टूल छिपे हुए मेटाडेटा का पता लगाता है',
+        '<strong>मेटाडेटा हटाएं</strong> पर क्लिक करें',
+        'साफ छवि डाउनलोड करें — पिक्सेल अपरिवर्तित हैं',
+      ],
+      featuresHeading: 'विशेषताएं',
+      features: [
+        'EXIF, GPS, IPTC, XMP और टिप्पणियां हटाता है',
+        'बिना नुकसान — पिक्सेल कभी दोबारा एन्कोड नहीं होते',
+        'बताता है कि वास्तव में क्या हटाया गया',
+        'JPG, PNG और WebP के साथ काम करता है',
+        'सारी प्रक्रिया आपके ब्राउज़र में होती है',
+      ],
+    },
+  },
   whyHeading: 'छवि कन्वर्ट क्यों करें?',
   whyNote: {
     universal:
@@ -625,6 +986,60 @@ const jaCopy: ImageCopy = {
       desc: 'PNGをブラウザ内で即座にWebPに変換。WebPは透明性を維持し、PNGよりはるかに小さなファイルを生み出します-ウェブ向けグラフィックやロゴに最適な形式。',
     },
   },
+  meta: {
+    'image-metadata-viewer': {
+      title: '画像メタデータ表示 - EXIF・GPSなどを無料でオンライン確認',
+      description:
+        '画像メタデータ（EXIF・GPS・IPTC・XMP・ICC）を無料でオンライン確認。カメラ設定、GPS座標、隠れたファイル情報を調べられます。アップロード不要、100%ブラウザ内。',
+      keywords: '画像メタデータ表示, exifビューア オンライン, メタデータを見る, exifデータ表示, gpsメタデータ, 写真メタデータビューア',
+      h1: '画像メタデータ表示',
+      desc: '画像をドロップするだけで、カメラモデル、シャッタースピード、GPS座標、タイムスタンプ、ソフトウェアなど隠されたメタデータをすべて表示します。すべてブラウザ内でローカルに読み取られ、アップロードされることはありません。',
+      whyHeading: '画像メタデータとは',
+      whyNote:
+        'スマホやカメラで撮影した写真には必ず隠されたメタデータがあります。最も一般的なのは<strong>EXIF</strong>で、メーカー、モデル、ISO、焦点距離などのカメラ設定に加え、撮影地点の正確な<strong>GPS座標</strong>が含まれます。写真には<strong>IPTC</strong>（キャプション、キーワード、著作権）、<strong>XMP</strong>（Adobeメタデータ）、<strong>ICCカラープロファイル</strong>が含まれることもあります。通常のビューアでは見えないため、確認する価値があり、共有前に削除するのが多くの場合賢明です。',
+      howHeading: 'メタデータの確認方法',
+      howSteps: [
+        '画像をドラッグ＆ドロップ、または<strong>参照</strong>をクリック',
+        'メタデータがローカルで読み取られるまで少し待つ',
+        'メタデータ表を確認-EXIF、GPS、IPTC、XMPなど',
+        '必要に応じてJSONとしてエクスポート',
+      ],
+      featuresHeading: '機能',
+      features: [
+        'EXIF・GPS・IPTC・XMP・ICC・PNGテキストを読み取り',
+        'GPS座標を読みやすい緯度・経度で表示',
+        'JPG・PNG・WebPに対応',
+        'すべてのメタデータをJSONでダウンロード',
+        '100%ブラウザ内-画像が端末から出ることはありません',
+      ],
+    },
+    'remove-image-metadata': {
+      title: '画像メタデータ削除 - EXIF・GPSを無料でオンライン削除',
+      description:
+        '画像メタデータ（EXIF・GPS・IPTC・XMP）を無料でオンライン削除。共有前に隠れた位置情報やカメラデータを除去。ロスレス、アップロード不要、100%ブラウザ内。',
+      keywords: '画像メタデータ削除, exif削除, exifをオンラインで削除, gpsデータ削除, 写真からメタデータを削除, exifリムーバー',
+      h1: '画像メタデータ削除',
+      desc: '写真から隠れたメタデータ（GPS位置、カメラ情報、タイムスタンプなど）をブラウザ内で直接削除します。ピクセルは無傷のまま、メタデータだけが取り除かれます。',
+      whyHeading: 'なぜメタデータを削除するのか',
+      whyNote:
+        'スマホ写真には想像以上のデータが含まれます。埋め込まれた<strong>EXIF</strong>ブロックには、正確な<strong>GPS座標</strong>、撮影日時、カメラのメーカー・モデルなどの詳細が記録されています。その写真を共有すると情報も一緒に渡り、誰でもどこでいつ撮影されたかを見ることができます。公開前にメタデータを削除するとプライバシーを守れ、埋め込みデータが不要な印刷や提出用の画像も準備できます。',
+      howHeading: 'メタデータの削除方法',
+      howSteps: [
+        'JPG・PNG・WebP画像をドラッグ＆ドロップ',
+        'ツールが隠れたメタデータを検出',
+        '<strong>メタデータを削除</strong>をクリック',
+        'クリーンな画像をダウンロード-ピクセルは無変化',
+      ],
+      featuresHeading: '機能',
+      features: [
+        'EXIF・GPS・IPTC・XMP・コメントを削除',
+        'ロスレス-ピクセルは再エンコードされません',
+        '削除されたものを正確に表示',
+        'JPG・PNG・WebPに対応',
+        '処理はすべてブラウザ内で実行',
+      ],
+    },
+  },
   whyHeading: 'なぜ画像を変換するのか',
   whyNote: {
     universal:
@@ -666,11 +1081,11 @@ export const imageConverters: {
   hi: ImageMap;
   ja: ImageMap;
 } = {
-  en: build(enCopy),
-  de: build(deCopy),
-  es: build(esCopy),
-  pt: build(ptCopy),
-  fr: build(frCopy),
-  hi: build(hiCopy),
-  ja: build(jaCopy),
+  en: { ...build(enCopy), ...buildMeta(enCopy) },
+  de: { ...build(deCopy), ...buildMeta(deCopy) },
+  es: { ...build(esCopy), ...buildMeta(esCopy) },
+  pt: { ...build(ptCopy), ...buildMeta(ptCopy) },
+  fr: { ...build(frCopy), ...buildMeta(frCopy) },
+  hi: { ...build(hiCopy), ...buildMeta(hiCopy) },
+  ja: { ...build(jaCopy), ...buildMeta(jaCopy) },
 };

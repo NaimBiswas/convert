@@ -519,6 +519,18 @@ export const ptHome: HomeContent = {
         link: '/image-converter',
         icon: 'image',
       },
+      {
+        title: 'Ver metadados de imagem',
+        desc: 'Inspecione EXIF, GPS, IPTC, XMP e ICC ocultos nas suas fotos: configurações da câmera, localização, datas e mais.',
+        link: '/image-metadata-viewer',
+        icon: 'image',
+      },
+      {
+        title: 'Remover metadados',
+        desc: 'Remova EXIF, GPS e outros dados ocultos antes de compartilhar. Sem perda, privado e inteiramente no seu navegador.',
+        link: '/remove-image-metadata',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {

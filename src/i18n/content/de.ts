@@ -514,6 +514,18 @@ export const deHome: HomeContent = {
         link: '/image-converter',
         icon: 'image',
       },
+      {
+        title: 'Bild-Metadaten ansehen',
+        desc: 'EXIF-, GPS-, IPTC-, XMP- und ICC-Metadaten in Ihren Fotos prüfen — Kameraeinstellungen, Standort, Zeitstempel und mehr.',
+        link: '/image-metadata-viewer',
+        icon: 'image',
+      },
+      {
+        title: 'Metadaten entfernen',
+        desc: 'EXIF-, GPS- und andere versteckte Daten vor dem Teilen entfernen. Verlustfrei, privat und komplett im Browser.',
+        link: '/remove-image-metadata',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {

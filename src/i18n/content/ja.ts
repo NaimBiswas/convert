@@ -514,6 +514,18 @@ export const jaHome: HomeContent = {
         link: '/image-converter',
         icon: 'image',
       },
+      {
+        title: '画像メタデータ表示',
+        desc: '写真に隠されたEXIF・GPS・IPTC・XMP・ICCを確認：カメラ設定、場所、日時など。',
+        link: '/image-metadata-viewer',
+        icon: 'image',
+      },
+      {
+        title: 'メタデータ削除',
+        desc: '共有前にEXIF・GPSなどの隠れたデータを削除。ロスレス、プライベート、すべてブラウザ内で完結。',
+        link: '/remove-image-metadata',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {

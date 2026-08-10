@@ -30,6 +30,8 @@ export interface HeaderStrings {
   webpToJpg: string;
   jpgToWebp: string;
   pngToWebp: string;
+  imageMetadataViewer: string;
+  removeImageMetadata: string;
   reportIssue: string;
   versionBadge: string;
   language: string;
@@ -124,6 +126,19 @@ export interface ImageToolStrings {
   fileSize: string;
   download: string;
   convertAnother: string;
+  metaSupports: string;
+  metadata: string;
+  gps: string;
+  noMetadata: string;
+  exportJson: string;
+  removedGroups: string;
+  removeBtn: string;
+  downloadClean: string;
+  nothingFound: string;
+  tryAnother: string;
+  foundMeta: string;
+  tableField: string;
+  tableValue: string;
 }
 
 export interface UIStrings {

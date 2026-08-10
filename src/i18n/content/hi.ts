@@ -514,6 +514,18 @@ export const hiHome: HomeContent = {
         link: '/image-converter',
         icon: 'image',
       },
+      {
+        title: 'इमेज मेटाडेटा व्यूअर',
+        desc: 'अपनी फोटो में छिपे EXIF, GPS, IPTC, XMP और ICC की जांच करें: कैमरा सेटिंग्स, स्थान, समय-चिह्न और अधिक।',
+        link: '/image-metadata-viewer',
+        icon: 'image',
+      },
+      {
+        title: 'मेटाडेटा हटाएं',
+        desc: 'साझा करने से पहले EXIF, GPS और अन्य छिपे डेटा हटाएं। बिना नुकसान, निजी और पूरी तरह ब्राउज़र में।',
+        link: '/remove-image-metadata',
+        icon: 'image',
+      },
     ],
   },
   howItWorks: {
