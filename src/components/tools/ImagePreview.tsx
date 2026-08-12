@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import type { ConvertedImage } from "@/lib/converters/image";
 import { imageExt } from "@/lib/converters/image";
 import { downloadBlob } from "@/lib/exportUtils";
@@ -90,7 +91,7 @@ export default function ImagePreview({ locale }: { locale: Locale }) {
 
       <div className="preview-body">
         <div className="preview-image-wrap">
-          <img id="imagePreviewImg" alt="" />
+          <Image src={"/placeholder.jpg"} id="imagePreviewImg" alt="" />
         </div>
 
         <div className="preview-info">
