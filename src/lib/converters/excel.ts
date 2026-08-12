@@ -7,7 +7,7 @@ export function parseExcel(data: ArrayBuffer): ParseResult {
   const sheetName = workbook.SheetNames[0];
   const sheet = workbook.Sheets[sheetName];
 
-  const jsonData = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: '' });
+  const jsonData = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet);
   const flatRows = jsonData.map(row => flattenObject(row));
   const headers = [...new Set(flatRows.flatMap(Object.keys))] as string[];
   const rawRows = flatRows.map(row =>

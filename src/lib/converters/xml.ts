@@ -5,7 +5,6 @@ import { flattenObject, normalizeRows, inferColumnTypes } from './utils';
 export function parseXML(input: string): ParseResult {
   const parser = new XMLParser({
     ignoreAttributes: false,
-    attributeNamePrefix: '@_',
     trimValues: true,
     parseTagValue: true,
     parseAttributeValue: true,

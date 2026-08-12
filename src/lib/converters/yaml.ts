@@ -1,21 +1,21 @@
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 import type { ParseResult } from './types';
 import { flattenObject, normalizeRows, inferColumnTypes } from './utils';
 
 export function parseYAML(input: string): ParseResult {
-  const parsed = yaml.load(input);
+  const parsed = yaml.load(input, { schema: yaml.YAML11_SCHEMA });
 
   if (parsed === null || parsed === undefined) {
     return { headers: [], rows: [], meta: { rowCount: 0, colCount: 0, size: new Blob([input]).size } };
   }
 
   if (typeof parsed === 'number' || typeof parsed === 'boolean') {
-    const rows = [{ value: String(parsed) }];
+    const rows: Record<string, unknown>[] = [{ value: String(parsed) }];
     const headers = ['value'];
     return {
       headers,
       rows,
-      meta: { rowCount: 1, colCount: 1, size: new Blob([input]).size, columnTypes: inferColumnTypes(rows as any, headers) },
+      meta: { rowCount: 1, colCount: 1, size: new Blob([input]).size, columnTypes: inferColumnTypes(rows, headers) },
     };
   }
 
