@@ -42,6 +42,20 @@ export type ConverterSlug =
 
 export type ConverterContentMap = Record<ConverterSlug, ConverterContent>;
 
+export type ConverterDataSlug = Exclude<
+  ConverterSlug,
+  | 'image-converter'
+  | 'png-to-jpg'
+  | 'jpg-to-png'
+  | 'webp-to-jpg'
+  | 'jpg-to-webp'
+  | 'png-to-webp'
+  | 'image-metadata-viewer'
+  | 'remove-image-metadata'
+>;
+
+export type ConverterDataMap = Record<ConverterDataSlug, ConverterContent>;
+
 export interface FeatureCard {
   title: string;
   desc: string;

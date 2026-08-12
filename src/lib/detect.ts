@@ -1,6 +1,6 @@
 import type { Format } from './converters/types';
 import { XMLParser } from 'fast-xml-parser';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml';
 
 export function detectFormat(text: string): Format | null {
   if (!text || !text.trim()) return null;
@@ -23,10 +23,10 @@ export function detectFormat(text: string): Format | null {
   }
 
   const lines = trimmed.split('\n').filter(Boolean);
-  if (lines.length >= 1) {
+  if (lines.length >= 2) {
     const commaCounts = lines.map(l => (l.match(/,/g) || []).length);
     const avgCommas = commaCounts.reduce((a, b) => a + b, 0) / commaCounts.length;
-    if (avgCommas >= 1 && lines.length > 1 && commaCounts.every(c => Math.abs(c - avgCommas) <= 1)) {
+    if (avgCommas >= 2 && commaCounts.every(c => c > 0 && Math.abs(c - avgCommas) <= avgCommas * 0.5)) {
       return 'CSV';
     }
   }

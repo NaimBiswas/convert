@@ -7,8 +7,9 @@ export function initTheme(): void {
   }
 }
 
-export function toggleTheme(): void {
+export function toggleTheme(): boolean {
   const root = document.documentElement;
   root.classList.toggle('dark');
   localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+  return root.classList.contains('dark');
 }

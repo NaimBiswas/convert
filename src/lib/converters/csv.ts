@@ -6,7 +6,7 @@ export function parseCSV(input: string): ParseResult {
   const result = Papa.parse<Record<string, unknown>>(input, {
     header: true,
     skipEmptyLines: true,
-    dynamicTyping: true,
+    dynamicTyping: false,
   });
 
   const flatRows = result.data.map(row => flattenObject(row));
