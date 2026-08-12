@@ -1,4 +1,4 @@
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getRelativeLocaleUrl } from '../../lib/links';
 import type { Locale } from '../languages';
 import type { Breadcrumb } from './types';
 

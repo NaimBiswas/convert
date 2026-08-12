@@ -40,7 +40,7 @@ export function getState(): AppState {
 
 export function setState(partial: Partial<AppState>): void {
   state = { ...state, ...partial };
-  listeners.forEach(fn => fn());
+  listeners.forEach((fn) => fn());
 }
 
 export function subscribe(fn: Listener): () => void {
@@ -64,14 +64,14 @@ export function pushHistory(parseResult: ParseResult): void {
     sortDirection: 'asc',
     searchQuery: '',
   };
-  listeners.forEach(fn => fn());
+  listeners.forEach((fn) => fn());
 }
 
 export function undo(): void {
   if (state.historyIndex > 0) {
     const idx = state.historyIndex - 1;
     state = { ...state, parseResult: state.history[idx], historyIndex: idx };
-    listeners.forEach(fn => fn());
+    listeners.forEach((fn) => fn());
   }
 }
 
@@ -79,7 +79,7 @@ export function redo(): void {
   if (state.historyIndex < state.history.length - 1) {
     const idx = state.historyIndex + 1;
     state = { ...state, parseResult: state.history[idx], historyIndex: idx };
-    listeners.forEach(fn => fn());
+    listeners.forEach((fn) => fn());
   }
 }
 
@@ -91,8 +91,8 @@ export function getDisplayData(): { headers: string[]; rows: Record<string, unkn
 
   if (state.searchQuery) {
     const q = state.searchQuery.toLowerCase();
-    rows = rows.filter(r =>
-      Object.values(r).some(v => String(v).toLowerCase().includes(q))
+    rows = rows.filter((r) =>
+      Object.values(r).some((v) => String(v).toLowerCase().includes(q))
     );
   }
 

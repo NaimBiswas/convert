@@ -94,7 +94,7 @@ const posts = {
     heroImg: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&h=400&fit=crop',
     heroAlt: 'कंप्यूटर स्क्रीन पर कोड एडिटर',
   },
-} satisfies Record<BlogSlug, BlogCardData>;
+} satisfies Partial<Record<BlogSlug, BlogCardData>>;
 
 type BlogCardData = {
   title: string;

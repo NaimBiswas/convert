@@ -326,7 +326,7 @@ export async function stripMetadata(file: File): Promise<StrippedImage> {
   }
 
   const meta = kindToName(kind);
-  const blob = new Blob([out], { type: meta.mime });
+  const blob = new Blob([new Uint8Array(out)], { type: meta.mime });
   return {
     blob,
     objectUrl: URL.createObjectURL(blob),
@@ -424,7 +424,12 @@ export async function readImageMetadata(file: File): Promise<ImageMetaInfo> {
   const groups: MetaGroup[] = [];
 
   try {
-    const gps = await exifr.gps(buffer);
+    const gps = (await exifr.gps(buffer)) as {
+      latitude?: number;
+      longitude?: number;
+      altitude?: unknown;
+      dateTime?: unknown;
+    };
     if (gps && (gps.latitude !== undefined || gps.longitude !== undefined)) {
       const rows: MetaRow[] = [];
       if (gps.latitude !== undefined) rows.push({ key: 'latitude', value: `${gps.latitude}°` });

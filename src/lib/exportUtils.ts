@@ -1,5 +1,6 @@
 import { stringifyJSON } from './converters/json';
 import { stringifyCSV } from './converters/csv';
+import type { jsPDF } from 'jspdf';
 
 export function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
@@ -22,11 +23,20 @@ export function toMarkdown(data: Record<string, unknown>[], headers: string[]): 
   return `${headerRow}\n${sep}\n${bodyRows}`;
 }
 
-export function toPDF(doc: any, data: Record<string, unknown>[], headers: string[]): void {
+export function toPDF(doc: jsPDF, data: Record<string, unknown>[], headers: string[]): void {
   try {
     const rows = data.map(row => headers.map(h => String(row[h] ?? '')));
-    if (typeof doc.autoTable === 'function') {
-      doc.autoTable({
+    const withTable = doc as jsPDF & {
+      autoTable?: (opts: {
+        head: string[][];
+        body: string[][];
+        styles: Record<string, unknown>;
+        headStyles: { fillColor: number[] };
+        margin: { top: number };
+      }) => void;
+    };
+    if (typeof withTable.autoTable === 'function' && withTable.autoTable) {
+      withTable.autoTable({
         head: [headers],
         body: rows,
         styles: { fontSize: 8, cellPadding: 3 },

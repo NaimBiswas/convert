@@ -1,6 +1,6 @@
-﻿import type { HomeContent, ConverterContentMap } from './types';
+import type { HomeContent, ConverterDataMap } from './types';
 
-export const converterContent: ConverterContentMap = {
+export const converterContent: ConverterDataMap = {
   'json-to-csv': {
     meta: {
       title: 'JSON to CSV Converter — Convert JSON to CSV Online Free',
