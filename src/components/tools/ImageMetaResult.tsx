@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import {
   readImageMetadata,
   stripMetadata,
@@ -365,7 +366,7 @@ export default function ImageMetaResult({
 
       <div className="preview-strip">
         <div className="preview-image-wrap">
-          <img id="metaPreviewImg" alt="" />
+          <Image src={"/placeholder.jpg"} id="metaPreviewImg" alt="" />
         </div>
         <div className="preview-info">
           <div className="info-grid">

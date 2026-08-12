@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { blogContent } from "@/i18n/pages";
+import Image from "next/image";
 import type { BlogPostContent } from "@/i18n/pages";
 import type { Locale } from "@/i18n/languages";
 import HtmlBlocks from "./HtmlBlocks";
@@ -23,7 +24,7 @@ export default function BlogPostLanding({
           <time dateTime={c.dateISO}>{c.dateDisplay}</time> · {c.byline}
         </p>
 
-        <img src={c.heroImg} alt={c.heroAlt} className="post-img" loading="lazy" />
+        <Image src={c.heroImg} alt={c.heroAlt} className="post-img" loading="lazy" />
 
         <p dangerouslySetInnerHTML={{ __html: c.intro }} />
 

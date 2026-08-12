@@ -1,5 +1,6 @@
 import { getRelativeLocaleUrl } from "@/lib/links";
 import Link from "next/link";
+import Image from "next/image";
 import { blogContent } from "@/i18n/pages";
 import type { Locale } from "@/i18n/languages";
 
@@ -18,7 +19,7 @@ export default function BlogIndexLanding({ locale }: { locale: Locale }) {
           return (
             <article className="post-card" key={slug}>
               <Link href={getRelativeLocaleUrl(locale, `/blog/${slug}`)} className="post-link">
-                <img src={post.img} alt="" className="card-img" loading="lazy" />
+                <Image src={post.img} alt="" className="card-img" loading="lazy" />
                 <div className="card-body">
                   <h2>{post.title}</h2>
                   <p className="card-desc">{post.desc}</p>
